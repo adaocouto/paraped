@@ -1,0 +1,1431 @@
+<!-- NomeDoApp = "Drogas na PCR Pediátrica" -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ficha de Parada Pediátrica</title>
+  <style>
+    :root{
+      --surface: #ffffff;
+      --border: #cddbea;
+      --radius-xl: 22px;
+
+      --bg:#eef4fb;
+      --card:#ffffff;
+      --line:#d6e2ef;
+      --text:#17324d;
+      --muted:#5e7288;
+      --accent:#2c6fb7;
+      --accent-2:#114170;
+      --soft:#eaf3ff;
+      --soft-2:#f8fbff;
+      --warn:#8d2323;
+      --warn-bg:#fff2f2;
+      --ok:#166534;
+      --ok-bg:#ecfdf3;
+      --radius:18px;
+      --shadow:0 10px 28px rgba(23,50,77,.08);
+    }
+    *{box-sizing:border-box}
+    html{-webkit-text-size-adjust:100%}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:linear-gradient(180deg,#eef4fa 0%,#f8fbff 100%);
+      color:var(--text);
+    }
+    .wrap{
+      width:min(1180px,calc(100% - 20px));
+      margin:0 auto;
+      padding:16px 0 32px;
+    }
+    .hero,.card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero{
+      background:linear-gradient(135deg,#f7fbff 0%,#eef6ff 100%);
+      padding:18px 16px;
+      margin-bottom:14px;
+      text-align:center;
+    }
+    .hero h1{margin:0;font-size:1.6rem;line-height:1.06;color:var(--accent-2);letter-spacing:-0.5px}
+    .hero p{margin:4px 0 0;color:#64748b;line-height:1.45;font-size:0.82rem;max-width:none}
+    .grid{display:grid;gap:14px}
+    .grid-2{grid-template-columns:1fr}
+    .grid-3{grid-template-columns:1fr}
+    .grid-4{grid-template-columns:1fr}
+    .card{padding:16px}
+    .section-title{margin:0 0 12px;font-size:1.05rem;color:#143e69}
+    .fields{display:grid;grid-template-columns:1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .field.full{grid-column:1/-1}
+    label{font-size:.92rem;font-weight:700;color:#19466f}
+    .hint{font-size:.8rem;color:var(--muted);line-height:1.35}
+    input,select,button,textarea{
+      font:inherit;
+    }
+    input,select{
+      width:100%;min-height:46px;border-radius:14px;border:1px solid #bfd2e4;background:#fcfeff;
+      padding:11px 13px;font-size:1rem;color:var(--text);outline:none;
+      transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(44,111,183,.12)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    button{border:0;border-radius:14px;min-height:46px;padding:0 16px;font-weight:700;cursor:pointer}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-secondary{background:#eef3f8;color:#264764;border:1px solid #d4e0eb}
+    .btn-chip{min-height:36px;border-radius:999px;padding:0 12px;font-size:.88rem;background:#f3f7fb;color:#24425e;border:1px solid #d5e1ec}
+    .btn-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .toolbar-inline{display:flex;flex-wrap:wrap;gap:8px}
+    .alert{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid #f1c2c2;background:#fff2f2;color:var(--warn);font-weight:700;line-height:1.4}
+    .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .kpi{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fbfdff}
+    .kpi .label{font-size:.78rem;color:var(--muted);margin-bottom:4px}
+    .kpi .value{font-size:1.15rem;font-weight:700;color:#173a6d;line-height:1.25}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--soft);color:#234d78;border:1px solid #cfe0f5;font-size:.82rem;font-weight:700}
+    .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:14px;border:1px solid #e0e8f0}
+    table{width:100%;border-collapse:collapse;min-width:760px;background:#fff}
+    th,td{padding:10px 8px;border-bottom:1px solid #edf2f7;text-align:left;vertical-align:top;font-size:.9rem}
+    th{position:sticky;top:0;background:#f7fbff;color:#24425e;font-size:.82rem;z-index:1}
+    td strong{color:#143e69}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .summary{margin-top:14px;padding:14px;border-radius:16px;background:var(--soft);border:1px solid #cfe0f5;color:#234d78;line-height:1.5}
+    .helper{font-size:.82rem;color:var(--muted);line-height:1.45}
+    .stack{display:grid;gap:12px}
+    details.cardish{border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
+    details.cardish > summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:700;color:#19466f;background:#f7fbff;border-bottom:1px solid #e7eef6}
+    details.cardish > summary::-webkit-details-marker{display:none}
+    details.cardish > div{padding:14px 16px}
+    .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;justify-content:center}
+    .muted{color:var(--muted)}
+    .small{font-size:.82rem}
+    .entry-grid{display:grid;gap:12px}
+    .age-row,.pair-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .pair-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .drug-grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .drug-card{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:#fbfdff;
+      display:grid;
+      gap:8px;
+    }
+    .drug-card h3{margin:0;font-size:1rem;color:#143e69;line-height:1.25}
+    .drug-card .drug-total{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      padding:10px 12px;border-radius:12px;background:var(--soft);border:1px solid #cfe0f5;
+      color:#234d78;font-weight:700
+    }
+    .drug-card .drug-total .v{font-size:1.05rem}
+    .drug-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .drug-meta .item{
+      border:1px solid #e3ebf4;border-radius:12px;padding:8px 10px;background:#fff;
+    }
+    .drug-meta .k{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px}
+    .drug-meta .v{display:block;font-size:.87rem;line-height:1.3;color:var(--text)}
+    .info-grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .info-card{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+      background:#fbfdff;
+      display:grid;
+      gap:8px;
+    }
+    .info-card h3{margin:0;font-size:1rem;color:#143e69;line-height:1.25}
+    .info-sub{font-size:.82rem;color:var(--muted);line-height:1.35}
+    .info-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .info-meta .item{
+      border:1px solid #e3ebf4;
+      border-radius:12px;
+      padding:8px 10px;
+      background:#fff;
+    }
+    .info-meta .k{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px}
+    .info-meta .v{display:block;font-size:.87rem;line-height:1.3;color:var(--text)}
+    .loss-hours{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+    .loss-hours .item{
+      border:1px solid #e3ebf4;
+      border-radius:12px;
+      padding:8px 10px;
+      background:#fff;
+      text-align:center;
+    }
+    .loss-hours .k{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px}
+    .loss-hours .v{display:block;font-size:.9rem;font-weight:700;color:#143e69;line-height:1.3}
+
+    .continuous-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;grid-column:1/-1}
+    .continuous-field{border:1px solid #e3ebf4;border-radius:12px;padding:8px 10px;background:#fff;display:flex;flex-direction:column;gap:6px}
+    .continuous-field label{font-size:.72rem;color:var(--muted);margin:0}
+    .continuous-field input,.continuous-field select{min-height:42px;border-radius:10px;padding:8px 10px;font-size:.92rem}
+    @media (max-width:520px){.continuous-controls{grid-template-columns:1fr}}
+    @media (min-width:720px){
+      .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .fields{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .drug-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .card{padding:18px}
+      .wrap{padding:20px 0 40px}
+    }
+    @media (min-width:1024px){
+      .drug-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .info-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+  
+    .espaco-antes-titulo {
+      height: 1em;
+    }
+  
+    .legal-disclaimer {
+      margin: 16px 0 0;
+      font-size: 12px;
+      line-height: 1.2;
+      color: #5c6f87;
+      text-align: justify;
+      word-break: break-word;
+      background: var(--surface, #ffffff);
+      border: 1px solid var(--border, #cddbea);
+      border-radius: var(--radius-xl, 22px);
+      box-shadow: var(--shadow, 0 16px 34px rgba(18, 44, 73, 0.10));
+      padding: 16px;
+    }
+
+    .signature-block {
+      text-align: center;
+      color: #5c6f87;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .spacer-3lines {
+      height: 4.2em;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="espaco-antes-titulo" aria-hidden="true"></div>
+
+      <h1>Ficha de Parada Pediátrica</h1>
+      <p>Cálculo de doses na parada cardiorrespiratória</p>
+      <div class="tag-row">
+        <span class="pill" id="perfilPaciente">Perfil: —</span>
+        <span class="pill" id="idadeFormatada">Idade: —</span>
+        <span class="pill" id="classificacaoFaixa">Faixa etária: —</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Dados do paciente:</h2>
+      <div class="fields">
+        <div class="field full">
+          <div class="entry-grid">
+            <div class="age-row">
+              <div class="field">
+                <label for="idadeAno">Ano</label>
+                <input id="idadeAno" type="text" inputmode="numeric" maxlength="2" placeholder="">
+              </div>
+              <div class="field">
+                <label for="idadeMes">Mes</label>
+                <input id="idadeMes" type="text" inputmode="numeric" maxlength="2" placeholder="">
+              </div>
+              <div class="field">
+                <label for="idadeDia">Dias</label>
+                <input id="idadeDia" type="text" inputmode="numeric" maxlength="2" placeholder="">
+              </div>
+            </div>
+            <div class="hint">Ano: 0 a 18. Mês: 0 a 11. Dias: 0 a 30. Valores fora da faixa são ajustados automaticamente.</div>
+          </div>
+        </div>
+        <div class="field full">
+          <div class="pair-row">
+            <div class="field">
+              <label for="peso">Peso (kg)</label>
+              <input id="peso" type="text" inputmode="decimal" value="4" placeholder="Ex.: 4,000 ou 12,5">
+            </div>
+            <div class="field">
+              <label for="estatura">Estatura (cm)</label>
+              <input id="estatura" type="text" inputmode="numeric" placeholder="Ex.: 125">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn-primary" id="btnModelo" type="button">Atualizar Cálculos</button>
+        <button class="btn-secondary" id="btnLimpar" type="button">Limpar</button>
+      </div>
+      <div class="alert" id="alertBox"></div>
+    </section>
+
+    <section class="grid grid-4" style="margin-top:14px">
+      <div class="kpi"><div class="label">Superfície corporal</div><div class="value" id="scOut">—</div></div>
+      <div class="kpi"><div class="label">Manutenção hídrica</div><div class="value" id="manutOut">—</div></div>
+      <div class="kpi"><div class="label">Lâmina</div><div class="value" id="laminaOut">—</div></div>
+      <div class="kpi"><div class="label">Cânula orotraqueal</div><div class="value" id="canulaOut">—</div></div>
+    </section>
+
+    <section class="grid grid-3" style="margin-top:14px">
+      <div class="card">
+        <h2 class="section-title">Sinais vitais de referência:</h2>
+        <div class="mini-grid">
+          <div class="kpi"><div class="label">FC acordado</div><div class="value" id="fcAwakeOut">—</div></div>
+          <div class="kpi"><div class="label">FC média</div><div class="value" id="fcMeanOut">—</div></div>
+          <div class="kpi"><div class="label">FC dormindo</div><div class="value" id="fcSleepOut">—</div></div>
+          <div class="kpi"><div class="label">FR</div><div class="value" id="frOut">—</div></div>
+          <div class="kpi"><div class="label">PA sistólica</div><div class="value" id="pasOut">—</div></div>
+          <div class="kpi"><div class="label">PA diastólica</div><div class="value" id="padOut">—</div></div>
+          <div class="kpi"><div class="label">PAM</div><div class="value" id="pamOut">—</div></div>
+          <div class="kpi"><div class="label">PIC</div><div class="value" id="picOut">—</div></div>
+        </div>
+      </div>
+    </section>
+
+    <details class="cardish" style="margin-top:14px" open>
+      <summary>Preparo de doses rápidas</summary>
+      <div>
+        <div id="drugGrid" class="drug-grid" style="margin-top:12px"></div>
+      </div>
+    </details>
+
+    <details class="cardish" style="margin-top:14px">
+      <summary>Medicações para infusão contínua com preparo fixo</summary>
+      <div>
+        <div id="continuousCards" class="info-grid" style="margin-top:12px"></div>
+      </div>
+    </details>
+
+    <details class="cardish" style="margin-top:14px">
+      <summary>Volume de perdas em drenagem que sugerem reoperação</summary>
+      <div>
+        <div id="lossCards" class="info-grid" style="margin-top:12px"></div>
+      </div>
+    </details>
+
+    <div class="legal-disclaimer">
+      <strong>Aviso Legal e Isenção de Responsabilidade:</strong><br>
+      Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
+    
+    </div>
+    <div class="spacer-3lines" aria-hidden="true"></div>
+<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong></div>
+    <div class="spacer-3lines" aria-hidden="true"></div>
+</main>
+
+  <script>
+
+(() => {
+  'use strict';
+
+  // ==========================================================
+  // constants
+  // ==========================================================
+  const RESUSCITATION_DRUGS = [
+    {name:'Bolus Cristaloide — 10 mL/kg', presentation:'SF 0,9% ou Ringer Lactato', doseLabel:'10 mL/kg', mlKgLabel:'10', dilution:'—', diluent:'—', maxLabel:'Reavaliar após cada bolus', total:(w)=>w*10, unit:'mL', outputLabel:'Volume calculado'},
+    {name:'Bolus Cristaloide — 20 mL/kg', presentation:'SF 0,9% ou Ringer Lactato', doseLabel:'20 mL/kg', mlKgLabel:'20', dilution:'—', diluent:'—', maxLabel:'Reavaliar após cada bolus', total:(w)=>w*20, unit:'mL', outputLabel:'Volume calculado'},
+    {name:'Adrenalina IV', presentation:'1 mg/mL', doseLabel:'0,01 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
+    {name:'Adrenalina Endotraqueal (Via IT)', presentation:'1 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'2,5 mg = 2,5 mL', total:(w)=>Math.min(w*0.1,2.5), unit:'mL'},
+    {name:'Adenosina (ataque)', presentation:'3 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,033', dilution:'s/ diluir', diluent:'—', maxLabel:'6 mg = 2 mL', total:(w)=>Math.min(w*(0.1/3),2), unit:'mL'},
+    {name:'Adenosina (2ª dose)', presentation:'3 mg/mL', doseLabel:'0,2 mg/kg', mlKgLabel:'0,067', dilution:'s/ diluir', diluent:'—', maxLabel:'12 mg = 4 mL', total:(w)=>Math.min(w*(0.2/3),4), unit:'mL'},
+    {name:'Amiodarona', presentation:'50 mg/mL', doseLabel:'5 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'6 mL', total:(w)=>Math.min(w*0.1,6), unit:'mL'},
+    {name:'Atracúrio', presentation:'50 mg/5 mL', doseLabel:'0,4 mg/kg', mlKgLabel:'0,40', dilution:'1 p/ 9', diluent:'SF 0,9%', maxLabel:'—', total:(w)=>w*0.4, unit:'mL'},
+    {name:'Atropina IV/IO', presentation:'0,25 mg/mL', doseLabel:'0,02 mg/kg', mlKgLabel:'0,08', dilution:'s/ diluir', diluent:'—', maxLabel:'Dose máxima única: 0,5 mg = 2 mL', total:(w)=>Math.min(w*0.08,2), unit:'mL'},
+    {name:'Bicarbonato de sódio 8,4%', presentation:'1 mEq/mL', doseLabel:'1 mEq/kg', mlKgLabel:'<4 kg: 4,0<br>≥4 kg: 2,0', dilution:'<4 kg: 1 p/ 3<br>≥4 kg: 1 p/ 1', diluent:'AD', maxLabel:'—', total:(w)=>w < 4 ? w * 4 : w * 2, unit:'mL'},
+    {name:'Cetamina / Ketalar', presentation:'50 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'—', total:(w)=>w*0.1, unit:'mL'},
+    {name:'Cardioversão Sincronizada — dose inicial', presentation:'—', doseLabel:'0,5 a 1 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*1,360), unit:'J', outputLabel:'Energia calculada', displayTotal:(w)=>`${formatPtTrim(Math.min(w*0.5,360), 1)} a ${formatPtTrim(Math.min(w*1,360), 1)} J`},
+    {name:'Cardioversão Sincronizada — dose subsequente', presentation:'—', doseLabel:'2 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*2,360), unit:'J', outputLabel:'Energia calculada'},
+    {name:'Desfibrilação — 1º Choque', presentation:'—', doseLabel:'2 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*2,360), unit:'J', outputLabel:'Energia calculada'},
+    {name:'Desfibrilação — Choques Subsequentes', presentation:'—', doseLabel:'4 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*4,360), unit:'J', outputLabel:'Energia calculada'},
+    {name:'Fentanil', presentation:'50 mcg/mL', doseLabel:'2 mcg/kg', mlKgLabel:'0,20', dilution:'1 p/ 4', diluent:'AD', maxLabel:'50 mcg = 5 mL', total:(w)=>Math.min(w*0.2,5), unit:'mL'},
+    {name:'Esmolol / Brevibloc', presentation:'10 mg/mL', doseLabel:'0,5 mg/kg (500 mcg/kg)', mlKgLabel:'0,50', dilution:'1 p/ 9', diluent:'SF 0,9%', maxLabel:'Dose de ataque para TSV/controle agudo de frequência', total:(w)=>w*0.5, unit:'mL'},
+    {name:'Flumazenil / Lanexat', presentation:'0,1 mg/mL', doseLabel:'0,02 mg/kg', mlKgLabel:'0,20', dilution:'s/ diluir', diluent:'—', maxLabel:'1 mg = 10 mL', total:(w)=>Math.min(w*0.2,10), unit:'mL'},
+    {name:'Glicose', presentation:'Neonatal: SG10%<br>Pediátrica: SG25%', doseLabel:'Neonatal: 0,2 g/kg<br>Pediátrica: 0,5 g/kg', mlKgLabel:'2,0', dilution:'s/ diluir', diluent:'—', maxLabel:'Pediátrica: máx. 50 g = 200 mL de SG25%', total:(w)=>Math.min(w*2,200), unit:'mL'},
+    {name:'Gluconato de cálcio 10%', presentation:'100 mg/mL', doseLabel:'100 mg/kg', mlKgLabel:'2,0', dilution:'1 p/ 1', diluent:'AD', maxLabel:'2 g = 20 mL da ampola; 40 mL finais', total:(w)=>Math.min(w*2,40), unit:'mL'},
+    {name:'Lidocaína 2%', presentation:'20 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.05,5), unit:'mL'},
+    {name:'Dexmedetomidina / Precedex (ataque)', presentation:'100 mcg/mL', doseLabel:'1 mcg/kg em 10 min', mlKgLabel:'0,25', dilution:'Diluir para 4 mcg/mL', diluent:'SF 0,9% ou SG5%', maxLabel:'—', total:(w)=>w*0.25, unit:'mL'},
+    {name:'Midazolam / Dormonid', presentation:'5 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 4', diluent:'AD', maxLabel:'5 mL', total:(w)=>Math.min(w*0.1,5), unit:'mL'},
+    {name:'Meperidina / Dolantina', presentation:'50 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 4', diluent:'AD', maxLabel:'10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
+    {name:'Morfina / Dimorf', presentation:'10 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'10 mg = 10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
+    {name:'Naloxona / Narcan', presentation:'0,4 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,25', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.25,5), unit:'mL'},
+    {name:'Neostigmina', presentation:'0,5 mg/mL', doseLabel:'0,07 mg/kg', mlKgLabel:'0,14', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mg = 10 mL', total:(w)=>Math.min(w*0.14,10), unit:'mL'},
+    {name:'Pancurônio / Pavulon', presentation:'4 mg/2 mL', doseLabel:'0,2 mg/kg', mlKgLabel:'0,20', dilution:'1 p/ 1', diluent:'AD', maxLabel:'—', total:(w)=>w*0.2, unit:'mL'},
+    {name:'Procainamida / Procamide', presentation:'500 mg/5 mL', doseLabel:'15 mg/kg', mlKgLabel:'0,15', dilution:'s/ diluir', diluent:'—', maxLabel:'500 mg = 5 mL', total:(w)=>Math.min(w*0.15,5), unit:'mL'},
+    {name:'Valium', presentation:'5 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'2 mL', total:(w)=>Math.min(w*0.1,2), unit:'mL'},
+    {name:'Rocurônio / Esmeron', presentation:'10 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,25', dilution:'1 p/ 4', diluent:'AD', maxLabel:'—', total:(w)=>w*0.25, unit:'mL'},
+    {name:'Sulfato de magnésio 50%', presentation:'0,5 g/mL', doseLabel:'25 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'4 mL', total:(w)=>Math.min(w*0.05,4), unit:'mL'},
+    {name:'Thiopental', presentation:'25 mg/mL<br>Reconstituído: 500 mg + 20 mL de SF 0,9%', doseLabel:'3 mg/kg', mlKgLabel:'0,12', dilution:'reconstituído', diluent:'SF 0,9%', maxLabel:'—', total:(w)=>w*0.12, unit:'mL'}
+  ];
+
+  const CONTINUOUS_MEDS = [
+    {name:'Adrenalina', presentation:'1 amp x 2 mL (1 mg/mL)', ampCount:1, ampMl:2, mgPerMl:1, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,1 a 20 mcg/kg/min', defaultDose:0.2, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.1, maxConcentrationLabel:'0,1 mg/mL'},
+    {name:'Amiodarona', presentation:'2 ampolas x 3 mL (50 mg/mL)', ampCount:2, ampMl:3, mgPerMl:50, diluent:'SF/AD', dilutionVolumeMl:500, usual:'5 a 15 mcg/kg/min', defaultDose:15, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:6, maxConcentrationLabel:'6 mg/mL'},
+    {name:'Atracúrio', presentation:'1 amp x 5 mL (10 mg/mL)', ampCount:1, ampMl:5, mgPerMl:10, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'5 a 10 mcg/kg/min', defaultDose:5, doseUnit:'mcgkgmin'},
+    {name:'Cetamina', presentation:'1 amp x 10 mL (50 mg/mL)', ampCount:1, ampMl:10, mgPerMl:50, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,5 a 1 mg/kg/h', defaultDose:0.5, doseUnit:'mgkgh', maxConcentrationMgPerMl:2, maxConcentrationLabel:'2 mg/mL'},
+    {name:'Dobutamina', presentation:'1 amp x 20 mL (12,5 mg/mL)', ampCount:1, ampMl:20, mgPerMl:12.5, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'1 a 20 mcg/kg/min', defaultDose:5, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:4, maxConcentrationLabel:'4 mg/mL'},
+    {name:'Dopamina', presentation:'1 amp x 10 mL (5 mg/mL)', ampCount:1, ampMl:10, mgPerMl:5, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'1 a 20 mcg/kg/min', defaultDose:5, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:3.2, maxConcentrationLabel:'3,2 mg/mL'},
+    {name:'Noradrenalina / Levophed', presentation:'1 amp x 4 mL (1 mg/mL base)', ampCount:1, ampMl:4, mgPerMl:1, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,05 a 0,5 mcg/kg/min', defaultDose:0.05, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.016, maxConcentrationLabel:'16 mcg/mL'},
+    {name:'Midazolam / Dormonid', presentation:'1 amp x 10 mL (5 mg/mL)', ampCount:1, ampMl:10, mgPerMl:5, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,2 a 0,8 mg/kg/h', defaultDose:0.2, doseUnit:'mgkgh', maxConcentrationMgPerMl:0.5, maxConcentrationLabel:'0,5 mg/mL'},
+    {name:'Dexmedetomidina / Precedex', presentation:'1 amp x 2 mL (100 mcg/mL)', ampCount:1, ampMl:2, mgPerMl:0.1, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,2 a 1 mcg/kg/h', defaultDose:0.5, doseUnit:'mcgkgh', maxConcentrationMgPerMl:0.008, maxConcentrationLabel:'8 mcg/mL'},
+    {name:'Fentanil', presentation:'1 amp x 10 mL (50 mcg/mL)', ampCount:1, ampMl:10, mgPerMl:0.05, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'2 a 8 mcg/kg/h', defaultDose:2, doseUnit:'mcgkgh', maxConcentrationMgPerMl:0.05, maxConcentrationLabel:'50 mcg/mL'},
+    {name:'Esmolol', presentation:'10 ampolas x 10 mL (10 mg/mL)', ampCount:10, ampMl:10, mgPerMl:10, diluent:'SF/SG5%', dilutionVolumeMl:500, usual:'200 a 1000 mcg/kg/min', defaultDose:100, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:10, maxConcentrationLabel:'10 mg/mL'},
+    {name:'Lidocaína', presentation:'1 amp x 5 mL (20 mg/mL)', ampCount:1, ampMl:5, mgPerMl:20, diluent:'SF/AD', dilutionVolumeMl:500, usual:'15 a 50 mcg/kg/min', defaultDose:15, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:8, maxConcentrationLabel:'8 mg/mL'},
+    {name:'Milrinona', presentation:'1 amp x 20 mL (1 mg/mL)', ampCount:1, ampMl:20, mgPerMl:1, diluent:'SF/AD', dilutionVolumeMl:500, usual:'0,375 a 0,75 mcg/kg/min', defaultDose:0.375, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.2, maxConcentrationLabel:'200 mcg/mL'},
+    {name:'Nitroprussiato de sódio', presentation:'0,5 amp x 2 mL (25 mg/mL)', ampCount:0.5, ampMl:2, mgPerMl:25, diluent:'SG', dilutionVolumeMl:500, usual:'0,5 a 10 mcg/kg/min', defaultDose:0.5, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.5, maxConcentrationLabel:'500 mcg/mL'}
+  ];
+
+  const VOLUME_LOSS_TABLE = [
+    {label:'≤5 kg', min:null, max:5, h1:70, h2:60, h3:50, h4:120, h5:130, h6:140},
+    {label:'6 kg', min:6, max:6, h1:70, h2:60, h3:50, h4:130, h5:155, h6:null},
+    {label:'7 kg', min:7, max:7, h1:70, h2:61, h3:50, h4:152, h5:181, h6:null},
+    {label:'8 kg', min:8, max:8, h1:90, h2:69, h3:52, h4:174, h5:207, h6:null},
+    {label:'9 kg', min:9, max:9, h1:90, h2:78, h3:59, h4:195, h5:233, h6:null},
+    {label:'10 kg', min:10, max:10, h1:108, h2:87, h3:65, h4:217, h5:259, h6:null},
+    {label:'12 kg', min:11, max:12, h1:130, h2:104, h3:78, h4:260, h5:311, h6:null},
+    {label:'14 kg', min:13, max:14, h1:152, h2:122, h3:91, h4:304, h5:363, h6:null},
+    {label:'16 kg', min:15, max:16, h1:174, h2:139, h3:104, h4:347, h5:414, h6:null},
+    {label:'18 kg', min:17, max:18, h1:195, h2:156, h3:117, h4:391, h5:466, h6:null},
+    {label:'20 kg', min:19, max:20, h1:217, h2:174, h3:130, h4:434, h5:518, h6:null},
+    {label:'25 kg', min:21, max:25, h1:271, h2:217, h3:163, h4:542, h5:647, h6:null},
+    {label:'30 kg', min:26, max:30, h1:325, h2:260, h3:195, h4:651, h5:777, h6:null},
+    {label:'35 kg', min:31, max:35, h1:380, h2:304, h3:228, h4:759, h5:906, h6:null},
+    {label:'40 kg', min:36, max:40, h1:434, h2:347, h3:260, h4:868, h5:1036, h6:null},
+    {label:'45 kg', min:41, max:45, h1:488, h2:391, h3:293, h4:976, h5:1165, h6:null},
+    {label:'≥46 kg', min:46, max:null, h1:500, h2:400, h3:300, h4:1000, h5:1200, h6:null}
+  ];
+
+  const HEART_RATE_BANDS = [
+    {label:'RN a 3 meses', maxDays:92, awake:'85–205', mean:'140', sleep:'80–160'},
+    {label:'3 meses a 2 anos', maxDays:730, awake:'100–190', mean:'130', sleep:'75–160'},
+    {label:'2 a 10 anos', maxDays:3650, awake:'60–140', mean:'80', sleep:'60–90'},
+    {label:'>10 anos', maxDays:Infinity, awake:'60–100', mean:'75', sleep:'50–90'}
+  ];
+
+  const RESP_BANDS = [
+    {label:'RN', maxDays:30, fr:'30–50'},
+    {label:'1 a 11 meses', maxDays:365, fr:'26–40'},
+    {label:'2 a 4 anos', maxDays:5 * 365, fr:'20–30'},
+    {label:'5 a 7 anos', maxDays:8 * 365, fr:'20–26'},
+    {label:'8 a 10 anos', maxDays:11 * 365, fr:'18–24'},
+    {label:'>10 anos', maxDays:Infinity, fr:'16–20'}
+  ];
+
+  const PRESSURE_BANDS = [
+    {label:'Prematuro >1000 g (aprox.)', test:(ctx)=>ctx.ageDays <= 1 && ctx.weight < 2.5, pas:'39–59', pad:'16–56'},
+    {label:'RN até 1 dia (aprox.)', test:(ctx)=>ctx.ageDays <= 1, pas:'50–70', pad:'25–45'},
+    {label:'RN até 30 dias', test:(ctx)=>ctx.ageDays <= 30, pas:'60–90', pad:'20–60'},
+    {label:'Lactente até 12 meses', test:(ctx)=>ctx.ageDays <= 365, pas:'87–105', pad:'53–66'},
+    {label:'Criança até 5 anos', test:(ctx)=>ctx.ageYears < 6, pas:'95–105', pad:'53–66'},
+    {label:'Idade escolar', test:(ctx)=>ctx.ageYears < 12, pas:'97–112', pad:'57–71'},
+    {label:'Adolescente', test:()=>true, pas:'112–128', pad:'66–80'}
+  ];
+
+  const PAM_BANDS = [
+    {label:'RN prematuro <32 sem (aprox.)', test:(ctx)=>ctx.ageDays <= 1 && ctx.weight < 1.5, pam:'30'},
+    {label:'RN prematuro 32–38 sem (aprox.)', test:(ctx)=>ctx.ageDays <= 1 && ctx.weight >= 1.5 && ctx.weight < 3.5, pam:'35'},
+    {label:'RN termo até 1 mês', test:(ctx)=>ctx.ageDays <= 30, pam:'40'},
+    {label:'1–12 meses', test:(ctx)=>ctx.ageDays <= 365, pam:'45'},
+    {label:'1–5 anos', test:(ctx)=>ctx.ageYears <= 5, pam:'50'},
+    {label:'5–12 anos', test:(ctx)=>ctx.ageYears <= 12, pam:'55'},
+    {label:'≥12 anos', test:()=>true, pam:'60'}
+  ];
+
+  const PIC_BANDS = [
+    {label:'Neonato / lactente pequeno', test:(ctx)=>ctx.ageYears < 3, pic:'≤5'},
+    {label:'Até 7 anos', test:(ctx)=>ctx.ageYears < 8, pic:'6–13'},
+    {label:'≥8 anos', test:()=>true, pic:'<15'}
+  ];
+
+  // ==========================================================
+  // dom refs
+  // ==========================================================
+  const DOM_IDS = Object.freeze({
+    profile:'perfilPaciente',
+    ageLabel:'idadeFormatada',
+    ageBand:'classificacaoFaixa',
+    bodySurface:'scOut',
+    maintenance:'manutOut',
+    blade:'laminaOut',
+    tube:'canulaOut',
+    drugGrid:'drugGrid',
+    continuousCards:'continuousCards',
+    lossCards:'lossCards',
+    alertBox:'alertBox',
+    modelButton:'btnModelo',
+    clearButton:'btnLimpar'
+  });
+
+  // ==========================================================
+  // state
+  // ==========================================================
+  const UI_STATE = {
+    lastContext: null,
+    lastAlert: '',
+    continuousConfigs: Object.create(null)
+  };
+
+  const CONTINUOUS_PREPARATION_SCHEMES = Object.freeze([
+    Object.freeze({ totalMl: 12, rateMlPerHour: 0.5 }),
+    Object.freeze({ totalMl: 24, rateMlPerHour: 1 }),
+    Object.freeze({ totalMl: 36, rateMlPerHour: 1.5 }),
+    Object.freeze({ totalMl: 48, rateMlPerHour: 2 }),
+    Object.freeze({ totalMl: 72, rateMlPerHour: 3 }),
+    Object.freeze({ totalMl: 96, rateMlPerHour: 4 }),
+    Object.freeze({ totalMl: 120, rateMlPerHour: 5 }),
+    Object.freeze({ totalMl: 144, rateMlPerHour: 6 }),
+    Object.freeze({ totalMl: 168, rateMlPerHour: 7 }),
+    Object.freeze({ totalMl: 192, rateMlPerHour: 8 }),
+    Object.freeze({ totalMl: 216, rateMlPerHour: 9 }),
+    Object.freeze({ totalMl: 240, rateMlPerHour: 10 }),
+    Object.freeze({ totalMl: 480, rateMlPerHour: 20 })
+  ]);
+
+  // ==========================================================
+  // parsers / formatters
+  // ==========================================================
+  function byId(id) {
+    return document.getElementById(id);
+  }
+
+  function formatPt(value, decimals = 2) {
+    if (!Number.isFinite(value)) return '—';
+    return value.toLocaleString('pt-BR', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+  }
+
+  function formatPtTrim(value, decimals = 2) {
+    if (!Number.isFinite(value)) return '—';
+    let text = value.toLocaleString('pt-BR', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+    if (text.includes(',')) {
+      text = text.replace(/0+$/, '').replace(/,$/, '');
+    }
+    return text;
+  }
+
+  function parseLocaleNumber(value) {
+    if (typeof value !== 'string') return Number(value);
+    const raw = value.trim().replace(/\s+/g, '');
+    if (!raw) return NaN;
+    const hasDot = raw.includes('.');
+    const hasComma = raw.includes(',');
+    if (hasDot && hasComma) {
+      if (raw.lastIndexOf(',') > raw.lastIndexOf('.')) {
+        return Number(raw.replace(/\./g, '').replace(',', '.'));
+      }
+      return Number(raw.replace(/,/g, ''));
+    }
+    if (hasComma) return Number(raw.replace(',', '.'));
+    return Number(raw);
+  }
+
+  function parseAgeFields(yearRaw, monthRaw, dayRaw) {
+    function parsePiece(value, max) {
+      const raw = String(value ?? '').trim();
+      if (raw === '') return 0;
+
+      const parsed = Number(raw.replace(',', '.'));
+      if (!Number.isFinite(parsed) || parsed <= 0) return 0;
+
+      return Math.max(0, Math.min(max, Math.trunc(parsed)));
+    }
+
+    const yearsInt = parsePiece(yearRaw, 17);
+    const monthsInt = parsePiece(monthRaw, 11);
+    const daysInt = parsePiece(dayRaw, 30);
+
+    if (yearsInt === 0 && monthsInt === 0 && daysInt === 0) {
+      return { valid: false, empty: true, years: NaN, months: NaN, totalDays: NaN, text: 'Não informada' };
+    }
+
+    const totalDays = (yearsInt * 365) + (monthsInt * 30) + daysInt;
+    const yearsFloat = totalDays / 365;
+    const monthsFloat = (yearsInt * 12) + monthsInt + (daysInt / 30);
+
+    const parts = [];
+    if (yearsInt > 0) parts.push(`${yearsInt}a`);
+    if (monthsInt > 0) parts.push(`${monthsInt}m`);
+    if (daysInt > 0) parts.push(`${daysInt}d`);
+
+    return {
+      valid: true,
+      empty: false,
+      years: yearsFloat,
+      months: monthsFloat,
+      totalDays,
+      text: parts.join(' ')
+    };
+  }
+
+  function normalizeAgeInputField(input, max, defaultIfEmpty = '') {
+    const raw = String(input.value ?? '').trim();
+
+    if (raw === '') {
+      input.value = defaultIfEmpty;
+      return;
+    }
+
+    const parsed = Number(raw.replace(',', '.'));
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      input.value = defaultIfEmpty;
+      return;
+    }
+
+    const adjusted = Math.min(max, Math.trunc(parsed));
+    input.value = adjusted <= 0 ? defaultIfEmpty : String(adjusted);
+  }
+
+  function normalizeWeightInput(value) {
+    const raw = String(value ?? '').trim();
+
+    if (raw === '') return '';
+
+    let cleaned = raw.replace(/\s+/g, '').replace(/[^\d,.-]/g, '');
+
+    const hasComma = cleaned.includes(',');
+    const hasDot = cleaned.includes('.');
+
+    let numericText = cleaned;
+
+    if (hasComma && hasDot) {
+      const lastComma = cleaned.lastIndexOf(',');
+      const lastDot = cleaned.lastIndexOf('.');
+      const decimalIndex = Math.max(lastComma, lastDot);
+      const integerPart = cleaned.slice(0, decimalIndex).replace(/[^\d-]/g, '').replace(/^0+(?=\d)/, '');
+      const decimalPart = cleaned.slice(decimalIndex + 1).replace(/\D/g, '');
+      numericText = (integerPart || '0') + (decimalPart ? '.' + decimalPart : '');
+    } else if (hasComma) {
+      const parts = cleaned.split(',');
+      const integerPart = parts.shift().replace(/[^\d-]/g, '').replace(/^0+(?=\d)/, '');
+      const decimalPart = parts.join('').replace(/\D/g, '');
+      numericText = (integerPart || '0') + (decimalPart ? '.' + decimalPart : '');
+    } else if (hasDot) {
+      const parts = cleaned.split('.');
+      const integerPart = parts.shift().replace(/[^\d-]/g, '').replace(/^0+(?=\d)/, '');
+      const decimalPart = parts.join('').replace(/\D/g, '');
+      numericText = (integerPart || '0') + (decimalPart ? '.' + decimalPart : '');
+    } else {
+      numericText = cleaned.replace(/[^\d-]/g, '').replace(/^0+(?=\d)/, '');
+    }
+
+    let numeric = Number(numericText);
+
+    if (!Number.isFinite(numeric) || numeric <= 0) return '';
+
+    if (numeric < 5) {
+      const capped = Math.min(Math.floor(numeric * 1000) / 1000, 4.999);
+      return capped.toLocaleString('pt-BR', {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3
+      });
+    }
+
+    const capped = Math.min(numeric, 99.9);
+    const truncated = Math.floor(capped * 10) / 10;
+
+    if (Number.isInteger(truncated)) {
+      return String(truncated);
+    }
+
+    return truncated.toLocaleString('pt-BR', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1
+    });
+  }
+
+  function normalizeHeightInput(value) {
+    const raw = String(value ?? '').trim();
+
+    if (raw === '') return '';
+
+    const numeric = Number(raw.replace(',', '.').replace(/[^\d.-]/g, ''));
+    if (!Number.isFinite(numeric) || numeric <= 0) return '';
+
+    const adjusted = Math.min(200, Math.trunc(numeric));
+    return String(adjusted);
+  }
+
+  function formatAmpouleCount(count) {
+    const numericCount = Number(count);
+    const countText = formatPtTrim(numericCount, Number.isInteger(numericCount) ? 0 : 1);
+    return `${countText} ${numericCount > 1 ? 'ampolas' : 'ampola'}`;
+  }
+
+  function formatAmpouleVolumeMl(volume) {
+    const numericVolume = Number(volume);
+    return `${formatPtTrim(numericVolume, Number.isInteger(numericVolume) ? 0 : 2)}mL`;
+  }
+
+  function extractConcentrationPerAmpoule(presentation) {
+    const match = String(presentation || '').match(/\(([^)]+)\)/);
+    return match ? match[1].replace(/\s+/g, '') : String(presentation || '').replace(/\s+/g, '');
+  }
+
+
+  function formatContinuousDoseUnit(item) {
+    return item.doseUnit === 'mgkgh'
+      ? 'mg/kg/h'
+      : item.doseUnit === 'mcgkgh'
+        ? 'mcg/kg/h'
+        : 'mcg/kg/min';
+  }
+
+  function formatContinuousPresentation(item) {
+    const concentrationText = extractConcentrationPerAmpoule(item.presentation);
+    const ampouleVolumeText = formatAmpouleVolumeMl(item.ampMl).replace(/\s+/g, '');
+    return `${concentrationText} · Ampolas com ${ampouleVolumeText}`;
+  }
+
+
+  function continuousKey(item) {
+    return String(item.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]+/g, '_').replace(/^_+|_+$/g, '').toLowerCase();
+  }
+
+  function getContinuousConfig(item) {
+    const key = continuousKey(item);
+    if (!UI_STATE.continuousConfigs[key]) {
+      UI_STATE.continuousConfigs[key] = {
+        dose: item.defaultDose,
+        selectedVolumeMl: 12
+      };
+    }
+    return UI_STATE.continuousConfigs[key];
+  }
+
+  function sanitizeContinuousDoseInput(value) {
+    const raw = String(value ?? '').replace(/\s+/g, '').replace(/\./g, ',').replace(/[^\d,]/g, '');
+    if (!raw) return '';
+    const parts = raw.split(',');
+    const integerPart = (parts.shift() || '').replace(/^0+(?=\d)/, '').slice(0, 5) || '0';
+    const decimalPart = parts.join('').replace(/\D/g, '').slice(0, 3);
+    return raw.includes(',') ? `${integerPart}${decimalPart ? ',' + decimalPart : ','}` : integerPart;
+  }
+
+  function normalizeContinuousDoseInput(value, fallback) {
+    const sanitized = sanitizeContinuousDoseInput(value);
+    const numeric = parseLocaleNumber(sanitized);
+    if (!Number.isFinite(numeric) || numeric <= 0) return fallback;
+    return numeric;
+  }
+
+  function hasContinuousConcentrationLimit(item) {
+    return Number.isFinite(Number(item.maxConcentrationMgPerMl)) && Number(item.maxConcentrationMgPerMl) > 0;
+  }
+
+  function formatContinuousConcentrationLimit(item) {
+    if (!hasContinuousConcentrationLimit(item)) return 'Não definido';
+    return item.maxConcentrationLabel || `${formatPtTrim(Number(item.maxConcentrationMgPerMl), 4)} mg/mL`;
+  }
+
+  function getContinuousSchemeByVolume(calc, selectedVolumeMl) {
+    if (!calc || !Array.isArray(calc.schemes)) return null;
+
+    const requestedVolume = Number(selectedVolumeMl);
+    const requestedScheme = calc.schemes.find((scheme) => Number(scheme.totalVolumeMl) === requestedVolume) || calc.schemes[0] || null;
+
+    if (requestedScheme && requestedScheme.isFeasible) {
+      return Object.assign({}, requestedScheme, {
+        requestedVolumeMl: requestedScheme.totalVolumeMl,
+        wasAutoAdjusted: false,
+        exceededMaximumVolume: false
+      });
+    }
+
+    const autoAdjustedScheme = calc.schemes.find((scheme) => {
+      if (!scheme.isFeasible) return false;
+      if (!Number.isFinite(requestedVolume)) return true;
+      return scheme.totalVolumeMl > requestedVolume;
+    });
+
+    if (autoAdjustedScheme) {
+      return Object.assign({}, autoAdjustedScheme, {
+        requestedVolumeMl: requestedScheme ? requestedScheme.totalVolumeMl : requestedVolume,
+        wasAutoAdjusted: true,
+        exceededMaximumVolume: false,
+        autoAdjustmentReasons: requestedScheme ? requestedScheme.failureReasons : []
+      });
+    }
+
+    const maximumScheme = calc.schemes[calc.schemes.length - 1] || requestedScheme || null;
+    return maximumScheme
+      ? Object.assign({}, maximumScheme, {
+          requestedVolumeMl: requestedScheme ? requestedScheme.totalVolumeMl : requestedVolume,
+          wasAutoAdjusted: requestedScheme ? Number(maximumScheme.totalVolumeMl) !== Number(requestedScheme.totalVolumeMl) : false,
+          exceededMaximumVolume: true,
+          autoAdjustmentReasons: requestedScheme ? requestedScheme.failureReasons : []
+        })
+      : null;
+  }
+
+  function buildContinuousVolumeOptions(selectedVolumeMl) {
+    return CONTINUOUS_PREPARATION_SCHEMES.map((scheme) => {
+      const selected = Number(scheme.totalMl) === Number(selectedVolumeMl) ? ' selected' : '';
+      return `<option value="${scheme.totalMl}"${selected}>${formatPtTrim(scheme.totalMl, 0)} mL (${formatPtTrim(scheme.rateMlPerHour, 1)} mL/h)</option>`;
+    }).join('');
+  }
+
+  // ==========================================================
+  // calculators / domain rules
+  // ==========================================================
+  function maintenance1005020(weight) {
+    if (weight <= 10) return weight * 100;
+    if (weight <= 20) return 1000 + ((weight - 10) * 50);
+    return 1500 + ((weight - 20) * 20);
+  }
+
+  function bodySurfaceArea(weight, heightCm) {
+    if (!(weight > 0) || !(heightCm > 0)) return NaN;
+    return 0.007184 * Math.pow(weight, 0.425) * Math.pow(heightCm, 0.725);
+  }
+
+  function getBandByDay(ageDays, bands) {
+    if (!Number.isFinite(ageDays)) return null;
+    return bands.find((band) => ageDays <= band.maxDays) || bands[bands.length - 1];
+  }
+
+  function getHeartBand(ctx) {
+    return getBandByDay(ctx.ageDays, HEART_RATE_BANDS);
+  }
+
+  function getRespBand(ctx) {
+    return getBandByDay(ctx.ageDays, RESP_BANDS);
+  }
+
+  function getPressureBand(ctx) {
+    if (!Number.isFinite(ctx.ageDays) && !Number.isFinite(ctx.ageYears)) return null;
+    return PRESSURE_BANDS.find((band) => band.test(ctx)) || PRESSURE_BANDS[PRESSURE_BANDS.length - 1];
+  }
+
+  function getPAMBand(ctx) {
+    if (!Number.isFinite(ctx.ageDays) && !Number.isFinite(ctx.ageYears)) return null;
+    return PAM_BANDS.find((band) => band.test(ctx)) || PAM_BANDS[PAM_BANDS.length - 1];
+  }
+
+  function getPICBand(ctx) {
+    if (!Number.isFinite(ctx.ageYears)) return null;
+    return PIC_BANDS.find((band) => band.test(ctx)) || PIC_BANDS[PIC_BANDS.length - 1];
+  }
+
+  function getBlade(weight) {
+    if (weight > 32) return 'Reta 3 ou curva';
+    if (weight > 24) return 'Reta 2–3 ou curva';
+    if (weight > 15) return 'Reta 2 ou curva';
+    if (weight > 12) return 'Reta 2';
+    if (weight > 6) return 'Reta 1';
+    return 'Reta 0–1';
+  }
+
+  function getTube(weight) {
+    if (weight > 32) return '6,5 com cuff';
+    if (weight > 24) return '6,0 com cuff';
+    if (weight > 19) return '5,5 sem cuff';
+    if (weight > 15) return '5,0 sem cuff';
+    if (weight > 12) return '4,5 sem cuff';
+    if (weight > 3) return '4,0 sem cuff';
+    if (weight > 2) return '3,5 sem cuff';
+    if (weight > 1) return '3,0 sem cuff';
+    return '2,5 sem cuff';
+  }
+
+  function hasInformedAge(ctx) {
+    return Number.isFinite(ctx.ageDays) && Number.isFinite(ctx.ageYears);
+  }
+
+  function inferAgeBandByAge(ctx) {
+    if (!hasInformedAge(ctx)) return null;
+    if (ctx.ageDays < 28) return 'Neonatal';
+    if (ctx.ageYears < 2) return 'Lactente';
+    if (ctx.ageYears < 6) return 'Pré-escolar';
+    if (ctx.ageYears < 10) return 'Escolar';
+    if (ctx.ageYears < 12) return 'Pré-adolescente';
+    return 'Adolescente';
+  }
+
+  function inferProbableAgeBandByWeight(weight) {
+    if (!Number.isFinite(weight) || weight <= 0) return null;
+    if (weight < 4.1) return 'Provável Neonatal';
+    if (weight < 12) return 'Provável Lactente';
+    if (weight < 20) return 'Provável Pré-escolar';
+    if (weight < 35) return 'Provável Escolar';
+    if (weight < 45) return 'Provável Pré-adolescente';
+    return 'Provável Adolescente';
+  }
+
+  function isNeonatalProfile(ctx) {
+    if (hasInformedAge(ctx)) return ctx.ageDays < 28;
+    return Number.isFinite(ctx.weight) && ctx.weight < 4.1;
+  }
+
+  function classifyPatient(ctx) {
+    if (hasInformedAge(ctx)) {
+      return inferAgeBandByAge(ctx) === 'Neonatal' ? 'Neonatal' : 'Pediátrica';
+    }
+    return inferProbableAgeBandByWeight(ctx.weight) || 'Não informado';
+  }
+
+  function inferAgeBandLabel(ctx) {
+    if (hasInformedAge(ctx)) return inferAgeBandByAge(ctx);
+    return inferProbableAgeBandByWeight(ctx.weight) || 'Não informada';
+  }
+
+  function computeContinuousPreparation(item, weight, doseValue = item.defaultDose) {
+    if (!(weight > 0)) return null;
+
+    const numericDose = Number(doseValue);
+    if (!Number.isFinite(numericDose) || numericDose <= 0) return null;
+
+    let totalDrugMgPerDay = 0;
+    if (item.doseUnit === 'mcgkgmin') totalDrugMgPerDay = (numericDose * weight * 60 * 24) / 1000;
+    if (item.doseUnit === 'mcgkgh') totalDrugMgPerDay = (numericDose * weight * 24) / 1000;
+    if (item.doseUnit === 'mgkgh') totalDrugMgPerDay = numericDose * weight * 24;
+
+    const drugVolumeMlPerDay = totalDrugMgPerDay / item.mgPerMl;
+    const hasConcentrationLimit = hasContinuousConcentrationLimit(item);
+    const maxConcentrationMgPerMl = Number(item.maxConcentrationMgPerMl);
+
+    const schemes = CONTINUOUS_PREPARATION_SCHEMES.map((scheme) => {
+      const diluentMl = scheme.totalMl - drugVolumeMlPerDay;
+      const concentrationMgPerMl = totalDrugMgPerDay / scheme.totalMl;
+      const volumeFits = diluentMl >= -1e-9;
+      const concentrationFits = !hasConcentrationLimit || concentrationMgPerMl <= maxConcentrationMgPerMl + 1e-9;
+      const failureReasons = [];
+
+      if (!volumeFits) failureReasons.push('a dose diária da droga excedia o volume selecionado');
+      if (!concentrationFits) failureReasons.push('a concentração final ficava acima do recomendado');
+
+      return {
+        totalVolumeMl: scheme.totalMl,
+        rateMlPerHour: scheme.rateMlPerHour,
+        diluentMl: volumeFits ? Math.max(0, diluentMl) : NaN,
+        concentrationMgPerMl,
+        volumeFits,
+        concentrationFits,
+        failureReasons,
+        isFeasible: volumeFits && concentrationFits
+      };
+    });
+
+    return {
+      totalDrugMgPerDay,
+      drugVolumeMlPerDay,
+      schemes,
+      hasAnyFeasibleScheme: schemes.some((scheme) => scheme.isFeasible),
+      hasConcentrationLimit,
+      maxConcentrationMgPerMl
+    };
+  }
+
+  function resolveLossBand(weight) {
+    return VOLUME_LOSS_TABLE.find((band) => (band.min == null || weight >= band.min) && (band.max == null || weight <= band.max)) || VOLUME_LOSS_TABLE[0];
+  }
+
+  function buildContext(values) {
+    const age = parseAgeFields(values.year, values.month, values.day);
+    const weight = parseLocaleNumber(values.weight);
+    const height = parseLocaleNumber(values.height);
+
+    if (!age.valid && !age.empty) {
+      throw new Error('Idade inválida. Ano: 0 a 18; Mês: 0 a 11; Dias: 0 a 30.');
+    }
+    if (!Number.isFinite(weight) || weight <= 0) {
+      throw new Error('Informe um peso válido maior que zero.');
+    }
+    if (values.height.trim() !== '' && (!Number.isFinite(height) || height <= 0)) {
+      throw new Error('Se informar a estatura, use um valor válido em cm.');
+    }
+
+    return {
+      ageText: age.valid ? age.text : 'Não informada',
+      ageYears: age.valid ? age.years : NaN,
+      ageMonths: age.valid ? age.months : NaN,
+      ageDays: age.valid ? age.totalDays : NaN,
+      weight,
+      height: Number.isFinite(height) && height > 0 ? height : NaN,
+      bsa: Number.isFinite(height) && height > 0 ? bodySurfaceArea(weight, height) : NaN
+    };
+  }
+
+  // ==========================================================
+  // ui renderers
+  // ==========================================================
+  function renderDrugCards(ctx) {
+    const grid = byId('drugGrid');
+    grid.innerHTML = '';
+    RESUSCITATION_DRUGS.forEach((drug) => {
+      const total = ctx.weight > 0 ? drug.total(ctx.weight, ctx) : NaN;
+      const outputLabel = drug.outputLabel || (drug.unit === 'J'
+        ? 'Energia calculada'
+        : (drug.dilution && drug.dilution !== 's/ diluir' && drug.dilution !== '—'
+          ? 'Volume após diluição'
+          : 'Volume da ampola'));
+      const displayValue = ctx.weight > 0 && typeof drug.displayTotal === 'function'
+        ? drug.displayTotal(ctx.weight, ctx)
+        : (Number.isFinite(total) ? `${formatPtTrim(total, 2)} ${drug.unit}` : '—');
+      const card = document.createElement('article');
+      card.className = 'drug-card';
+      card.innerHTML = `
+        <h3>${drug.name}</h3>
+        <div class="drug-total">
+          <span>${outputLabel}</span>
+          <span class="v">${displayValue}</span>
+        </div>
+        <div class="drug-meta">
+          <div class="item"><span class="k">Apresentação</span><span class="v">${drug.presentation}</span></div>
+          <div class="item"><span class="k">Dose</span><span class="v">${drug.doseLabel}</span></div>
+          <div class="item"><span class="k">mL/kg</span><span class="v">${drug.mlKgLabel}</span></div>
+          <div class="item"><span class="k">Diluição</span><span class="v">${drug.dilution}</span></div>
+          <div class="item"><span class="k">Diluente</span><span class="v">${drug.diluent}</span></div>
+          <div class="item"><span class="k">Dose máx.</span><span class="v">${drug.maxLabel}</span></div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function renderContinuousCards(ctx) {
+    const grid = byId('continuousCards');
+    grid.innerHTML = '';
+    CONTINUOUS_MEDS.forEach((item) => {
+      const key = continuousKey(item);
+      const config = getContinuousConfig(item);
+      const calc = computeContinuousPreparation(item, ctx.weight, config.dose);
+      const doseUnitText = formatContinuousDoseUnit(item);
+      const doseText = `${formatPtTrim(config.dose, 3)} ${doseUnitText}`;
+      const presentationText = formatContinuousPresentation(item);
+      const selectedScheme = getContinuousSchemeByVolume(calc, config.selectedVolumeMl);
+
+      if (selectedScheme && Number(config.selectedVolumeMl) !== Number(selectedScheme.totalVolumeMl)) {
+        config.selectedVolumeMl = selectedScheme.totalVolumeMl;
+      }
+
+      let selectedSchemeMarkup = '';
+      if (!calc || !selectedScheme) {
+        selectedSchemeMarkup = `
+          <div class="item" style="grid-column:1/-1">
+            <span class="k">Preparo selecionado</span>
+            <span class="v">—</span>
+          </div>
+        `;
+      } else if (!selectedScheme.isFeasible) {
+        const warningLines = [];
+        if (!selectedScheme.volumeFits) {
+          warningLines.push(`Mesmo em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL, o volume diário da droga (${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL) excede o volume final disponível; não há diluente positivo para este preparo.`);
+        }
+        if (!selectedScheme.concentrationFits) {
+          warningLines.push(`Mesmo em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL, a concentração final (${formatPtTrim(selectedScheme.concentrationMgPerMl, 4)} mg/mL) fica acima do recomendado (${formatContinuousConcentrationLimit(item)}).`);
+        }
+        const autoAdjustmentText = selectedScheme.wasAutoAdjusted
+          ? `<br><span class="muted small">Ajustado automaticamente de ${formatPtTrim(selectedScheme.requestedVolumeMl, 0)} mL para ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL porque ${(selectedScheme.autoAdjustmentReasons || ['o preparo selecionado não era adequado']).join(' e ')}.</span>`
+          : '';
+        const diluentText = selectedScheme.volumeFits
+          ? `${formatPtTrim(selectedScheme.diluentMl, 2)} mL de ${item.diluent}`
+          : `não há volume de diluente suficiente em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL`;
+        selectedSchemeMarkup = `
+          <div class="item" style="grid-column:1/-1">
+            <span class="k">Preparo ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
+            <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${diluentText} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationMgPerMl, 4)} mg/mL e infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora${autoAdjustmentText}<br><span class="muted small"><strong>Aviso:</strong> ${warningLines.join(' ') || 'Mesmo no maior volume disponível, este preparo ultrapassa os limites configurados.'}</span></span>
+          </div>
+        `;
+      } else {
+        const autoAdjustmentText = selectedScheme.wasAutoAdjusted
+          ? `<br><span class="muted small">Ajustado automaticamente de ${formatPtTrim(selectedScheme.requestedVolumeMl, 0)} mL para ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL porque ${(selectedScheme.autoAdjustmentReasons || ['o preparo selecionado não era adequado']).join(' e ')}.</span>`
+          : '';
+        selectedSchemeMarkup = `
+          <div class="item" style="grid-column:1/-1">
+            <span class="k">Preparo ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
+            <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${formatPtTrim(selectedScheme.diluentMl, 2)} mL de ${item.diluent} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationMgPerMl, 4)} mg/mL e infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora${autoAdjustmentText}</span>
+          </div>
+        `;
+      }
+
+      const card = document.createElement('article');
+      card.className = 'info-card';
+      card.dataset.continuousKey = key;
+      card.innerHTML = `
+        <h3>${item.name}</h3>
+        <div class="info-sub">${extractConcentrationPerAmpoule(item.presentation)}</div>
+        <div class="info-meta">
+          <div class="item"><span class="k">Apresentação</span><span class="v">${presentationText}</span></div>
+          <div class="item"><span class="k">Dose usual</span><span class="v">${item.usual}</span></div>
+          <div class="continuous-controls">
+            <div class="continuous-field">
+              <label for="dose_${key}">Dose padrão (${doseUnitText})</label>
+              <input id="dose_${key}" class="continuous-dose-input" type="text" inputmode="decimal" value="${formatPtTrim(config.dose, 3)}" data-continuous-key="${key}" autocomplete="off">
+            </div>
+            <div class="continuous-field">
+              <label for="volume_${key}">Diluição / volume final</label>
+              <select id="volume_${key}" class="continuous-volume-select" data-continuous-key="${key}">
+                ${buildContinuousVolumeOptions(config.selectedVolumeMl)}
+              </select>
+            </div>
+          </div>
+          <div class="item"><span class="k">Dose selecionada</span><span class="v">${doseText}</span></div>
+          <div class="item"><span class="k">Droga / 24h</span><span class="v">${calc ? `${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL` : '—'}</span></div>
+          <div class="item"><span class="k">Concentração limite</span><span class="v">${formatContinuousConcentrationLimit(item)}</span></div>
+          ${selectedSchemeMarkup}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    bindContinuousControlEvents();
+  }
+
+  function bindContinuousControlEvents() {
+    const grid = byId('continuousCards');
+
+    grid.querySelectorAll('.continuous-dose-input').forEach((input) => {
+      input.addEventListener('input', () => {
+        input.value = sanitizeContinuousDoseInput(input.value);
+      });
+
+      const updateDose = () => {
+        const key = input.dataset.continuousKey;
+        const item = CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
+        if (!item) return;
+        const config = getContinuousConfig(item);
+        config.dose = normalizeContinuousDoseInput(input.value, item.defaultDose);
+        renderContinuousCards(UI_STATE.lastContext || emptyContext());
+      };
+
+      input.addEventListener('blur', updateDose);
+      input.addEventListener('change', updateDose);
+    });
+
+    grid.querySelectorAll('.continuous-volume-select').forEach((select) => {
+      select.addEventListener('change', () => {
+        const key = select.dataset.continuousKey;
+        const item = CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
+        if (!item) return;
+        const config = getContinuousConfig(item);
+        config.selectedVolumeMl = Number(select.value);
+        renderContinuousCards(UI_STATE.lastContext || emptyContext());
+      });
+    });
+  }
+
+  function renderLossCards(weight) {
+    const grid = byId('lossCards');
+    grid.innerHTML = '';
+    const band = resolveLossBand(weight > 0 ? weight : 5);
+
+    const card = document.createElement('article');
+    card.className = 'info-card';
+    card.innerHTML = `
+      <h3>${band.label}</h3>
+      <div class="loss-hours">
+        <div class="item"><span class="k">1ª hora</span><span class="v">${band.h1 ?? 'NA'} mL</span></div>
+        <div class="item"><span class="k">2ª hora</span><span class="v">${band.h2 ?? 'NA'} mL</span></div>
+        <div class="item"><span class="k">3ª hora</span><span class="v">${band.h3 ?? 'NA'} mL</span></div>
+        <div class="item"><span class="k">4ª hora</span><span class="v">${band.h4 ?? 'NA'} mL</span></div>
+        <div class="item"><span class="k">5ª hora</span><span class="v">${band.h5 ?? 'NA'} mL</span></div>
+        <div class="item"><span class="k">6ª hora</span><span class="v">${band.h6 ?? 'NA'} mL</span></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+
+  function renderTopSummary(ctx) {
+    byId('perfilPaciente').textContent = `Perfil: ${classifyPatient(ctx)}`;
+    byId('idadeFormatada').textContent = `Idade: ${ctx.ageText || 'Não informada'}`;
+    byId('classificacaoFaixa').textContent = `Faixa etária: ${inferAgeBandLabel(ctx)}`;
+
+    byId('scOut').textContent = Number.isFinite(ctx.bsa) ? `${formatPtTrim(ctx.bsa, 3)} m²` : '—';
+    byId('manutOut').textContent = ctx.weight > 0 ? `${formatPtTrim(maintenance1005020(ctx.weight), 0)} mL/dia` : '—';
+    byId('laminaOut').textContent = ctx.weight > 0 ? getBlade(ctx.weight) : '—';
+    byId('canulaOut').textContent = ctx.weight > 0 ? getTube(ctx.weight) : '—';
+
+    const heartBand = getHeartBand(ctx);
+    const respBand = getRespBand(ctx);
+    const pressureBand = getPressureBand(ctx);
+    const pamBand = getPAMBand(ctx);
+    const picBand = getPICBand(ctx);
+
+    byId('fcAwakeOut').textContent = heartBand ? heartBand.awake : '—';
+    byId('fcMeanOut').textContent = heartBand ? heartBand.mean : '—';
+    byId('fcSleepOut').textContent = heartBand ? heartBand.sleep : '—';
+    byId('frOut').textContent = respBand ? respBand.fr : '—';
+    byId('pasOut').textContent = pressureBand ? pressureBand.pas : '—';
+    byId('padOut').textContent = pressureBand ? pressureBand.pad : '—';
+    byId('pamOut').textContent = pamBand ? pamBand.pam : '—';
+    byId('picOut').textContent = picBand ? picBand.pic : '—';
+  }
+
+  // ==========================================================
+  // event helpers / controllers
+  // ==========================================================
+  function showAlert(message) {
+    const box = byId('alertBox');
+    UI_STATE.lastAlert = String(message || '');
+    box.textContent = message;
+    box.style.display = 'block';
+  }
+
+  function clearAlert() {
+    const box = byId('alertBox');
+    UI_STATE.lastAlert = '';
+    box.textContent = '';
+    box.style.display = 'none';
+  }
+
+  function readFormValues() {
+    return {
+      year: byId('idadeAno').value,
+      month: byId('idadeMes').value,
+      day: byId('idadeDia').value,
+      weight: byId('peso').value,
+      height: byId('estatura').value
+    };
+  }
+
+  function emptyContext() {
+    return {
+      ageText: 'Não informada',
+      ageYears: NaN,
+      ageMonths: NaN,
+      ageDays: NaN,
+      weight: NaN,
+      height: NaN,
+      bsa: NaN
+    };
+  }
+
+  function renderAll() {
+    clearAlert();
+    try {
+      const ctx = buildContext(readFormValues());
+      UI_STATE.lastContext = ctx;
+      renderTopSummary(ctx);
+      renderDrugCards(ctx);
+      renderContinuousCards(ctx);
+      renderLossCards(ctx.weight);
+    } catch (error) {
+      const blank = emptyContext();
+      UI_STATE.lastContext = blank;
+      renderTopSummary(blank);
+      renderDrugCards(blank);
+      renderContinuousCards(blank);
+      renderLossCards(NaN);
+      showAlert(error.message || 'Não foi possível calcular.');
+    }
+  }
+
+  function resetAll() {
+    UI_STATE.continuousConfigs = Object.create(null);
+    byId('idadeAno').value = '';
+    byId('idadeMes').value = '';
+    byId('idadeDia').value = '';
+    byId('peso').value = '4';
+    byId('estatura').value = '';
+    clearAlert();
+    renderAll();
+  }
+
+  function bindAgeFieldEvents() {
+    ['idadeAno', 'idadeMes', 'idadeDia'].forEach((id) => {
+      const element = byId(id);
+      const max = id === 'idadeAno' ? 17 : id === 'idadeMes' ? 11 : 30;
+
+      element.addEventListener('input', () => {
+        element.value = element.value.replace(/[^\d-]/g, '').slice(0, 3);
+      });
+
+      const normalizeAndRenderAge = () => {
+        normalizeAgeInputField(element, max, '');
+        renderAll();
+      };
+
+      element.addEventListener('blur', normalizeAndRenderAge);
+      element.addEventListener('focusout', normalizeAndRenderAge);
+      element.addEventListener('change', normalizeAndRenderAge);
+    });
+  }
+
+  function bindNumericFieldEvents() {
+    const weightInput = byId('peso');
+    const heightInput = byId('estatura');
+
+    weightInput.addEventListener('input', () => {
+      let value = String(weightInput.value ?? '').replace(/[^\d,.-]/g, '');
+
+      const firstSeparatorIndex = value.search(/[,.]/);
+
+      if (firstSeparatorIndex !== -1) {
+        let before = value.slice(0, firstSeparatorIndex).replace(/[^\d-]/g, '').replace(/^0+(?=\d)/, '');
+        const separator = value[firstSeparatorIndex];
+        let after = value.slice(firstSeparatorIndex + 1).replace(/\D/g, '').slice(0, 3);
+
+        if (before.length > 2 || Number(before || '0') > 99) {
+          before = '99';
+          after = '9';
+        }
+
+        value = (before || '0') + separator + after;
+      } else {
+        value = value.replace(/[^\d-]/g, '').replace(/^0+(?=\d)/, '');
+        if (Number(value || '0') > 99) {
+          value = '99,9';
+        } else {
+          value = value.slice(0, 2);
+        }
+      }
+
+      weightInput.value = value;
+    });
+
+    const normalizeAndRenderWeight = () => {
+      weightInput.value = normalizeWeightInput(weightInput.value);
+      renderAll();
+    };
+
+    weightInput.addEventListener('blur', normalizeAndRenderWeight);
+    weightInput.addEventListener('focusout', normalizeAndRenderWeight);
+    weightInput.addEventListener('change', normalizeAndRenderWeight);
+
+    heightInput.addEventListener('input', () => {
+      heightInput.value = String(heightInput.value ?? '').replace(/\D/g, '').slice(0, 3);
+    });
+
+    const normalizeAndRenderHeight = () => {
+      heightInput.value = normalizeHeightInput(heightInput.value);
+      renderAll();
+    };
+
+    heightInput.addEventListener('blur', normalizeAndRenderHeight);
+    heightInput.addEventListener('focusout', normalizeAndRenderHeight);
+    heightInput.addEventListener('change', normalizeAndRenderHeight);
+  }
+
+  function bindGlobalFieldEvents() {
+    // A normalização de idade, peso e estatura é feita nos handlers específicos.
+  }
+
+  function runSelfAudit() {
+    const checks = [];
+
+    function assert(condition, message) {
+      if (!condition) throw new Error(message);
+      checks.push(message);
+    }
+
+    const infant = buildContext({ year: '', month: '1', day: '15', weight: '4', height: '60' });
+    assert(Math.abs(maintenance1005020(4) - 400) < 1e-9, 'Manutenção 100/50/20 correta para 4 kg');
+    assert(getHeartBand(infant).label === 'RN a 3 meses', 'Faixa de FC correta para lactente jovem');
+    assert(getRespBand({ ageDays: 30 }).label === 'RN', 'Limite de 30 dias mantido em RN');
+    assert(resolveLossBand(46).label === '≥46 kg', 'Faixa de perdas cobre pesos acima de 45 kg');
+    const adrenaline = RESUSCITATION_DRUGS.find((item) => item.name === 'Adrenalina IV');
+    assert(Math.abs(adrenaline.total(10) - 1) < 1e-9, 'Dose de adrenalina IV correta para 10 kg');
+    const bicarbonate = RESUSCITATION_DRUGS.find((item) => item.name === 'Bicarbonato de sódio 8,4%');
+    assert(Math.abs(bicarbonate.total(3.5) - 14) < 1e-9, 'Diluição do bicarbonato correta para peso <4 kg');
+    assert(Math.abs(bicarbonate.total(4) - 8) < 1e-9, 'Diluição do bicarbonato correta para peso ≥4 kg');
+    const dobutamine = CONTINUOUS_MEDS.find((item) => item.name === 'Dobutamina');
+    const prep = computeContinuousPreparation(dobutamine, 10);
+    assert(Math.abs(prep.drugVolumeMlPerDay - 5.76) < 1e-9, 'Volume diário de dobutamina correto para 10 kg');
+    assert(Math.abs(prep.schemes[0].diluentMl - 6.24) < 1e-9, 'Completação volumétrica da dobutamina para 12 mL correta');
+    assert(Math.abs(prep.schemes[0].rateMlPerHour - 0.5) < 1e-9, 'Taxa padronizada de dobutamina correta');
+    return checks;
+  }
+
+  // ==========================================================
+  // bootstrap
+  // ==========================================================
+  function initialize() {
+    byId('btnModelo').addEventListener('click', renderAll);
+    byId('btnLimpar').addEventListener('click', resetAll);
+    bindAgeFieldEvents();
+    bindNumericFieldEvents();
+    bindGlobalFieldEvents();
+    renderAll();
+    try {
+      const checks = runSelfAudit();
+      console.info('ParaPed self-audit OK:', checks);
+    } catch (error) {
+      console.error('ParaPed self-audit failed:', error);
+    }
+  }
+
+  window.ParaPedCalculator = {
+    buildContext,
+    parseLocaleNumber,
+    parseAgeFields,
+    maintenance1005020,
+    bodySurfaceArea,
+    getHeartBand,
+    getRespBand,
+    getPressureBand,
+    getPAMBand,
+    getPICBand,
+    getBlade,
+    getTube,
+    classifyPatient,
+    inferAgeBandLabel,
+    computeContinuousPreparation,
+    resolveLossBand,
+    runSelfAudit,
+    constants: {
+      RESUSCITATION_DRUGS,
+      CONTINUOUS_MEDS,
+      VOLUME_LOSS_TABLE,
+      HEART_RATE_BANDS,
+      RESP_BANDS,
+      PRESSURE_BANDS,
+      PAM_BANDS,
+      PIC_BANDS
+    }
+  };
+
+  initialize();
+})();
+
+  </script>
+</body>
+<!--
+REFERÊNCIAS TÉCNICAS E FONTES DE APOIO
+
+Observação de fidelidade:
+- A fidelidade à planilha "Ficha Parada Pediátrica.xlsx" foi considerada prioritária para a lógica de cálculo.
+- Ajustes clínicos posteriores foram baseados em fontes institucionais, bulas oficiais, monografias técnicas ou referências médicas reconhecidas.
+- Este bloco é apenas informativo e não é exibido na interface do HTML.
+
+Fontes principais consultadas:
+1. Planilha-fonte: Ficha Parada Pediátrica.xlsx.
+2. Ministério da Saúde / Brasil — Distribuição dos medicamentos para intubação orotraqueal:
+   https://www.gov.br/saude/pt-br/composicao/sectics/daf/cbaf/acoes-covid-19/intubacao-orotraqueal
+   https://www.gov.br/saude/pt-br/composicao/sectics/distribuicao-dos-medicamentos-para-iot
+3. EBSERH / HU-UFGD — Protocolo de Intubação em Sequência Rápida em Pediatria:
+   https://www.gov.br/hubrasil/pt-br/hospitais-universitarios/regiao-centro-oeste/hu-ufgd/acesso-a-informacao/pops-protocolos-e-processos/gad/prt-utip-004-intubacao-em-sequencia-rapida-em-pediatria-v1-1.pdf
+4. EBSERH / HU-UFGD — Protocolo de Manejo de Dor Neonatal:
+   https://www.gov.br/ebserh-/pt-br/hospitais-universitarios/regiao-centro-oeste/hu-ufgd/acesso-a-informacao/pops-protocolos-e-processos/gad/prt-utin-009-manejo-de-dor-neonatal.pdf
+5. EBSERH / HUSE-UNIRIO — Manual de Medicamentos Potencialmente Perigosos:
+   https://www.gov.br/hubrasil/pt-br/hospitais-universitarios/regiao-sudeste/huse-unirio/saude/farmacia/manual-de-medicamentos-potencialmente-perigosos-mpp.pdf
+6. SES-DF — Manual de Medicamentos Injetáveis:
+   https://www.saude.df.gov.br/documents/37101/0/Formatacao_Manual_Injetaveis_FINAL_ABRIL2025-07-05-25.pdf
+7. DailyMed / U.S. National Library of Medicine:
+   https://dailymed.nlm.nih.gov/
+8. Drugs.com Professional Monographs:
+   https://www.drugs.com/pro/
+9. American Academy of Pediatrics / Pediatrics:
+   https://publications.aap.org/
+10. PubMed Central / PALS reference:
+   https://pmc.ncbi.nlm.nih.gov/
+11. BCEHS Handbook:
+   https://handbook.bcehs.ca/
+12. AccessAnesthesiology / McGraw Hill Medical:
+   https://accessanesthesiology.mhmedical.com/
+
+Fórmula geral usada para conferência:
+- volume em mL/kg = dose por kg / concentração final.
+- quando havia diluição, a concentração final foi recalculada antes da obtenção do volume.
+-->
+
+</html>
