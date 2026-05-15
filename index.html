@@ -128,6 +128,8 @@
     }
     .drug-meta .k{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px}
     .drug-meta .v{display:block;font-size:.87rem;line-height:1.3;color:var(--text)}
+    .drug-meta .item.warn-bg{background:var(--warn-bg);border-color:#f1c2c2;color:var(--warn)}
+    .drug-meta .item.warn-bg .v{color:var(--warn);font-weight:700}
     .info-grid{display:grid;grid-template-columns:1fr;gap:12px}
     .info-card{
       border:1px solid var(--line);
@@ -159,7 +161,7 @@
     .loss-hours .k{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px}
     .loss-hours .v{display:block;font-size:.9rem;font-weight:700;color:#143e69;line-height:1.3}
 
-    .continuous-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;grid-column:1/-1}
+    .continuous-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;grid-column:1/-1}
     .continuous-field{border:1px solid #e3ebf4;border-radius:12px;padding:8px 10px;background:#fff;display:flex;flex-direction:column;gap:6px}
     .continuous-field label{font-size:.72rem;color:var(--muted);margin:0}
     .continuous-field input,.continuous-field select{min-height:42px;border-radius:10px;padding:8px 10px;font-size:.92rem}
@@ -315,7 +317,6 @@
       Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
     
     </div>
-    <div class="spacer-3lines" aria-hidden="true"></div>
 <div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong></div>
     <div class="spacer-3lines" aria-hidden="true"></div>
 </main>
@@ -329,56 +330,243 @@
   // constants
   // ==========================================================
   const RESUSCITATION_DRUGS = [
-    {name:'Bolus Cristaloide — 10 mL/kg', presentation:'SF 0,9% ou Ringer Lactato', doseLabel:'10 mL/kg', mlKgLabel:'10', dilution:'—', diluent:'—', maxLabel:'Reavaliar após cada bolus', total:(w)=>w*10, unit:'mL', outputLabel:'Volume calculado'},
-    {name:'Bolus Cristaloide — 20 mL/kg', presentation:'SF 0,9% ou Ringer Lactato', doseLabel:'20 mL/kg', mlKgLabel:'20', dilution:'—', diluent:'—', maxLabel:'Reavaliar após cada bolus', total:(w)=>w*20, unit:'mL', outputLabel:'Volume calculado'},
-    {name:'Adrenalina IV', presentation:'1 mg/mL', doseLabel:'0,01 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
-    {name:'Adrenalina Endotraqueal (Via IT)', presentation:'1 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'2,5 mg = 2,5 mL', total:(w)=>Math.min(w*0.1,2.5), unit:'mL'},
-    {name:'Adenosina (ataque)', presentation:'3 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,033', dilution:'s/ diluir', diluent:'—', maxLabel:'6 mg = 2 mL', total:(w)=>Math.min(w*(0.1/3),2), unit:'mL'},
-    {name:'Adenosina (2ª dose)', presentation:'3 mg/mL', doseLabel:'0,2 mg/kg', mlKgLabel:'0,067', dilution:'s/ diluir', diluent:'—', maxLabel:'12 mg = 4 mL', total:(w)=>Math.min(w*(0.2/3),4), unit:'mL'},
-    {name:'Amiodarona', presentation:'50 mg/mL', doseLabel:'5 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'6 mL', total:(w)=>Math.min(w*0.1,6), unit:'mL'},
-    {name:'Atracúrio', presentation:'50 mg/5 mL', doseLabel:'0,4 mg/kg', mlKgLabel:'0,40', dilution:'1 p/ 9', diluent:'SF 0,9%', maxLabel:'—', total:(w)=>w*0.4, unit:'mL'},
-    {name:'Atropina IV/IO', presentation:'0,25 mg/mL', doseLabel:'0,02 mg/kg', mlKgLabel:'0,08', dilution:'s/ diluir', diluent:'—', maxLabel:'Dose máxima única: 0,5 mg = 2 mL', total:(w)=>Math.min(w*0.08,2), unit:'mL'},
-    {name:'Bicarbonato de sódio 8,4%', presentation:'1 mEq/mL', doseLabel:'1 mEq/kg', mlKgLabel:'<4 kg: 4,0<br>≥4 kg: 2,0', dilution:'<4 kg: 1 p/ 3<br>≥4 kg: 1 p/ 1', diluent:'AD', maxLabel:'—', total:(w)=>w < 4 ? w * 4 : w * 2, unit:'mL'},
-    {name:'Cetamina / Ketalar', presentation:'50 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'—', total:(w)=>w*0.1, unit:'mL'},
-    {name:'Cardioversão Sincronizada — dose inicial', presentation:'—', doseLabel:'0,5 a 1 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*1,360), unit:'J', outputLabel:'Energia calculada', displayTotal:(w)=>`${formatPtTrim(Math.min(w*0.5,360), 1)} a ${formatPtTrim(Math.min(w*1,360), 1)} J`},
-    {name:'Cardioversão Sincronizada — dose subsequente', presentation:'—', doseLabel:'2 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*2,360), unit:'J', outputLabel:'Energia calculada'},
-    {name:'Desfibrilação — 1º Choque', presentation:'—', doseLabel:'2 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*2,360), unit:'J', outputLabel:'Energia calculada'},
-    {name:'Desfibrilação — Choques Subsequentes', presentation:'—', doseLabel:'4 J/kg', mlKgLabel:'—', dilution:'—', diluent:'—', maxLabel:'360 J', total:(w)=>Math.min(w*4,360), unit:'J', outputLabel:'Energia calculada'},
-    {name:'Fentanil', presentation:'50 mcg/mL', doseLabel:'2 mcg/kg', mlKgLabel:'0,20', dilution:'1 p/ 4', diluent:'AD', maxLabel:'50 mcg = 5 mL', total:(w)=>Math.min(w*0.2,5), unit:'mL'},
-    {name:'Esmolol / Brevibloc', presentation:'10 mg/mL', doseLabel:'0,5 mg/kg (500 mcg/kg)', mlKgLabel:'0,50', dilution:'1 p/ 9', diluent:'SF 0,9%', maxLabel:'Dose de ataque para TSV/controle agudo de frequência', total:(w)=>w*0.5, unit:'mL'},
-    {name:'Flumazenil / Lanexat', presentation:'0,1 mg/mL', doseLabel:'0,02 mg/kg', mlKgLabel:'0,20', dilution:'s/ diluir', diluent:'—', maxLabel:'1 mg = 10 mL', total:(w)=>Math.min(w*0.2,10), unit:'mL'},
-    {name:'Glicose', presentation:'Neonatal: SG10%<br>Pediátrica: SG25%', doseLabel:'Neonatal: 0,2 g/kg<br>Pediátrica: 0,5 g/kg', mlKgLabel:'2,0', dilution:'s/ diluir', diluent:'—', maxLabel:'Pediátrica: máx. 50 g = 200 mL de SG25%', total:(w)=>Math.min(w*2,200), unit:'mL'},
-    {name:'Gluconato de cálcio 10%', presentation:'100 mg/mL', doseLabel:'100 mg/kg', mlKgLabel:'2,0', dilution:'1 p/ 1', diluent:'AD', maxLabel:'2 g = 20 mL da ampola; 40 mL finais', total:(w)=>Math.min(w*2,40), unit:'mL'},
-    {name:'Lidocaína 2%', presentation:'20 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.05,5), unit:'mL'},
-    {name:'Dexmedetomidina / Precedex (ataque)', presentation:'100 mcg/mL', doseLabel:'1 mcg/kg em 10 min', mlKgLabel:'0,25', dilution:'Diluir para 4 mcg/mL', diluent:'SF 0,9% ou SG5%', maxLabel:'—', total:(w)=>w*0.25, unit:'mL'},
-    {name:'Midazolam / Dormonid', presentation:'5 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 4', diluent:'AD', maxLabel:'5 mL', total:(w)=>Math.min(w*0.1,5), unit:'mL'},
-    {name:'Meperidina / Dolantina', presentation:'50 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 4', diluent:'AD', maxLabel:'10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
-    {name:'Morfina / Dimorf', presentation:'10 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'10 mg = 10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
-    {name:'Naloxona / Narcan', presentation:'0,4 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,25', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.25,5), unit:'mL'},
-    {name:'Neostigmina', presentation:'0,5 mg/mL', doseLabel:'0,07 mg/kg', mlKgLabel:'0,14', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mg = 10 mL', total:(w)=>Math.min(w*0.14,10), unit:'mL'},
-    {name:'Pancurônio / Pavulon', presentation:'4 mg/2 mL', doseLabel:'0,2 mg/kg', mlKgLabel:'0,20', dilution:'1 p/ 1', diluent:'AD', maxLabel:'—', total:(w)=>w*0.2, unit:'mL'},
-    {name:'Procainamida / Procamide', presentation:'500 mg/5 mL', doseLabel:'15 mg/kg', mlKgLabel:'0,15', dilution:'s/ diluir', diluent:'—', maxLabel:'500 mg = 5 mL', total:(w)=>Math.min(w*0.15,5), unit:'mL'},
-    {name:'Valium', presentation:'5 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'2 mL', total:(w)=>Math.min(w*0.1,2), unit:'mL'},
-    {name:'Rocurônio / Esmeron', presentation:'10 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,25', dilution:'1 p/ 4', diluent:'AD', maxLabel:'—', total:(w)=>w*0.25, unit:'mL'},
-    {name:'Sulfato de magnésio 50%', presentation:'0,5 g/mL', doseLabel:'25 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'4 mL', total:(w)=>Math.min(w*0.05,4), unit:'mL'},
-    {name:'Thiopental', presentation:'25 mg/mL<br>Reconstituído: 500 mg + 20 mL de SF 0,9%', doseLabel:'3 mg/kg', mlKgLabel:'0,12', dilution:'reconstituído', diluent:'SF 0,9%', maxLabel:'—', total:(w)=>w*0.12, unit:'mL'}
+{name:'Adrenalina IV', presentation:'1 mg/mL', doseLabel:'0,01 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
+{name:'Adrenalina Endotraqueal (Via IT)', presentation:'1 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'2,5 mg = 2,5 mL', total:(w)=>Math.min(w*0.1,2.5), unit:'mL'},
+{name:'Adenosina (ataque)', presentation:'3 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,033', dilution:'s/ diluir', diluent:'—', maxLabel:'6 mg = 2 mL', total:(w)=>Math.min(w*(0.1/3),2), unit:'mL'},
+{name:'Adenosina (2ª dose)', presentation:'3 mg/mL', doseLabel:'0,2 mg/kg', mlKgLabel:'0,067', dilution:'s/ diluir', diluent:'—', maxLabel:'12 mg = 4 mL', total:(w)=>Math.min(w*(0.2/3),4), unit:'mL'},
+{name:'Amiodarona', presentation:'50 mg/mL', doseLabel:'5 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'6 mL', total:(w)=>Math.min(w*0.1,6), unit:'mL'},
+{name:'Atropina IV/IO', presentation:'0,25 mg/mL', doseLabel:'0,02 mg/kg (mín. 0,1 mg)', mlKgLabel:'0,08', dilution:'s/ diluir', diluent:'—', maxLabel:'Dose mínima: 0,1 mg = 0,4 mL; dose máxima única: 0,5 mg = 2 mL', total:(w)=>Math.min(Math.max(w*0.08,0.4),2), unit:'mL'},
+{name:'Bicarbonato de sódio 8,4%', presentation:'1 mEq/mL', doseLabel:'1 mEq/kg', mlKgLabel:'<4 kg: 4,0<br>≥4 kg: 2,0', dilution:'<4 kg: 1 p/ 3<br>≥4 kg: 1 p/ 1', diluent:'AD', maxLabel:'—', total:(w)=>w < 4 ? w * 4 : w * 2, unit:'mL'},
+{name:'Cetamina / Ketalar', presentation:'50 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'—', total:(w)=>w*0.1, unit:'mL'},
+{name:'Fentanil', presentation:'50 mcg/mL', doseLabel:'2 mcg/kg', mlKgLabel:'0,20', dilution:'1 p/ 4', diluent:'AD', maxLabel:'50 mcg = 5 mL', total:(w)=>Math.min(w*0.2,5), unit:'mL'},
+{name:'Flumazenil / Lanexat', presentation:'0,1 mg/mL', doseLabel:'0,02 mg/kg', mlKgLabel:'0,20', dilution:'s/ diluir', diluent:'—', maxLabel:'1 mg = 10 mL', total:(w)=>Math.min(w*0.2,10), unit:'mL'},
+{name:'Glicose', presentation:(ctx)=>isNeonatalProfile(ctx) ? 'SG10%' : 'SG25%', doseLabel:(ctx)=>isNeonatalProfile(ctx) ? '0,2 g/kg' : '0,5 g/kg', mlKgLabel:'2,0', dilution:'s/ diluir', diluent:'—', maxLabel:(ctx)=>isNeonatalProfile(ctx) ? '—' : 'Máx. 50 g = 200 mL de SG25%', total:(w,ctx)=>isNeonatalProfile(ctx) ? w*2 : Math.min(w*2,200), unit:'mL'},
+{name:'Gluconato de cálcio 10%', presentation:'100 mg/mL', doseLabel:'100 mg/kg', mlKgLabel:'2,0', dilution:'1 p/ 1', diluent:'AD', maxLabel:'2 g = 20 mL da ampola; 40 mL finais', total:(w)=>Math.min(w*2,40), unit:'mL'},
+{name:'Lidocaína 2%', presentation:'20 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.05,5), unit:'mL'},
+{name:'Dexmedetomidina / Precedex (ataque)', presentation:'100 mcg/mL', doseLabel:'1 mcg/kg em 10 min', mlKgLabel:'0,25', dilution:'Diluir para 4 mcg/mL', diluent:'SF 0,9% ou SG5%', maxLabel:'—', total:(w)=>w*0.25, unit:'mL'},
+{name:'Midazolam / Dormonid', presentation:'5 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 4', diluent:'AD', maxLabel:'5 mL', total:(w)=>Math.min(w*0.1,5), unit:'mL'},
+{name:'Morfina / Dimorf', presentation:'10 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'1 p/ 9', diluent:'AD', maxLabel:'10 mg = 10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
+{name:'Naloxona / Narcan', presentation:'0,4 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,25', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.25,5), unit:'mL'},
+{name:'Valium', presentation:'5 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'2 mL', total:(w)=>Math.min(w*0.1,2), unit:'mL'},
+{name:'Propofol', presentation:'10 mg/mL', doseLabel:'2,5 a 3,5 mg/kg (≥3 anos; titular à resposta)', mlKgLabel:'0,25 a 0,35', dilution:'s/ diluir', diluent:'—', maxLabel:'Evitar bolus rápido em instabilidade; não indicado para sedação em UTI pediátrica', total:(w)=>w*0.25, unit:'mL', outputLabel:'Volume calculado', displayTotal:(w)=>`${formatPtTrim(w*0.25, 2)} a ${formatPtTrim(w*0.35, 2)} mL`},
+{name:'Rocurônio / Esmeron', presentation:'10 mg/mL', doseLabel:'0,5 mg/kg', mlKgLabel:'0,25', dilution:'1 p/ 4', diluent:'AD', maxLabel:'—', total:(w)=>w*0.25, unit:'mL'},
+{name:'Sulfato de magnésio 50%', presentation:'0,5 g/mL', doseLabel:'25 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'4 mL', total:(w)=>Math.min(w*0.05,4), unit:'mL'}
   ];
 
   const CONTINUOUS_MEDS = [
-    {name:'Adrenalina', presentation:'1 amp x 2 mL (1 mg/mL)', ampCount:1, ampMl:2, mgPerMl:1, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,1 a 20 mcg/kg/min', defaultDose:0.2, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.1, maxConcentrationLabel:'0,1 mg/mL'},
-    {name:'Amiodarona', presentation:'2 ampolas x 3 mL (50 mg/mL)', ampCount:2, ampMl:3, mgPerMl:50, diluent:'SF/AD', dilutionVolumeMl:500, usual:'5 a 15 mcg/kg/min', defaultDose:15, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:6, maxConcentrationLabel:'6 mg/mL'},
-    {name:'Atracúrio', presentation:'1 amp x 5 mL (10 mg/mL)', ampCount:1, ampMl:5, mgPerMl:10, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'5 a 10 mcg/kg/min', defaultDose:5, doseUnit:'mcgkgmin'},
-    {name:'Cetamina', presentation:'1 amp x 10 mL (50 mg/mL)', ampCount:1, ampMl:10, mgPerMl:50, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,5 a 1 mg/kg/h', defaultDose:0.5, doseUnit:'mgkgh', maxConcentrationMgPerMl:2, maxConcentrationLabel:'2 mg/mL'},
-    {name:'Dobutamina', presentation:'1 amp x 20 mL (12,5 mg/mL)', ampCount:1, ampMl:20, mgPerMl:12.5, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'1 a 20 mcg/kg/min', defaultDose:5, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:4, maxConcentrationLabel:'4 mg/mL'},
-    {name:'Dopamina', presentation:'1 amp x 10 mL (5 mg/mL)', ampCount:1, ampMl:10, mgPerMl:5, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'1 a 20 mcg/kg/min', defaultDose:5, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:3.2, maxConcentrationLabel:'3,2 mg/mL'},
-    {name:'Noradrenalina / Levophed', presentation:'1 amp x 4 mL (1 mg/mL base)', ampCount:1, ampMl:4, mgPerMl:1, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,05 a 0,5 mcg/kg/min', defaultDose:0.05, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.016, maxConcentrationLabel:'16 mcg/mL'},
-    {name:'Midazolam / Dormonid', presentation:'1 amp x 10 mL (5 mg/mL)', ampCount:1, ampMl:10, mgPerMl:5, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,2 a 0,8 mg/kg/h', defaultDose:0.2, doseUnit:'mgkgh', maxConcentrationMgPerMl:0.5, maxConcentrationLabel:'0,5 mg/mL'},
-    {name:'Dexmedetomidina / Precedex', presentation:'1 amp x 2 mL (100 mcg/mL)', ampCount:1, ampMl:2, mgPerMl:0.1, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'0,2 a 1 mcg/kg/h', defaultDose:0.5, doseUnit:'mcgkgh', maxConcentrationMgPerMl:0.008, maxConcentrationLabel:'8 mcg/mL'},
-    {name:'Fentanil', presentation:'1 amp x 10 mL (50 mcg/mL)', ampCount:1, ampMl:10, mgPerMl:0.05, diluent:'SF/SG/AD', dilutionVolumeMl:500, usual:'2 a 8 mcg/kg/h', defaultDose:2, doseUnit:'mcgkgh', maxConcentrationMgPerMl:0.05, maxConcentrationLabel:'50 mcg/mL'},
-    {name:'Esmolol', presentation:'10 ampolas x 10 mL (10 mg/mL)', ampCount:10, ampMl:10, mgPerMl:10, diluent:'SF/SG5%', dilutionVolumeMl:500, usual:'200 a 1000 mcg/kg/min', defaultDose:100, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:10, maxConcentrationLabel:'10 mg/mL'},
-    {name:'Lidocaína', presentation:'1 amp x 5 mL (20 mg/mL)', ampCount:1, ampMl:5, mgPerMl:20, diluent:'SF/AD', dilutionVolumeMl:500, usual:'15 a 50 mcg/kg/min', defaultDose:15, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:8, maxConcentrationLabel:'8 mg/mL'},
-    {name:'Milrinona', presentation:'1 amp x 20 mL (1 mg/mL)', ampCount:1, ampMl:20, mgPerMl:1, diluent:'SF/AD', dilutionVolumeMl:500, usual:'0,375 a 0,75 mcg/kg/min', defaultDose:0.375, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.2, maxConcentrationLabel:'200 mcg/mL'},
-    {name:'Nitroprussiato de sódio', presentation:'0,5 amp x 2 mL (25 mg/mL)', ampCount:0.5, ampMl:2, mgPerMl:25, diluent:'SG', dilutionVolumeMl:500, usual:'0,5 a 10 mcg/kg/min', defaultDose:0.5, doseUnit:'mcgkgmin', maxConcentrationMgPerMl:0.5, maxConcentrationLabel:'500 mcg/mL'}
+{
+      name:'Adrenalina',
+      presentation:'1 amp x 2 mL (1 mg/mL)',
+      ampCount:1,
+      ampMl:2,
+      mgPerMl:1,
+      diluent:'SF/SG/AD',
+      usual:'0,1 a 20 mcg/kg/min',
+      defaultDose:0.2,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:0.016, label:'16 mcg/mL' },
+        central:{ value:0.1, label:'100 mcg/mL' }
+      }
+    },
+{
+      name:'Amiodarona',
+      presentation:'2 ampolas x 3 mL (50 mg/mL)',
+      ampCount:2,
+      ampMl:3,
+      mgPerMl:50,
+      diluent:'SF/AD',
+      usual:'5 a 15 mcg/kg/min',
+      defaultDose:15,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:2, label:'2 mg/mL' },
+        central:{ value:6, label:'6 mg/mL' }
+      }
+    },
+{
+      name:'Propofol',
+      presentation:'1 frasco x 20 mL (10 mg/mL)',
+      ampCount:1,
+      ampMl:20,
+      mgPerMl:10,
+      diluent:'Não diluir; correr puro a 10 mg/mL',
+      usual:'125 a 300 mcg/kg/min (anestesia; não indicado para sedação em UTI pediátrica)',
+      defaultDose:125,
+      doseUnit:'mcgkgmin',
+      runPure:true,
+      accessConcentrationLimits:{
+        peripheral:{ value:10, label:'10 mg/mL (puro; emulsão lipídica)' },
+        central:{ value:10, label:'10 mg/mL (puro; emulsão lipídica)' }
+      }
+    },
+{
+      name:'Rocurônio / Esmeron',
+      presentation:'1 amp x 5 mL (10 mg/mL)',
+      ampCount:1,
+      ampMl:5,
+      mgPerMl:10,
+      diluent:'SF/SG/AD',
+      usual:'7 a 12 mcg/kg/min',
+      defaultDose:12,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:null, label:'não definido' },
+        central:{ value:null, label:'não definido' }
+      }
+    },
+{
+      name:'Cetamina',
+      presentation:'1 amp x 10 mL (50 mg/mL)',
+      ampCount:1,
+      ampMl:10,
+      mgPerMl:50,
+      diluent:'SF/SG/AD',
+      usual:'0,5 a 1 mg/kg/h',
+      defaultDose:0.5,
+      doseUnit:'mgkgh',
+      accessConcentrationLimits:{
+        peripheral:{ value:2, label:'2 mg/mL' },
+        central:{ value:10, label:'10 mg/mL' }
+      }
+    },
+{
+      name:'Dobutamina',
+      presentation:'1 amp x 20 mL (12,5 mg/mL)',
+      ampCount:1,
+      ampMl:20,
+      mgPerMl:12.5,
+      diluent:'SF/SG/AD',
+      usual:'1 a 20 mcg/kg/min',
+      defaultDose:5,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:5, label:'5 mg/mL' },
+        central:{ value:10, label:'10 mg/mL' }
+      }
+    },
+{
+      name:'Dopamina',
+      presentation:'1 amp x 10 mL (5 mg/mL)',
+      ampCount:1,
+      ampMl:10,
+      mgPerMl:5,
+      diluent:'SF/SG/AD',
+      usual:'1 a 20 mcg/kg/min',
+      defaultDose:5,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:3.2, label:'3,2 mg/mL' },
+        central:{ value:10, label:'10 mg/mL' }
+      }
+    },
+{
+      name:'Noradrenalina / Levophed',
+      presentation:'1 amp x 4 mL (1 mg/mL base)',
+      ampCount:1,
+      ampMl:4,
+      mgPerMl:1,
+      diluent:'SF/SG/AD',
+      usual:'0,05 a 0,5 mcg/kg/min',
+      defaultDose:0.05,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:0.016, label:'16 mcg/mL' },
+        central:{ value:0.1, label:'100 mcg/mL' }
+      }
+    },
+{
+      name:'Midazolam / Dormonid',
+      presentation:'1 amp x 10 mL (5 mg/mL)',
+      ampCount:1,
+      ampMl:10,
+      mgPerMl:5,
+      diluent:'SF/SG/AD',
+      usual:'0,2 a 0,8 mg/kg/h',
+      defaultDose:0.2,
+      doseUnit:'mgkgh',
+      accessConcentrationLimits:{
+        peripheral:{ value:2, label:'2 mg/mL' },
+        central:{ value:5, label:'5 mg/mL (droga pura)' }
+      }
+    },
+{
+      name:'Dexmedetomidina / Precedex',
+      presentation:'1 amp x 2 mL (100 mcg/mL)',
+      ampCount:1,
+      ampMl:2,
+      mgPerMl:0.1,
+      diluent:'SF/SG/AD',
+      usual:'0,2 a 1 mcg/kg/h',
+      defaultDose:0.5,
+      doseUnit:'mcgkgh',
+      accessConcentrationLimits:{
+        peripheral:{ value:0.008, label:'8 mcg/mL' },
+        central:{ value:0.008, label:'8 mcg/mL' }
+      }
+    },
+{
+      name:'Fentanil',
+      presentation:'1 amp x 10 mL (50 mcg/mL)',
+      ampCount:1,
+      ampMl:10,
+      mgPerMl:0.05,
+      diluent:'SF/SG/AD',
+      usual:'2 a 8 mcg/kg/h',
+      defaultDose:2,
+      doseUnit:'mcgkgh',
+      accessConcentrationLimits:{
+        peripheral:{ value:0.05, label:'50 mcg/mL (droga pura)' },
+        central:{ value:0.05, label:'50 mcg/mL' }
+      }
+    },
+{
+      name:'Lidocaína',
+      presentation:'1 amp x 5 mL (20 mg/mL)',
+      ampCount:1,
+      ampMl:5,
+      mgPerMl:20,
+      diluent:'SF/AD',
+      usual:'15 a 50 mcg/kg/min',
+      defaultDose:15,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:8, label:'8 mg/mL' },
+        central:{ value:20, label:'20 mg/mL' }
+      }
+    },
+{
+      name:'Milrinona',
+      presentation:'1 amp x 20 mL (1 mg/mL)',
+      ampCount:1,
+      ampMl:20,
+      mgPerMl:1,
+      diluent:'SF/AD',
+      usual:'0,375 a 0,75 mcg/kg/min',
+      defaultDose:0.375,
+      doseUnit:'mcgkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:0.2, label:'200 mcg/mL' },
+        central:{ value:0.2, label:'200 mcg/mL' }
+      }
+    },
+{
+      name:'Vasopressina',
+      presentation:'1 amp x 1 mL (20 U/mL)',
+      ampCount:1,
+      ampMl:1,
+      mgPerMl:20,
+      amountUnit:'U',
+      concentrationUnit:'U/mL',
+      diluent:'SF/SG/AD',
+      usual:'0,3 a 2 mU/kg/min',
+      defaultDose:0.3,
+      doseUnit:'mUkgmin',
+      accessConcentrationLimits:{
+        peripheral:{ value:0.2, label:'0,2 U/mL' },
+        central:{ value:1, label:'1 U/mL' }
+      }
+    }
   ];
 
   const VOLUME_LOSS_TABLE = [
@@ -541,7 +729,7 @@
       return Math.max(0, Math.min(max, Math.trunc(parsed)));
     }
 
-    const yearsInt = parsePiece(yearRaw, 17);
+    const yearsInt = parsePiece(yearRaw, 18);
     const monthsInt = parsePiece(monthRaw, 11);
     const daysInt = parsePiece(dayRaw, 30);
 
@@ -678,7 +866,9 @@
       ? 'mg/kg/h'
       : item.doseUnit === 'mcgkgh'
         ? 'mcg/kg/h'
-        : 'mcg/kg/min';
+        : item.doseUnit === 'mUkgmin'
+          ? 'mU/kg/min'
+          : 'mcg/kg/min';
   }
 
   function formatContinuousPresentation(item) {
@@ -697,8 +887,15 @@
     if (!UI_STATE.continuousConfigs[key]) {
       UI_STATE.continuousConfigs[key] = {
         dose: item.defaultDose,
-        selectedVolumeMl: 12
+        access: 'peripheral',
+        selectedVolumeByAccess: Object.create(null)
       };
+    }
+    if (!UI_STATE.continuousConfigs[key].access) {
+      UI_STATE.continuousConfigs[key].access = 'peripheral';
+    }
+    if (!UI_STATE.continuousConfigs[key].selectedVolumeByAccess) {
+      UI_STATE.continuousConfigs[key].selectedVolumeByAccess = Object.create(null);
     }
     return UI_STATE.continuousConfigs[key];
   }
@@ -719,14 +916,99 @@
     return numeric;
   }
 
-  function hasContinuousConcentrationLimit(item) {
-    return Number.isFinite(Number(item.maxConcentrationMgPerMl)) && Number(item.maxConcentrationMgPerMl) > 0;
+  function hasContinuousConcentrationLimit(item, access = 'peripheral') {
+    const limit = getAccessConcentrationLimit(item, access);
+    return !!limit && Number.isFinite(Number(limit.value)) && Number(limit.value) > 0;
   }
 
-  function formatContinuousConcentrationLimit(item) {
-    if (!hasContinuousConcentrationLimit(item)) return 'Não definido';
-    return item.maxConcentrationLabel || `${formatPtTrim(Number(item.maxConcentrationMgPerMl), 4)} mg/mL`;
+  function formatContinuousConcentrationLimit(item, access = 'peripheral') {
+    const limit = getAccessConcentrationLimit(item, access);
+    if (!limit || !Number.isFinite(Number(limit.value)) || Number(limit.value) <= 0) return 'Não definido';
+    return limit.label || `${formatPtTrim(Number(limit.value), 4)} ${item.concentrationUnit || 'mg/mL'}`;
   }
+
+  function normalizeContinuousAccess(access) {
+    if (access === 'central') return 'central';
+    if (access === 'free') return 'free';
+    return 'peripheral';
+  }
+
+  function getAccessConcentrationLimit(item, access = 'peripheral') {
+    const normalizedAccess = normalizeContinuousAccess(access);
+    if (normalizedAccess === 'free') {
+      return { value: null, label: 'concentração livre' };
+    }
+    if (item && item.accessConcentrationLimits && item.accessConcentrationLimits[normalizedAccess]) {
+      return item.accessConcentrationLimits[normalizedAccess];
+    }
+    if (Number.isFinite(Number(item && item.maxConcentrationMgPerMl)) && Number(item.maxConcentrationMgPerMl) > 0) {
+      const label = item.maxConcentrationLabel || `${formatPtTrim(Number(item.maxConcentrationMgPerMl), 4)} mg/mL`;
+      return { value: Number(item.maxConcentrationMgPerMl), label };
+    }
+    return { value: null, label: 'não definido' };
+  }
+
+  function buildContinuousAccessOptions(item, selectedAccess = 'peripheral') {
+    const normalizedSelectedAccess = normalizeContinuousAccess(selectedAccess);
+    const peripheral = getAccessConcentrationLimit(item, 'peripheral');
+    const central = getAccessConcentrationLimit(item, 'central');
+
+    return [
+      { value: 'peripheral', label: `Acesso Periférico — ${peripheral.label || 'não definido'}` },
+      { value: 'central', label: `Acesso Central — ${central.label || 'não definido'}` },
+      { value: 'free', label: 'Concentração Livre' }
+    ].map((option) => {
+      const selected = option.value === normalizedSelectedAccess ? ' selected' : '';
+      return `<option value="${option.value}"${selected}>${option.label}</option>`;
+    }).join('');
+  }
+
+  function getSmallestContinuousScheme(calc) {
+    if (!calc || !Array.isArray(calc.schemes) || calc.schemes.length === 0) return null;
+    const feasible = calc.schemes.find((scheme) => scheme.isFeasible);
+    if (feasible) {
+      return Object.assign({}, feasible, {
+        requestedVolumeMl: feasible.totalVolumeMl,
+        wasAutoAdjusted: false,
+        exceededMaximumVolume: false
+      });
+    }
+    const maximumScheme = calc.schemes[calc.schemes.length - 1];
+    return Object.assign({}, maximumScheme, {
+      requestedVolumeMl: maximumScheme.totalVolumeMl,
+      wasAutoAdjusted: false,
+      exceededMaximumVolume: true,
+      autoAdjustmentReasons: maximumScheme.failureReasons || []
+    });
+  }
+
+  function getDefaultContinuousVolumeForAccess(calc) {
+    const scheme = getSmallestContinuousScheme(calc);
+    return scheme && Number.isFinite(Number(scheme.totalVolumeMl)) ? Number(scheme.totalVolumeMl) : NaN;
+  }
+
+  function getSelectedContinuousVolumeForAccess(config, selectedAccess, calc) {
+    if (!config.selectedVolumeByAccess) {
+      config.selectedVolumeByAccess = Object.create(null);
+    }
+
+    const accessKey = normalizeContinuousAccess(selectedAccess);
+
+    if (!Number.isFinite(Number(config.selectedVolumeByAccess[accessKey]))) {
+      const defaultVolume = getDefaultContinuousVolumeForAccess(calc);
+      if (Number.isFinite(defaultVolume)) {
+        config.selectedVolumeByAccess[accessKey] = defaultVolume;
+      }
+    }
+
+    return config.selectedVolumeByAccess[accessKey];
+  }
+
+
+  function resolveDrugField(field, ctx, drug) {
+    return typeof field === 'function' ? field(ctx, drug) : field;
+  }
+
 
   function getContinuousSchemeByVolume(calc, selectedVolumeMl) {
     if (!calc || !Array.isArray(calc.schemes)) return null;
@@ -827,15 +1109,15 @@
   }
 
   function getTube(weight) {
-    if (weight > 32) return '6,5 com cuff';
-    if (weight > 24) return '6,0 com cuff';
-    if (weight > 19) return '5,5 sem cuff';
-    if (weight > 15) return '5,0 sem cuff';
-    if (weight > 12) return '4,5 sem cuff';
-    if (weight > 3) return '4,0 sem cuff';
-    if (weight > 2) return '3,5 sem cuff';
-    if (weight > 1) return '3,0 sem cuff';
-    return '2,5 sem cuff';
+    if (weight > 32) return '6,5';
+    if (weight > 24) return '6,0';
+    if (weight > 19) return '5,5';
+    if (weight > 15) return '5,0';
+    if (weight > 12) return '4,5';
+    if (weight > 3) return '4,0';
+    if (weight > 2) return '3,5';
+    if (weight > 1) return '3,0';
+    return '2,5';
   }
 
   function hasInformedAge(ctx) {
@@ -879,50 +1161,85 @@
     return inferProbableAgeBandByWeight(ctx.weight) || 'Não informada';
   }
 
-  function computeContinuousPreparation(item, weight, doseValue = item.defaultDose) {
+  function computeContinuousPreparation(item, weight, doseValue = item.defaultDose, access = 'peripheral') {
     if (!(weight > 0)) return null;
 
     const numericDose = Number(doseValue);
     if (!Number.isFinite(numericDose) || numericDose <= 0) return null;
 
-    let totalDrugMgPerDay = 0;
-    if (item.doseUnit === 'mcgkgmin') totalDrugMgPerDay = (numericDose * weight * 60 * 24) / 1000;
-    if (item.doseUnit === 'mcgkgh') totalDrugMgPerDay = (numericDose * weight * 24) / 1000;
-    if (item.doseUnit === 'mgkgh') totalDrugMgPerDay = numericDose * weight * 24;
+    let totalDrugAmountPerDay = 0;
+    if (item.doseUnit === 'mcgkgmin') totalDrugAmountPerDay = (numericDose * weight * 60 * 24) / 1000;
+    if (item.doseUnit === 'mcgkgh') totalDrugAmountPerDay = (numericDose * weight * 24) / 1000;
+    if (item.doseUnit === 'mgkgh') totalDrugAmountPerDay = numericDose * weight * 24;
+    if (item.doseUnit === 'mUkgmin') totalDrugAmountPerDay = (numericDose * weight * 60 * 24) / 1000;
 
-    const drugVolumeMlPerDay = totalDrugMgPerDay / item.mgPerMl;
-    const hasConcentrationLimit = hasContinuousConcentrationLimit(item);
-    const maxConcentrationMgPerMl = Number(item.maxConcentrationMgPerMl);
+    const drugVolumeMlPerDay = totalDrugAmountPerDay / item.mgPerMl;
+    const selectedAccess = normalizeContinuousAccess(access);
+    const hasConcentrationLimit = hasContinuousConcentrationLimit(item, selectedAccess);
+    const selectedLimit = getAccessConcentrationLimit(item, selectedAccess);
+    const maxConcentrationPerMl = Number(selectedLimit.value);
+    const runPure = item.runPure === true;
+    const requiresOneToOneDilution = selectedAccess !== 'free' && !hasConcentrationLimit && !runPure;
+    const minimumTotalVolumeMl = requiresOneToOneDilution ? drugVolumeMlPerDay * 2 : drugVolumeMlPerDay;
+    const amountUnit = item.amountUnit || 'mg';
+    const concentrationUnit = item.concentrationUnit || 'mg/mL';
 
-    const schemes = CONTINUOUS_PREPARATION_SCHEMES.map((scheme) => {
-      const diluentMl = scheme.totalMl - drugVolumeMlPerDay;
-      const concentrationMgPerMl = totalDrugMgPerDay / scheme.totalMl;
-      const volumeFits = diluentMl >= -1e-9;
-      const concentrationFits = !hasConcentrationLimit || concentrationMgPerMl <= maxConcentrationMgPerMl + 1e-9;
-      const failureReasons = [];
+    const schemes = runPure
+      ? [{
+          totalVolumeMl: drugVolumeMlPerDay,
+          rateMlPerHour: drugVolumeMlPerDay / 24,
+          diluentMl: 0,
+          concentrationMgPerMl: item.mgPerMl,
+          concentrationPerMl: item.mgPerMl,
+          volumeFits: true,
+          oneToOneFits: true,
+          concentrationFits: true,
+          failureReasons: [],
+          isFeasible: true,
+          runPure: true
+        }]
+      : CONTINUOUS_PREPARATION_SCHEMES.map((scheme) => {
+          const diluentMl = scheme.totalMl - drugVolumeMlPerDay;
+          const concentrationPerMl = totalDrugAmountPerDay / scheme.totalMl;
+          const volumeFits = diluentMl >= -1e-9;
+          const oneToOneFits = !requiresOneToOneDilution || scheme.totalMl >= minimumTotalVolumeMl - 1e-9;
+          const concentrationFits = !hasConcentrationLimit || concentrationPerMl <= maxConcentrationPerMl + 1e-9;
+          const failureReasons = [];
 
-      if (!volumeFits) failureReasons.push('a dose diária da droga excedia o volume selecionado');
-      if (!concentrationFits) failureReasons.push('a concentração final ficava acima do recomendado');
+          if (!volumeFits) failureReasons.push('a dose diária da droga excedia o volume selecionado');
+          if (!oneToOneFits) failureReasons.push('a concentração do acesso não estava definida e o preparo exigia diluição mínima 1:1');
+          if (!concentrationFits) failureReasons.push('a concentração final ficava acima do limite selecionado para o acesso');
 
-      return {
-        totalVolumeMl: scheme.totalMl,
-        rateMlPerHour: scheme.rateMlPerHour,
-        diluentMl: volumeFits ? Math.max(0, diluentMl) : NaN,
-        concentrationMgPerMl,
-        volumeFits,
-        concentrationFits,
-        failureReasons,
-        isFeasible: volumeFits && concentrationFits
-      };
-    });
+          return {
+            totalVolumeMl: scheme.totalMl,
+            rateMlPerHour: scheme.rateMlPerHour,
+            diluentMl: volumeFits ? Math.max(0, diluentMl) : NaN,
+            concentrationMgPerMl: concentrationPerMl,
+            concentrationPerMl,
+            volumeFits,
+            oneToOneFits,
+            concentrationFits,
+            failureReasons,
+            isFeasible: volumeFits && oneToOneFits && concentrationFits
+          };
+        });
 
     return {
-      totalDrugMgPerDay,
+      totalDrugMgPerDay: totalDrugAmountPerDay,
+      totalDrugAmountPerDay,
       drugVolumeMlPerDay,
       schemes,
       hasAnyFeasibleScheme: schemes.some((scheme) => scheme.isFeasible),
       hasConcentrationLimit,
-      maxConcentrationMgPerMl
+      runPure,
+      requiresOneToOneDilution,
+      minimumTotalVolumeMl,
+      maxConcentrationMgPerMl: maxConcentrationPerMl,
+      maxConcentrationPerMl,
+      selectedAccess,
+      selectedLimit,
+      amountUnit,
+      concentrationUnit
     };
   }
 
@@ -938,8 +1255,8 @@
     if (!age.valid && !age.empty) {
       throw new Error('Idade inválida. Ano: 0 a 18; Mês: 0 a 11; Dias: 0 a 30.');
     }
-    if (!Number.isFinite(weight) || weight <= 0) {
-      throw new Error('Informe um peso válido maior que zero.');
+    if (!Number.isFinite(weight) || weight < 1) {
+      throw new Error('Informe um peso válido maior ou igual a 1 kg.');
     }
     if (values.height.trim() !== '' && (!Number.isFinite(height) || height <= 0)) {
       throw new Error('Se informar a estatura, use um valor válido em cm.');
@@ -959,14 +1276,31 @@
   // ==========================================================
   // ui renderers
   // ==========================================================
-  function renderDrugCards(ctx) {
+  
+
+  
+
+  
+
+  
+
+  
+
+function renderDrugCards(ctx) {
     const grid = byId('drugGrid');
     grid.innerHTML = '';
+
     RESUSCITATION_DRUGS.forEach((drug) => {
+      const presentation = resolveDrugField(drug.presentation, ctx, drug);
+      const doseLabel = resolveDrugField(drug.doseLabel, ctx, drug);
+      const mlKgLabel = resolveDrugField(drug.mlKgLabel, ctx, drug);
+      const dilution = resolveDrugField(drug.dilution, ctx, drug);
+      const diluent = resolveDrugField(drug.diluent, ctx, drug);
+      const maxLabel = resolveDrugField(drug.maxLabel, ctx, drug);
       const total = ctx.weight > 0 ? drug.total(ctx.weight, ctx) : NaN;
       const outputLabel = drug.outputLabel || (drug.unit === 'J'
         ? 'Energia calculada'
-        : (drug.dilution && drug.dilution !== 's/ diluir' && drug.dilution !== '—'
+        : (dilution && dilution !== 's/ diluir' && dilution !== '—'
           ? 'Volume após diluição'
           : 'Volume da ampola'));
       const displayValue = ctx.weight > 0 && typeof drug.displayTotal === 'function'
@@ -981,12 +1315,12 @@
           <span class="v">${displayValue}</span>
         </div>
         <div class="drug-meta">
-          <div class="item"><span class="k">Apresentação</span><span class="v">${drug.presentation}</span></div>
-          <div class="item"><span class="k">Dose</span><span class="v">${drug.doseLabel}</span></div>
-          <div class="item"><span class="k">mL/kg</span><span class="v">${drug.mlKgLabel}</span></div>
-          <div class="item"><span class="k">Diluição</span><span class="v">${drug.dilution}</span></div>
-          <div class="item"><span class="k">Diluente</span><span class="v">${drug.diluent}</span></div>
-          <div class="item"><span class="k">Dose máx.</span><span class="v">${drug.maxLabel}</span></div>
+          <div class="item"><span class="k">Apresentação</span><span class="v">${presentation}</span></div>
+          <div class="item"><span class="k">Dose</span><span class="v">${doseLabel}</span></div>
+          <div class="item"><span class="k">mL/kg</span><span class="v">${mlKgLabel}</span></div>
+          <div class="item"><span class="k">Diluição</span><span class="v">${dilution}</span></div>
+          <div class="item"><span class="k">Diluente</span><span class="v">${diluent}</span></div>
+          <div class="item"><span class="k">Dose máx.</span><span class="v">${maxLabel}</span></div>
         </div>
       `;
       grid.appendChild(card);
@@ -996,24 +1330,50 @@
   function renderContinuousCards(ctx) {
     const grid = byId('continuousCards');
     grid.innerHTML = '';
+
     CONTINUOUS_MEDS.forEach((item) => {
       const key = continuousKey(item);
       const config = getContinuousConfig(item);
-      const calc = computeContinuousPreparation(item, ctx.weight, config.dose);
+      const selectedAccess = normalizeContinuousAccess(config.access);
+      const calc = computeContinuousPreparation(item, ctx.weight, config.dose, selectedAccess);
       const doseUnitText = formatContinuousDoseUnit(item);
       const doseText = `${formatPtTrim(config.dose, 3)} ${doseUnitText}`;
       const presentationText = formatContinuousPresentation(item);
-      const selectedScheme = getContinuousSchemeByVolume(calc, config.selectedVolumeMl);
+      const amountUnit = item.amountUnit || 'mg';
+      const concentrationUnit = item.concentrationUnit || 'mg/mL';
 
-      if (selectedScheme && Number(config.selectedVolumeMl) !== Number(selectedScheme.totalVolumeMl)) {
-        config.selectedVolumeMl = selectedScheme.totalVolumeMl;
+      const selectedVolumeMl = getSelectedContinuousVolumeForAccess(config, selectedAccess, calc);
+      const selectedScheme = calc && calc.runPure
+        ? getSmallestContinuousScheme(calc)
+        : getContinuousSchemeByVolume(calc, selectedVolumeMl);
+
+      if (selectedScheme && calc && !calc.runPure && Number(config.selectedVolumeByAccess[selectedAccess]) !== Number(selectedScheme.totalVolumeMl)) {
+        config.selectedVolumeByAccess[selectedAccess] = selectedScheme.totalVolumeMl;
       }
+
+      const volumeControlMarkup = calc && calc.runPure && selectedScheme
+        ? `
+            <div class="continuous-field">
+              <label for="volume_${key}">Diluição / volume final</label>
+              <select id="volume_${key}" class="continuous-volume-select" data-continuous-key="${key}" disabled>
+                <option selected>Puro — ${formatPtTrim(selectedScheme.totalVolumeMl, 2)} mL/24h</option>
+              </select>
+            </div>
+          `
+        : `
+            <div class="continuous-field">
+              <label for="volume_${key}">Diluição / volume final</label>
+              <select id="volume_${key}" class="continuous-volume-select" data-continuous-key="${key}">
+                ${buildContinuousVolumeOptions(config.selectedVolumeByAccess[selectedAccess])}
+              </select>
+            </div>
+          `;
 
       let selectedSchemeMarkup = '';
       if (!calc || !selectedScheme) {
         selectedSchemeMarkup = `
           <div class="item" style="grid-column:1/-1">
-            <span class="k">Preparo selecionado</span>
+            <span class="k">Diluição / volume final</span>
             <span class="v">—</span>
           </div>
         `;
@@ -1022,8 +1382,11 @@
         if (!selectedScheme.volumeFits) {
           warningLines.push(`Mesmo em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL, o volume diário da droga (${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL) excede o volume final disponível; não há diluente positivo para este preparo.`);
         }
+        if (!selectedScheme.oneToOneFits) {
+          warningLines.push(`Mesmo em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL, o volume final não alcança a diluição mínima 1:1 exigida quando o acesso não tem concentração definida.`);
+        }
         if (!selectedScheme.concentrationFits) {
-          warningLines.push(`Mesmo em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL, a concentração final (${formatPtTrim(selectedScheme.concentrationMgPerMl, 4)} mg/mL) fica acima do recomendado (${formatContinuousConcentrationLimit(item)}).`);
+          warningLines.push(`Mesmo em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL, a concentração final (${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit}) fica acima do limite do acesso selecionado (${formatContinuousConcentrationLimit(item, selectedAccess)}).`);
         }
         const autoAdjustmentText = selectedScheme.wasAutoAdjusted
           ? `<br><span class="muted small">Ajustado automaticamente de ${formatPtTrim(selectedScheme.requestedVolumeMl, 0)} mL para ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL porque ${(selectedScheme.autoAdjustmentReasons || ['o preparo selecionado não era adequado']).join(' e ')}.</span>`
@@ -1034,17 +1397,24 @@
         selectedSchemeMarkup = `
           <div class="item" style="grid-column:1/-1">
             <span class="k">Preparo ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
-            <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${diluentText} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationMgPerMl, 4)} mg/mL e infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora${autoAdjustmentText}<br><span class="muted small"><strong>Aviso:</strong> ${warningLines.join(' ') || 'Mesmo no maior volume disponível, este preparo ultrapassa os limites configurados.'}</span></span>
+            <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${diluentText} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit} · Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora<br><span class="muted small"><strong>Aviso:</strong> ${warningLines.join(' ') || 'Mesmo no maior volume disponível, este preparo ultrapassa os limites configurados.'}</span>${autoAdjustmentText}</span>
+          </div>
+        `;
+      } else if (calc.runPure) {
+        selectedSchemeMarkup = `
+          <div class="item" style="grid-column:1/-1">
+            <span class="k">Preparo puro</span>
+            <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga pura · Sem diluição · Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit} · Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 2)} mL/hora<br><span class="muted small">Regra específica: emulsão lipídica configurada para correr pura a 10 mg/mL.</span></span>
           </div>
         `;
       } else {
-        const autoAdjustmentText = selectedScheme.wasAutoAdjusted
+        const autoText = selectedScheme.wasAutoAdjusted
           ? `<br><span class="muted small">Ajustado automaticamente de ${formatPtTrim(selectedScheme.requestedVolumeMl, 0)} mL para ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL porque ${(selectedScheme.autoAdjustmentReasons || ['o preparo selecionado não era adequado']).join(' e ')}.</span>`
-          : '';
+          : `<br><span class="muted small">Volume final selecionado. A seleção inicial é calculada pelo menor volume padronizado que respeita o acesso ${selectedAccess === 'free' ? 'concentração livre' : selectedAccess === 'central' ? 'central' : 'periférico'}${calc.requiresOneToOneDilution ? ' e a diluição mínima 1:1.' : '.'}</span>`;
         selectedSchemeMarkup = `
           <div class="item" style="grid-column:1/-1">
             <span class="k">Preparo ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
-            <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${formatPtTrim(selectedScheme.diluentMl, 2)} mL de ${item.diluent} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationMgPerMl, 4)} mg/mL e infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora${autoAdjustmentText}</span>
+            <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${formatPtTrim(selectedScheme.diluentMl, 2)} mL de ${item.diluent} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit} · Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora${autoText}</span>
           </div>
         `;
       }
@@ -1064,15 +1434,16 @@
               <input id="dose_${key}" class="continuous-dose-input" type="text" inputmode="decimal" value="${formatPtTrim(config.dose, 3)}" data-continuous-key="${key}" autocomplete="off">
             </div>
             <div class="continuous-field">
-              <label for="volume_${key}">Diluição / volume final</label>
-              <select id="volume_${key}" class="continuous-volume-select" data-continuous-key="${key}">
-                ${buildContinuousVolumeOptions(config.selectedVolumeMl)}
+              <label for="access_${key}">Acesso</label>
+              <select id="access_${key}" class="continuous-access-select" data-continuous-key="${key}">
+                ${buildContinuousAccessOptions(item, selectedAccess)}
               </select>
             </div>
+            ${volumeControlMarkup}
           </div>
           <div class="item"><span class="k">Dose selecionada</span><span class="v">${doseText}</span></div>
-          <div class="item"><span class="k">Droga / 24h</span><span class="v">${calc ? `${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL` : '—'}</span></div>
-          <div class="item"><span class="k">Concentração limite</span><span class="v">${formatContinuousConcentrationLimit(item)}</span></div>
+          <div class="item"><span class="k">Droga / 24h</span><span class="v">${calc ? `${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL = ${formatPtTrim(calc.totalDrugAmountPerDay, 2)} ${amountUnit}` : '—'}</span></div>
+          <div class="item"><span class="k">Concentração limite</span><span class="v">${formatContinuousConcentrationLimit(item, selectedAccess)}</span></div>
           ${selectedSchemeMarkup}
         </div>
       `;
@@ -1102,13 +1473,31 @@
       input.addEventListener('change', updateDose);
     });
 
+    grid.querySelectorAll('.continuous-access-select').forEach((select) => {
+      select.addEventListener('change', () => {
+        const key = select.dataset.continuousKey;
+        const item = CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
+        if (!item) return;
+        const config = getContinuousConfig(item);
+        config.access = normalizeContinuousAccess(select.value);
+        renderContinuousCards(UI_STATE.lastContext || emptyContext());
+      });
+    });
+
     grid.querySelectorAll('.continuous-volume-select').forEach((select) => {
       select.addEventListener('change', () => {
         const key = select.dataset.continuousKey;
         const item = CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
         if (!item) return;
         const config = getContinuousConfig(item);
-        config.selectedVolumeMl = Number(select.value);
+        if (!config.selectedVolumeByAccess) {
+          config.selectedVolumeByAccess = Object.create(null);
+        }
+        const selectedVolume = Number(select.value);
+        if (Number.isFinite(selectedVolume)) {
+          config.access = 'free';
+          config.selectedVolumeByAccess.free = selectedVolume;
+        }
         renderContinuousCards(UI_STATE.lastContext || emptyContext());
       });
     });
@@ -1234,7 +1623,7 @@
   function bindAgeFieldEvents() {
     ['idadeAno', 'idadeMes', 'idadeDia'].forEach((id) => {
       const element = byId(id);
-      const max = id === 'idadeAno' ? 17 : id === 'idadeMes' ? 11 : 30;
+      const max = id === 'idadeAno' ? 18 : id === 'idadeMes' ? 11 : 30;
 
       element.addEventListener('input', () => {
         element.value = element.value.replace(/[^\d-]/g, '').slice(0, 3);
@@ -1319,20 +1708,88 @@
     }
 
     const infant = buildContext({ year: '', month: '1', day: '15', weight: '4', height: '60' });
+    const neonate = buildContext({ year: '', month: '', day: '7', weight: '3', height: '50' });
+    const child = buildContext({ year: '5', month: '', day: '', weight: '20', height: '110' });
+    const adolescent18 = buildContext({ year: '18', month: '', day: '', weight: '60', height: '170' });
+
     assert(Math.abs(maintenance1005020(4) - 400) < 1e-9, 'Manutenção 100/50/20 correta para 4 kg');
     assert(getHeartBand(infant).label === 'RN a 3 meses', 'Faixa de FC correta para lactente jovem');
     assert(getRespBand({ ageDays: 30 }).label === 'RN', 'Limite de 30 dias mantido em RN');
     assert(resolveLossBand(46).label === '≥46 kg', 'Faixa de perdas cobre pesos acima de 45 kg');
+    assert(adolescent18.ageYears >= 18, 'Idade de 18 anos preservada');
+    assert(!String(getTube(20)).includes('cuff'), 'Cânula sem texto cuff');
+
+    const glicose = RESUSCITATION_DRUGS.find((item) => item.name === 'Glicose');
+    assert(resolveDrugField(glicose.presentation, neonate, glicose) === 'SG10%', 'Glicose neonatal usa SG10%');
+    assert(resolveDrugField(glicose.presentation, child, glicose) === 'SG25%', 'Glicose pediátrica usa SG25%');
+
     const adrenaline = RESUSCITATION_DRUGS.find((item) => item.name === 'Adrenalina IV');
     assert(Math.abs(adrenaline.total(10) - 1) < 1e-9, 'Dose de adrenalina IV correta para 10 kg');
+
+    const atropine = RESUSCITATION_DRUGS.find((item) => item.name === 'Atropina IV/IO');
+    assert(Math.abs(atropine.total(2) - 0.4) < 1e-9, 'Atropina respeita dose mínima de 0,1 mg');
+    assert(Math.abs(atropine.total(30) - 2) < 1e-9, 'Atropina respeita dose máxima única');
+
     const bicarbonate = RESUSCITATION_DRUGS.find((item) => item.name === 'Bicarbonato de sódio 8,4%');
     assert(Math.abs(bicarbonate.total(3.5) - 14) < 1e-9, 'Diluição do bicarbonato correta para peso <4 kg');
     assert(Math.abs(bicarbonate.total(4) - 8) < 1e-9, 'Diluição do bicarbonato correta para peso ≥4 kg');
+
+    assert(CONTINUOUS_MEDS.every((item) => item.accessConcentrationLimits && item.accessConcentrationLimits.peripheral && item.accessConcentrationLimits.central), 'Todas as infusões têm limites por acesso');
+    assert(!!CONTINUOUS_MEDS.find((item) => item.name === 'Vasopressina'), 'Vasopressina incluída');
+    assert(!!CONTINUOUS_MEDS.find((item) => item.name === 'Rocurônio / Esmeron'), 'Rocurônio incluído nas infusões contínuas');
+    assert(!!RESUSCITATION_DRUGS.find((item) => item.name === 'Propofol'), 'Propofol incluído nas doses rápidas');
+    assert(!!CONTINUOUS_MEDS.find((item) => item.name === 'Propofol'), 'Propofol incluído nas infusões contínuas');
+
+    assert(RESUSCITATION_DRUGS.every((item) => item.unit !== 'J'), 'Doses rápidas sem itens de energia elétrica');
+    assert(RESUSCITATION_DRUGS.length === 21, 'Quantidade esperada de doses rápidas após consolidação');
+    assert(CONTINUOUS_MEDS.length === 14, 'Quantidade esperada de infusões contínuas após consolidação');
+
+    const dopamine = CONTINUOUS_MEDS.find((item) => item.name === 'Dopamina');
+    assert(formatContinuousConcentrationLimit(dopamine, 'peripheral') !== formatContinuousConcentrationLimit(dopamine, 'central'), 'Dopamina tem limites diferentes por acesso');
+
+    const midazolamInf = CONTINUOUS_MEDS.find((item) => item.name === 'Midazolam / Dormonid');
+    const ketamineInf = CONTINUOUS_MEDS.find((item) => item.name === 'Cetamina');
+    const dobutamineInf = CONTINUOUS_MEDS.find((item) => item.name === 'Dobutamina');
+    const lidocaineInf = CONTINUOUS_MEDS.find((item) => item.name === 'Lidocaína');
+    const epinephrineInf = CONTINUOUS_MEDS.find((item) => item.name === 'Adrenalina');
+    const norepinephrineInf = CONTINUOUS_MEDS.find((item) => item.name === 'Noradrenalina / Levophed');
+    assert(getAccessConcentrationLimit(midazolamInf, 'peripheral').value === 2 && getAccessConcentrationLimit(midazolamInf, 'central').value === 5, 'Limites de midazolam atualizados');
+    assert(getAccessConcentrationLimit(ketamineInf, 'central').value === 10, 'Limite central de cetamina atualizado');
+    assert(getAccessConcentrationLimit(dobutamineInf, 'peripheral').value === 5 && getAccessConcentrationLimit(dobutamineInf, 'central').value === 10, 'Limites de dobutamina atualizados');
+    assert(getAccessConcentrationLimit(dopamine, 'central').value === 10, 'Limite central de dopamina atualizado');
+    assert(getAccessConcentrationLimit(lidocaineInf, 'central').value === 20, 'Limite central de lidocaína atualizado');
+    assert(getAccessConcentrationLimit(epinephrineInf, 'central').value === 0.1 && getAccessConcentrationLimit(norepinephrineInf, 'central').value === 0.1, 'Limites centrais de adrenalina e noradrenalina atualizados');
+
     const dobutamine = CONTINUOUS_MEDS.find((item) => item.name === 'Dobutamina');
-    const prep = computeContinuousPreparation(dobutamine, 10);
+    const prep = computeContinuousPreparation(dobutamine, 10, dobutamine.defaultDose, 'peripheral');
+    const smallest = getSmallestContinuousScheme(prep);
     assert(Math.abs(prep.drugVolumeMlPerDay - 5.76) < 1e-9, 'Volume diário de dobutamina correto para 10 kg');
-    assert(Math.abs(prep.schemes[0].diluentMl - 6.24) < 1e-9, 'Completação volumétrica da dobutamina para 12 mL correta');
-    assert(Math.abs(prep.schemes[0].rateMlPerHour - 0.5) < 1e-9, 'Taxa padronizada de dobutamina correta');
+    assert(smallest.totalVolumeMl === 24, 'Infusão contínua escolhe o menor volume viável respeitando limite periférico');
+    assert(Math.abs(smallest.diluentMl - 18.24) < 1e-9, 'Completação volumétrica da dobutamina para 24 mL correta');
+
+    const rocuronium = CONTINUOUS_MEDS.find((item) => item.name === 'Rocurônio / Esmeron');
+    const rocPrep = computeContinuousPreparation(rocuronium, 10, rocuronium.defaultDose, 'peripheral');
+    const rocSmallest = getSmallestContinuousScheme(rocPrep);
+    assert(rocPrep.requiresOneToOneDilution === true, 'Infusão sem concentração definida ativa regra 1:1');
+    assert(Math.abs(rocPrep.drugVolumeMlPerDay - 17.28) < 1e-9, 'Volume diário de rocurônio correto para 10 kg');
+    assert(rocSmallest.totalVolumeMl === 36, 'Regra 1:1 escolhe 36 mL para rocurônio 10 kg');
+    assert(Math.abs(rocSmallest.diluentMl - 18.72) < 1e-9, 'Completação 1:1 do rocurônio para 36 mL correta');
+
+    const propofol = CONTINUOUS_MEDS.find((item) => item.name === 'Propofol');
+    const propPrep = computeContinuousPreparation(propofol, 4, propofol.defaultDose, 'peripheral');
+    const propSmallest = getSmallestContinuousScheme(propPrep);
+    assert(propPrep.runPure === true, 'Propofol configurado para correr puro');
+    assert(propPrep.requiresOneToOneDilution === false, 'Propofol não usa regra 1:1 por ser emulsão lipídica');
+    assert(Math.abs(propPrep.drugVolumeMlPerDay - 72) < 1e-9, 'Volume diário de propofol correto para 4 kg a 125 mcg/kg/min');
+    assert(Math.abs(propSmallest.totalVolumeMl - 72) < 1e-9, 'Propofol 4 kg mantém volume puro de 72 mL/24h');
+    assert(Math.abs(propSmallest.diluentMl) < 1e-9, 'Propofol não recebe diluente');
+    assert(Math.abs(propSmallest.rateMlPerHour - 3) < 1e-9, 'Propofol puro infunde a 3 mL/h para 4 kg na dose padrão');
+
+    const nor = CONTINUOUS_MEDS.find((item) => item.name === 'Noradrenalina / Levophed');
+    const norPeripheral = getSmallestContinuousScheme(computeContinuousPreparation(nor, 50, 0.5, 'peripheral'));
+    const norCentral = getSmallestContinuousScheme(computeContinuousPreparation(nor, 50, 0.5, 'central'));
+    assert(norCentral.totalVolumeMl <= norPeripheral.totalVolumeMl, 'Acesso central permite volume igual ou menor que periférico quando há limite diferente');
+
     return checks;
   }
 
@@ -1370,6 +1827,7 @@
     classifyPatient,
     inferAgeBandLabel,
     computeContinuousPreparation,
+    getSmallestContinuousScheme,
     resolveLossBand,
     runSelfAudit,
     constants: {
@@ -1412,6 +1870,7 @@ Fontes principais consultadas:
    https://www.saude.df.gov.br/documents/37101/0/Formatacao_Manual_Injetaveis_FINAL_ABRIL2025-07-05-25.pdf
 7. DailyMed / U.S. National Library of Medicine:
    https://dailymed.nlm.nih.gov/
+   - Propofol Injectable Emulsion: apresentação 10 mg/mL; emulsão lipídica configurada no app para correr pura; não indicado para sedação em UTI pediátrica.
 8. Drugs.com Professional Monographs:
    https://www.drugs.com/pro/
 9. American Academy of Pediatrics / Pediatrics:
