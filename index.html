@@ -181,6 +181,41 @@
       padding:8px 10px;
       background:#fff;
     }
+
+    .info-meta .item.continuous-preparation-box{
+      background:#ecfdf3;
+      border-color:#86efac;
+      color:#14532d;
+      box-shadow:0 0 0 1px rgba(22,101,52,.06) inset;
+    }
+    .info-meta .item.continuous-preparation-box .k{
+      color:#166534;
+      font-weight:700;
+    }
+    .info-meta .item.continuous-preparation-box .v{
+      color:#14532d;
+      font-weight:700;
+    }
+    .info-meta .item.continuous-preparation-box .muted{
+      color:#2f6b47;
+    }
+    .info-meta .item.continuous-preparation-box.preparation-infeasible{
+      background:#fffbeb;
+      border-color:#facc15;
+      color:#92400e;
+      box-shadow:0 0 0 1px rgba(146,64,14,.08) inset;
+    }
+    .info-meta .item.continuous-preparation-box.preparation-infeasible .k{
+      color:#92400e;
+      font-weight:700;
+    }
+    .info-meta .item.continuous-preparation-box.preparation-infeasible .v{
+      color:#92400e;
+      font-weight:700;
+    }
+    .info-meta .item.continuous-preparation-box.preparation-infeasible .muted{
+      color:#92400e;
+    }
     .info-meta .k{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px}
     .info-meta .v{display:block;font-size:.87rem;line-height:1.3;color:var(--text)}
 
@@ -355,7 +390,7 @@
 {name:'Rocurônio / Esmeron', presentation:'10 mg/mL', doseLabel:'0,6 a 1,2 mg/kg IV (intubação/RSI)', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,06 a 0,12 (puro)' : '0,30 a 0,60 após diluição 1:4', dilution:(ctx)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(ctx.weight*0.06, 2)} a ${formatPtTrim(ctx.weight*0.12, 2)} mL da ampola pura.` : `Diluir 1 mL em 4mL de AD ou SF 0,9% = 5 mL (2 mg/mL). Aplicar ${formatPtTrim(ctx.weight*0.3, 2)} a ${formatPtTrim(ctx.weight*0.6, 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.06 : w*0.3, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição', displayTotal:(w,ctx)=>usePureRapidDose(ctx) ? `${formatPtTrim(w*0.06, 2)} a ${formatPtTrim(w*0.12, 2)} mL` : `${formatPtTrim(w*0.3, 2)} a ${formatPtTrim(w*0.6, 2)} mL`},
 {name:'Cetamina / Ketalar', presentation:'50 mg/mL', doseLabel:'1 a 2 mg/kg IV (intubação)', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,02 a 0,04 (puro)' : '0,20 a 0,40 após diluição 1:9', dilution:(ctx)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(ctx.weight*0.02, 2)} a ${formatPtTrim(ctx.weight*0.04, 2)} mL da ampola pura.` : `Diluir 1 mL em 9mL de AD ou SF 0,9% = 10 mL (5 mg/mL). Aplicar ${formatPtTrim(ctx.weight*0.2, 2)} a ${formatPtTrim(ctx.weight*0.4, 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.02 : w*0.2, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição', displayTotal:(w,ctx)=>usePureRapidDose(ctx) ? `${formatPtTrim(w*0.02, 2)} a ${formatPtTrim(w*0.04, 2)} mL` : `${formatPtTrim(w*0.2, 2)} a ${formatPtTrim(w*0.4, 2)} mL`},
 {name:'Dexmedetomidina / Precedex (ataque)', presentation:'100 mcg/mL', doseLabel:'1 mcg/kg em 10 min', mlKgLabel:'0,25 após diluição para 4 mcg/mL', dilution:(ctx,drug)=>`Aspirar 1 mL da ampola + 24 mL de SF 0,9% ou SG5% = 25 mL (4 mcg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura em 10 min.`, diluent:'SF 0,9% ou SG5%', maxLabel:'Não administrar a ampola concentrada pura; diluir para 4 mcg/mL.', total:(w)=>w*0.25, unit:'mL', outputLabel:'Volume após diluição'},
-{name:'Atropina IV/IO', presentation:'0,25 mg/mL', doseLabel:'PALS/bradicardia: 0,02 mg/kg IV/IO; mín. 0,1 mg; repetir 1x se necessário', mlKgLabel:'0,08; mín. 0,4 mL', dilution:'s/ diluir; usar em bradicardia sintomática por aumento de tônus vagal ou bloqueio AV primário, conforme PALS/protocolo institucional', diluent:'—', maxLabel:(ctx)=>isAdolescentContextForAtropine(ctx, ctx && ctx.weight) ? 'Mín.: 0,1 mg = 0,4 mL; máx. adolescente: 1 mg = 4 mL' : 'Mín.: 0,1 mg = 0,4 mL; máx. criança: 0,5 mg = 2 mL', total:(w,ctx)=>atropinePalsVolumeMl(w,ctx), unit:'mL'},
+{name:'Atropina IV/IO', presentation:'0,25 mg/mL', doseLabel:'PALS/bradicardia: 0,02 mg/kg IV/IO; mín. 0,1 mg; repetir 1x se necessário', mlKgLabel:'0,08; mín. 0,4 mL', dilution:'s/ diluir; usar em bradicardia sintomática por aumento de tônus vagal ou bloqueio AV primário, conforme PALS/protocolo institucional', diluent:'—', maxLabel:'Mín.: 0,1 mg = 0,4 mL; máx. PALS: 0,5 mg = 2 mL', total:(w,ctx)=>atropinePalsVolumeMl(w,ctx), unit:'mL'},
 {name:'Lidocaína 2%', presentation:'20 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.05,5), unit:'mL'},
 {name:'Valium / Diazepam (convulsão)', presentation:'5 mg/mL', doseLabel:'Retal: 0,5 mg/kg; IV lento: 0,25 mg/kg', mlKgLabel:'Retal: 0,10<br>IV: 0,05', dilution:'s/ diluir; administrar IV lentamente quando usada via venosa', diluent:'—', maxLabel:'Máx.: 10 mg = 2 mL', total:(w)=>Math.min(w*0.05,2), unit:'mL', outputLabel:'Volume da ampola', displayTotal:(w)=>`IV: ${formatPtTrim(Math.min(w*0.05,2), 2)} mL<br>Retal: ${formatPtTrim(Math.min(w*0.1,2), 2)} mL`},
 {name:'Propofol', presentation:'10 mg/mL', doseLabel:'2,5 a 3,5 mg/kg (≥3 anos; titular à resposta)', mlKgLabel:'0,25 a 0,35', dilution:'s/ diluir', diluent:'—', maxLabel:'Evitar bolus rápido em instabilidade; não indicado para sedação em UTI pediátrica', total:(w)=>w*0.25, unit:'mL', outputLabel:'Volume calculado', displayTotal:(w)=>`${formatPtTrim(w*0.25, 2)} a ${formatPtTrim(w*0.35, 2)} mL`},
@@ -623,7 +658,7 @@
   ];
 
   const RESP_BANDS = [
-    {label:'RN', maxDays:30, fr:'30–50'},
+    {label:'RN até 28 dias', maxDays:28, fr:'30–50'},
     {label:'1 a 11 meses', maxDays:365, fr:'26–40'},
     {label:'2 a 4 anos', maxDays:5 * 365, fr:'20–30'},
     {label:'5 a 7 anos', maxDays:8 * 365, fr:'20–26'},
@@ -634,7 +669,7 @@
   const PRESSURE_BANDS = [
     {label:'Prematuro >1000 g (aprox.)', test:(ctx)=>ctx.ageDays <= 1 && ctx.weight < 2.5, pas:'39–59', pad:'16–56'},
     {label:'RN até 1 dia (aprox.)', test:(ctx)=>ctx.ageDays <= 1, pas:'50–70', pad:'25–45'},
-    {label:'RN até 30 dias', test:(ctx)=>ctx.ageDays <= 30, pas:'60–90', pad:'20–60'},
+    {label:'RN até 28 dias', test:(ctx)=>ctx.ageDays <= 28, pas:'60–90', pad:'20–60'},
     {label:'Lactente até 12 meses', test:(ctx)=>ctx.ageDays <= 365, pas:'87–105', pad:'53–66'},
     {label:'Criança até 5 anos', test:(ctx)=>ctx.ageYears < 6, pas:'95–105', pad:'53–66'},
     {label:'Idade escolar', test:(ctx)=>ctx.ageYears < 12, pas:'97–112', pad:'57–71'},
@@ -644,10 +679,10 @@
   const PAM_BANDS = [
     {label:'RN prematuro <32 sem (aprox.)', test:(ctx)=>ctx.ageDays <= 1 && ctx.weight < 1.5, pam:'30'},
     {label:'RN prematuro 32–38 sem (aprox.)', test:(ctx)=>ctx.ageDays <= 1 && ctx.weight >= 1.5 && ctx.weight < 3.5, pam:'35'},
-    {label:'RN termo até 1 mês', test:(ctx)=>ctx.ageDays <= 30, pam:'40'},
+    {label:'RN termo até 28 dias', test:(ctx)=>ctx.ageDays <= 28, pam:'40'},
     {label:'1–12 meses', test:(ctx)=>ctx.ageDays <= 365, pam:'45'},
     {label:'1–5 anos', test:(ctx)=>ctx.ageYears <= 5, pam:'50'},
-    {label:'5–12 anos', test:(ctx)=>ctx.ageYears <= 12, pam:'55'},
+    {label:'5–<12 anos', test:(ctx)=>ctx.ageYears < 12, pam:'55'},
     {label:'≥12 anos', test:()=>true, pam:'60'}
   ];
 
@@ -1302,6 +1337,10 @@
       ageDays: age.valid ? age.totalDays : NaN,
       weight,
       height,
+      originalWeight: parsedWeight,
+      originalHeight: Number.isFinite(parsedHeight) && parsedHeight > 0 ? parsedHeight : NaN,
+      weightWasCapped: parsedWeight > 120,
+      heightWasCapped: Number.isFinite(parsedHeight) && parsedHeight > 200,
       bsa: Number.isFinite(height) && height > 0 ? bodySurfaceArea(weight, height) : NaN
     };
   }
@@ -1330,7 +1369,7 @@
   function atropinePalsDoseMg(weight, ctx) {
     const numericWeight = Number(weight);
     if (!Number.isFinite(numericWeight) || numericWeight <= 0) return NaN;
-    const maximumMg = isAdolescentContextForAtropine(ctx, numericWeight) ? 1 : 0.5;
+    const maximumMg = 0.5;
     return Math.min(Math.max(numericWeight * 0.02, 0.1), maximumMg);
   }
 
@@ -1559,7 +1598,7 @@ function renderDrugCards(ctx) {
       let selectedSchemeMarkup = '';
       if (!calc || !selectedScheme) {
         selectedSchemeMarkup = `
-          <div class="item" style="grid-column:1/-1">
+          <div class="item continuous-preparation-box" style="grid-column:1/-1">
             <span class="k">Diluição / volume final</span>
             <span class="v">—</span>
           </div>
@@ -1582,14 +1621,14 @@ function renderDrugCards(ctx) {
           ? `${formatPtTrim(selectedScheme.diluentMl, 2)} mL de ${item.diluent}`
           : `não há volume de diluente suficiente em ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL`;
         selectedSchemeMarkup = `
-          <div class="item" style="grid-column:1/-1">
-            <span class="k">Preparo ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
+          <div class="item continuous-preparation-box preparation-infeasible" style="grid-column:1/-1">
+            <span class="k">Preparo inviável — ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
             <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${diluentText} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit} · Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora<br><span class="muted small"><strong>Aviso:</strong> ${warningLines.join(' ') || 'Mesmo no maior volume disponível, este preparo ultrapassa os limites configurados.'}</span>${autoAdjustmentText}</span>
           </div>
         `;
       } else if (calc.runPure) {
         selectedSchemeMarkup = `
-          <div class="item" style="grid-column:1/-1">
+          <div class="item continuous-preparation-box" style="grid-column:1/-1">
             <span class="k">Preparo puro</span>
             <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga pura · Sem diluição · Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit} · Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 2)} mL/hora<br><span class="muted small">Regra específica: emulsão lipídica configurada para correr pura a 10 mg/mL.</span></span>
           </div>
@@ -1597,9 +1636,9 @@ function renderDrugCards(ctx) {
       } else {
         const autoText = selectedScheme.wasAutoAdjusted
           ? `<br><span class="muted small">Ajustado automaticamente de ${formatPtTrim(selectedScheme.requestedVolumeMl, 0)} mL para ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL porque ${(selectedScheme.autoAdjustmentReasons || ['o preparo selecionado não era adequado']).join(' e ')}.</span>`
-          : `<br><span class="muted small">Volume final selecionado. A seleção inicial é calculada pelo menor volume padronizado que respeita o acesso ${selectedAccess === 'free' ? 'concentração livre' : selectedAccess === 'central' ? 'central' : 'periférico'}${calc.requiresOneToOneDilution ? ' e a diluição mínima 1:1.' : '.'}</span>`;
+          : '';
         selectedSchemeMarkup = `
-          <div class="item" style="grid-column:1/-1">
+          <div class="item continuous-preparation-box" style="grid-column:1/-1">
             <span class="k">Preparo ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
             <span class="v">${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL da droga + ${formatPtTrim(selectedScheme.diluentMl, 2)} mL de ${item.diluent} até ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL · Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit} · Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora${autoText}</span>
           </div>
@@ -1756,6 +1795,30 @@ function renderDrugCards(ctx) {
     box.style.display = 'none';
   }
 
+  function getInputLimitMessages(values) {
+    const messages = [];
+    const rawWeight = String(values && values.weight !== undefined ? values.weight : '').trim();
+    const rawHeight = String(values && values.height !== undefined ? values.height : '').trim();
+    const parsedWeight = parseLocaleNumber(rawWeight);
+    const parsedHeight = parseLocaleNumber(rawHeight);
+
+    if (Number.isFinite(parsedWeight) && parsedWeight > 120) {
+      messages.push('Peso informado acima de 120 kg; cálculo limitado automaticamente a 120 kg.');
+    }
+    if (rawHeight !== '' && Number.isFinite(parsedHeight) && parsedHeight > 200) {
+      messages.push('Estatura informada acima de 200 cm; cálculo limitado automaticamente a 200 cm.');
+    }
+
+    return messages;
+  }
+
+  function showInputLimitAlert(values) {
+    const messages = getInputLimitMessages(values);
+    if (messages.length > 0) {
+      showAlert(messages.join(' '));
+    }
+  }
+
   function readFormValues() {
     return {
       year: byId('idadeAno').value,
@@ -1774,6 +1837,10 @@ function renderDrugCards(ctx) {
       ageDays: NaN,
       weight: NaN,
       height: NaN,
+      originalWeight: NaN,
+      originalHeight: NaN,
+      weightWasCapped: false,
+      heightWasCapped: false,
       bsa: NaN
     };
   }
@@ -1781,11 +1848,13 @@ function renderDrugCards(ctx) {
   function renderAll() {
     clearAlert();
     try {
-      const ctx = buildContext(readFormValues());
+      const values = readFormValues();
+      const ctx = buildContext(values);
       UI_STATE.lastContext = ctx;
       renderTopSummary(ctx);
       renderDrugCards(ctx);
       renderContinuousCards(ctx);
+      showInputLimitAlert(values);
     } catch (error) {
       const blank = emptyContext();
       UI_STATE.lastContext = blank;
@@ -1876,8 +1945,10 @@ function renderDrugCards(ctx) {
     });
 
     const normalizeAndRenderWeight = () => {
+      const valuesBeforeNormalization = readFormValues();
       weightInput.value = normalizeWeightInput(weightInput.value);
       renderAll();
+      showInputLimitAlert(valuesBeforeNormalization);
     };
 
     weightInput.addEventListener('blur', normalizeAndRenderWeight);
@@ -1889,8 +1960,10 @@ function renderDrugCards(ctx) {
     });
 
     const normalizeAndRenderHeight = () => {
+      const valuesBeforeNormalization = readFormValues();
       heightInput.value = normalizeHeightInput(heightInput.value);
       renderAll();
+      showInputLimitAlert(valuesBeforeNormalization);
     };
 
     heightInput.addEventListener('blur', normalizeAndRenderHeight);
@@ -1914,6 +1987,7 @@ function renderDrugCards(ctx) {
     const neonate = buildContext({ year: '', month: '', day: '7', weight: '3', height: '50' });
     const neonate0 = buildContext({ year: '', month: '', day: '0', weight: '4.5', height: '54' });
     const neonate28 = buildContext({ year: '', month: '', day: '28', weight: '3', height: '50' });
+    const neonate29 = buildContext({ year: '', month: '', day: '29', weight: '3', height: '50' });
     const child = buildContext({ year: '5', month: '', day: '', weight: '20', height: '110' });
     const cappedWeightContext = buildContext({ year: '12', month: '', day: '', weight: '150', height: '300' });
     const adolescent18 = buildContext({ year: '18', month: '', day: '', weight: '60', height: '170' });
@@ -1923,10 +1997,16 @@ function renderDrugCards(ctx) {
     assert(classifyPatient(neonate0) === 'Neonatal', '0 dias é classificado como neonatal mesmo com peso acima de 4 kg');
     assert(cappedWeightContext.weight === 120, 'Peso acima de 120 kg é limitado internamente a 120 kg');
     assert(cappedWeightContext.height === 200, 'Estatura acima de 200 cm é limitada internamente a 200 cm');
+    assert(cappedWeightContext.weightWasCapped === true && cappedWeightContext.heightWasCapped === true, 'Contexto registra truncamento de peso e estatura máximos');
+    assert(getInputLimitMessages({ weight:'150', height:'300' }).length === 2, 'Alerta de truncamento é gerado para peso e estatura acima do limite');
     assert(buildMaintenanceOutput({ weight: 4, ageDays: 28, ageYears: 28/365, ageText:'28d' }).includes('absolutamente contraindicada'), 'Alerta Holliday-Segar neonatal presente até 28 dias');
     assert(!buildMaintenanceOutput({ weight: 4, ageDays: 29, ageYears: 29/365, ageText:'29d' }).includes('absolutamente contraindicada'), 'Alerta Holliday-Segar não aparece após 28 dias');
     assert(getHeartBand(infant).label === 'RN a 3 meses', 'Faixa de FC correta para lactente jovem');
-    assert(getRespBand({ ageDays: 30 }).label === 'RN', 'Limite de 30 dias mantido em RN');
+    assert(getRespBand({ ageDays: 28 }).label === 'RN até 28 dias', 'Limite neonatal harmonizado em 28 dias para FR');
+    assert(getRespBand({ ageDays: 29 }).label !== 'RN até 28 dias', 'Após 28 dias não é mais classificado como RN na FR');
+    assert(getPressureBand(neonate28).label === 'RN até 28 dias', 'Limite neonatal harmonizado em 28 dias para pressão arterial');
+    assert(getPressureBand(neonate29).label !== 'RN até 28 dias', 'Após 28 dias não usa mais a faixa neonatal de pressão arterial');
+    assert(getPAMBand({ ageDays: 365 * 12, ageYears: 12, weight: 45 }).label === '≥12 anos', 'PAM aos 12 anos entra na faixa ≥12 anos');
     assert(adolescent18.ageYears >= 18, 'Idade de 18 anos preservada');
     assert(!String(getTube(20)).includes('cuff'), 'Cânula sem texto cuff');
 
@@ -1952,7 +2032,7 @@ function renderDrugCards(ctx) {
     const atropine = RESUSCITATION_DRUGS.find((item) => item.name === 'Atropina IV/IO');
     assert(Math.abs(atropine.total(2, neonate) - 0.4) < 1e-9, 'Atropina PALS/bradicardia respeita dose mínima: 2 kg = 0,4 mL');
     assert(Math.abs(atropine.total(30, child) - 2) < 1e-9, 'Atropina PALS/bradicardia respeita máximo de criança: 0,5 mg = 2 mL');
-    assert(Math.abs(atropine.total(60, adolescent18) - 4) < 1e-9, 'Atropina PALS/bradicardia respeita máximo de adolescente: 1 mg = 4 mL');
+    assert(Math.abs(atropine.total(60, adolescent18) - 2) < 1e-9, 'Atropina PALS/bradicardia respeita máximo PALS: 0,5 mg = 2 mL, inclusive em adolescente');
 
     const bicarbonate = RESUSCITATION_DRUGS.find((item) => item.name === 'Bicarbonato de sódio 8,4%');
     assert(Math.abs(bicarbonate.total(3.5) - 7) < 1e-9, 'Bicarbonato 8,4% diluído 1:1: 3,5 kg = 7 mL finais');
