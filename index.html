@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Cálculo de doses na parada cardiorrespiratória Pediátrica</title>
+  <title>Emergência em Pediatria — PCR, Via Aérea, Sedação</title>
   <style>
     :root{
       --surface: #ffffff;
@@ -277,8 +277,8 @@
     <section class="hero">
       <div class="espaco-antes-titulo" aria-hidden="true"></div>
 
-      <h1>Cálculo de doses na parada cardiorrespiratória Pediátrica</h1>
-      <p>Medicamentos comumente usados na parada cardiorrespiratória em Pediatria</p>
+      <h1>Emergência em Pediatria<br>PCR, Via Aérea, Sedação</h1>
+      <p>Medicamentos comumente usados na Emergência Pediátrica: PCR, Via Aérea, Sedação e Infusões.</p>
       <div class="tag-row">
         <span class="pill" id="perfilPaciente">Perfil: —</span>
         <span class="pill" id="idadeFormatada">Idade: —</span>
@@ -1382,21 +1382,33 @@
     return !!ctx && Number.isFinite(Number(ctx.weight)) && Number(ctx.weight) > 40;
   }
 
+  function isLikelyNeonatalOrInfantWithoutAge(ctx) {
+    if (!ctx || hasInformedAge(ctx)) return false;
+    const inferredBand = inferProbableAgeBandByWeight(ctx.weight);
+    return inferredBand === 'Provável Neonatal' || inferredBand === 'Provável Lactente';
+  }
+
   function isPropofolUnderThreeYears(item, ctx) {
-    return !!item
-      && item.name === 'Propofol'
-      && hasInformedAge(ctx)
-      && Number.isFinite(ctx.ageYears)
-      && ctx.ageYears < 3;
+    if (!item || item.name !== 'Propofol' || !ctx) return false;
+
+    if (hasInformedAge(ctx)) {
+      return Number.isFinite(ctx.ageYears) && ctx.ageYears < 3;
+    }
+
+    return isLikelyNeonatalOrInfantWithoutAge(ctx);
   }
 
   function buildPropofolUnderThreeAlertMarkup(item, ctx) {
     if (!isPropofolUnderThreeYears(item, ctx)) return '';
 
+    const alertText = hasInformedAge(ctx)
+      ? 'Idade menor que 3 anos: Propofol deve ser evitado conforme regra cadastrada (≥3 anos). Use apenas se houver indicação anestésica/protocolo institucional e avaliação clínica explícita.'
+      : 'Idade não informada e perfil inferido como Provável Neonatal ou Provável Lactente: não é possível excluir idade menor que 3 anos. Confirme a idade antes de usar Propofol; use apenas se houver indicação anestésica/protocolo institucional e avaliação clínica explícita.';
+
     return `
       <div class="item warn-bg" style="grid-column:1/-1">
         <span class="k">Alerta Propofol &lt; 3 anos</span>
-        <span class="v">Idade menor que 3 anos: Propofol deve ser evitado conforme regra cadastrada (≥3 anos). Use apenas se houver indicação anestésica/protocolo institucional e avaliação clínica explícita.</span>
+        <span class="v">${alertText}</span>
       </div>
     `;
   }
