@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Emergência em Pediatria — PCR, Via Aérea, Sedação</title>
+  <title>Cálculo de doses na parada cardiorrespiratória Pediátrica</title>
   <style>
     :root{
       --surface: #ffffff;
@@ -277,8 +277,8 @@
     <section class="hero">
       <div class="espaco-antes-titulo" aria-hidden="true"></div>
 
-      <h1>Emergência em Pediatria<br>PCR, Via Aérea, Sedação</h1>
-      <p>Medicamentos comumente usados na Emergência Pediátrica: PCR, Via Aérea, Sedação e Infusões.</p>
+      <h1>Cálculo de doses na parada cardiorrespiratória Pediátrica</h1>
+      <p>Medicamentos comumente usados na parada cardiorrespiratória em Pediatria</p>
       <div class="tag-row">
         <span class="pill" id="perfilPaciente">Perfil: —</span>
         <span class="pill" id="idadeFormatada">Idade: —</span>
@@ -359,9 +359,16 @@
     </details>
 
     <details class="cardish" style="margin-top:14px">
-      <summary>Medicações para infusão contínua com preparo fixo</summary>
+      <summary>Infusões contínuas com preparo fixo</summary>
       <div>
         <div id="continuousCards" class="info-grid" style="margin-top:12px"></div>
+      </div>
+    </details>
+
+    <details class="cardish" style="margin-top:14px">
+      <summary>Infusões contínuas com preparo padronizado</summary>
+      <div>
+        <div id="fixedContinuousCards" class="info-grid" style="margin-top:12px"></div>
       </div>
     </details>
 
@@ -650,6 +657,24 @@
     }
   ];
 
+
+
+  const FIXED_CONTINUOUS_MEDS = [
+    {
+      name:'Precedex / Dexmedetomidina',
+      presentation:'2 mL da droga (100 mcg/mL) + 50 mL de SF 0,9%',
+      drugMl:2,
+      drugConcentrationMcgPerMl:100,
+      diluent:'SF 0,9%',
+      diluentMl:50,
+      usual:'0,2 a 1 mcg/kg/h',
+      defaultDose:0.5,
+      usualMin:0.2,
+      usualMax:1,
+      doseUnit:'mcgkgh'
+    }
+  ];
+
   const HEART_RATE_BANDS = [
     {label:'RN a 3 meses', maxDays:92, awake:'85–205', mean:'140', sleep:'80–160'},
     {label:'3 meses a 2 anos', maxDays:730, awake:'100–190', mean:'130', sleep:'75–160'},
@@ -705,6 +730,7 @@
     tube:'canulaOut',
     drugGrid:'drugGrid',
     continuousCards:'continuousCards',
+    fixedContinuousCards:'fixedContinuousCards',
     alertBox:'alertBox',
     modelButton:'btnModelo',
     clearButton:'btnLimpar'
@@ -716,7 +742,8 @@
   const UI_STATE = {
     lastContext: null,
     lastAlert: '',
-    continuousConfigs: Object.create(null)
+    continuousConfigs: Object.create(null),
+    fixedContinuousConfigs: Object.create(null)
   };
 
   const CONTINUOUS_PREPARATION_SCHEMES = Object.freeze([
@@ -1382,33 +1409,21 @@
     return !!ctx && Number.isFinite(Number(ctx.weight)) && Number(ctx.weight) > 40;
   }
 
-  function isLikelyNeonatalOrInfantWithoutAge(ctx) {
-    if (!ctx || hasInformedAge(ctx)) return false;
-    const inferredBand = inferProbableAgeBandByWeight(ctx.weight);
-    return inferredBand === 'Provável Neonatal' || inferredBand === 'Provável Lactente';
-  }
-
   function isPropofolUnderThreeYears(item, ctx) {
-    if (!item || item.name !== 'Propofol' || !ctx) return false;
-
-    if (hasInformedAge(ctx)) {
-      return Number.isFinite(ctx.ageYears) && ctx.ageYears < 3;
-    }
-
-    return isLikelyNeonatalOrInfantWithoutAge(ctx);
+    return !!item
+      && item.name === 'Propofol'
+      && hasInformedAge(ctx)
+      && Number.isFinite(ctx.ageYears)
+      && ctx.ageYears < 3;
   }
 
   function buildPropofolUnderThreeAlertMarkup(item, ctx) {
     if (!isPropofolUnderThreeYears(item, ctx)) return '';
 
-    const alertText = hasInformedAge(ctx)
-      ? 'Idade menor que 3 anos: Propofol deve ser evitado conforme regra cadastrada (≥3 anos). Use apenas se houver indicação anestésica/protocolo institucional e avaliação clínica explícita.'
-      : 'Idade não informada e perfil inferido como Provável Neonatal ou Provável Lactente: não é possível excluir idade menor que 3 anos. Confirme a idade antes de usar Propofol; use apenas se houver indicação anestésica/protocolo institucional e avaliação clínica explícita.';
-
     return `
       <div class="item warn-bg" style="grid-column:1/-1">
         <span class="k">Alerta Propofol &lt; 3 anos</span>
-        <span class="v">${alertText}</span>
+        <span class="v">Idade menor que 3 anos: Propofol deve ser evitado conforme regra cadastrada (≥3 anos). Use apenas se houver indicação anestésica/protocolo institucional e avaliação clínica explícita.</span>
       </div>
     `;
   }
@@ -1669,7 +1684,7 @@ function renderDrugCards(ctx) {
           <div class="continuous-controls">
             <div class="continuous-dose-prep-stack">
               <div class="continuous-field">
-                <label for="dose_${key}">Dose padrão (${doseUnitText})</label>
+                <label for="dose_${key}">Dose (${doseUnitText})</label>
                 <input id="dose_${key}" class="continuous-dose-input" type="text" inputmode="decimal" value="${formatPtTrim(config.dose, 3)}" data-continuous-key="${key}" autocomplete="off">
               </div>
               <div class="continuous-prep-below-dose">
@@ -1689,8 +1704,7 @@ function renderDrugCards(ctx) {
               ${volumeControlMarkup}
             </div>
           </div>
-          <div class="item"><span class="k">Dose selecionada</span><span class="v">${doseText}</span></div>
-          <div class="item"><span class="k">Droga / 24h</span><span class="v">${calc ? `${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL = ${formatPtTrim(calc.totalDrugAmountPerDay, 2)} ${amountUnit}` : '—'}</span></div>
+            <div class="item"><span class="k">Droga / 24h</span><span class="v">${calc ? `${formatPtTrim(calc.drugVolumeMlPerDay, 2)} mL = ${formatPtTrim(calc.totalDrugAmountPerDay, 2)} ${amountUnit}` : '—'}</span></div>
           <div class="item"><span class="k">Concentração limite</span><span class="v">${formatContinuousConcentrationLimit(item, selectedAccess)}</span></div>
         </div>
       `;
@@ -1749,6 +1763,127 @@ function renderDrugCards(ctx) {
       });
     });
   }
+
+  function getFixedContinuousConfig(item) {
+    const key = continuousKey(item);
+    if (!UI_STATE.fixedContinuousConfigs[key]) {
+      UI_STATE.fixedContinuousConfigs[key] = {
+        dose: item.defaultDose
+      };
+    }
+    return UI_STATE.fixedContinuousConfigs[key];
+  }
+
+  function computeFixedContinuousPreparation(item, weight, dose) {
+    const numericWeight = Number(weight);
+    const numericDose = Number(dose);
+    const drugMl = Number(item.drugMl);
+    const concentrationMcgPerMl = Number(item.drugConcentrationMcgPerMl);
+    const diluentMl = Number(item.diluentMl);
+
+    if (!(numericWeight > 0) || !(numericDose > 0) || !(drugMl > 0) || !(concentrationMcgPerMl > 0) || !(diluentMl >= 0)) {
+      return null;
+    }
+
+    const totalDrugMcg = drugMl * concentrationMcgPerMl;
+    const totalVolumeMl = drugMl + diluentMl;
+    const finalConcentrationMcgPerMl = totalDrugMcg / totalVolumeMl;
+    const doseMcgPerHour = numericDose * numericWeight;
+    const rateMlPerHour = doseMcgPerHour / finalConcentrationMcgPerMl;
+    const durationHours = rateMlPerHour > 0 ? totalVolumeMl / rateMlPerHour : NaN;
+
+    return {
+      totalDrugMcg,
+      totalVolumeMl,
+      finalConcentrationMcgPerMl,
+      doseMcgPerHour,
+      rateMlPerHour,
+      durationHours,
+      diluentMl,
+      drugMl
+    };
+  }
+
+  function renderFixedContinuousCards(ctx) {
+    const grid = byId('fixedContinuousCards');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    FIXED_CONTINUOUS_MEDS.forEach((item) => {
+      const key = continuousKey(item);
+      const config = getFixedContinuousConfig(item);
+      const calc = computeFixedContinuousPreparation(item, ctx.weight, config.dose);
+      const doseUnitText = formatContinuousDoseUnit(item);
+      const doseText = `${formatPtTrim(config.dose, 3)} ${doseUnitText}`;
+      const doseRangeAlertMarkup = buildContinuousDoseRangeAlertMarkup(item, config.dose);
+
+      const preparationMarkup = calc ? `
+        <div class="item continuous-preparation-box" style="grid-column:1/-1">
+          <span class="k">Preparo fixo</span>
+          <span class="v">${formatPtTrim(calc.drugMl, 0)} mL da droga + ${formatPtTrim(calc.diluentMl, 0)} mL de ${item.diluent} = ${formatPtTrim(calc.totalVolumeMl, 0)} mL finais · Concentração final: ${formatPtTrim(calc.finalConcentrationMcgPerMl, 2)} mcg/mL</span>
+        </div>
+        <div class="item"><span class="k">Velocidade de infusão</span><span class="v">${formatPtTrim(calc.rateMlPerHour, 2)} mL/hora</span></div>
+        <div class="item"><span class="k">Dose entregue</span><span class="v">${formatPtTrim(calc.doseMcgPerHour, 2)} mcg/h</span></div>
+        <div class="item"><span class="k">Duração estimada da seringa</span><span class="v">${formatPtTrim(calc.durationHours, 1)} horas</span></div>
+      ` : `
+        <div class="item continuous-preparation-box preparation-infeasible" style="grid-column:1/-1">
+          <span class="k">Preparo fixo</span>
+          <span class="v">Informe peso e dose válidos para calcular a velocidade de infusão.</span>
+        </div>
+      `;
+
+      const card = document.createElement('article');
+      card.className = 'info-card';
+      card.dataset.fixedContinuousKey = key;
+      card.innerHTML = `
+        <h3>${item.name}</h3>
+        <div class="info-sub">${item.presentation}</div>
+        <div class="info-meta">
+          <div class="item"><span class="k">Apresentação</span><span class="v">Ampola 100 mcg/mL</span></div>
+          <div class="item"><span class="k">Dose usual</span><span class="v">${item.usual}</span></div>
+          <div class="continuous-controls">
+            <div class="continuous-dose-prep-stack">
+              <div class="continuous-field">
+                <label for="fixed_dose_${key}">Dose (${doseUnitText})</label>
+                <input id="fixed_dose_${key}" class="fixed-continuous-dose-input" type="text" inputmode="decimal" value="${formatPtTrim(config.dose, 3)}" data-fixed-continuous-key="${key}" autocomplete="off">
+              </div>
+              <div class="continuous-prep-below-dose">
+                ${preparationMarkup}
+                ${doseRangeAlertMarkup}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    bindFixedContinuousControlEvents();
+  }
+
+  function bindFixedContinuousControlEvents() {
+    const grid = byId('fixedContinuousCards');
+    if (!grid) return;
+
+    grid.querySelectorAll('.fixed-continuous-dose-input').forEach((input) => {
+      input.addEventListener('input', () => {
+        input.value = sanitizeContinuousDoseInput(input.value);
+      });
+
+      const updateDose = () => {
+        const key = input.dataset.fixedContinuousKey;
+        const item = FIXED_CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
+        if (!item) return;
+        const config = getFixedContinuousConfig(item);
+        config.dose = normalizeContinuousDoseInput(input.value, item.defaultDose);
+        renderFixedContinuousCards(UI_STATE.lastContext || emptyContext());
+      };
+
+      input.addEventListener('blur', updateDose);
+      input.addEventListener('change', updateDose);
+    });
+  }
+
 
 
 
@@ -1866,6 +2001,7 @@ function renderDrugCards(ctx) {
       renderTopSummary(ctx);
       renderDrugCards(ctx);
       renderContinuousCards(ctx);
+      renderFixedContinuousCards(ctx);
       showInputLimitAlert(values);
     } catch (error) {
       const blank = emptyContext();
@@ -1873,12 +2009,14 @@ function renderDrugCards(ctx) {
       renderTopSummary(blank);
       renderDrugCards(blank);
       renderContinuousCards(blank);
+      renderFixedContinuousCards(blank);
       showAlert(error.message || 'Não foi possível calcular.');
     }
   }
 
   function resetAll() {
     UI_STATE.continuousConfigs = Object.create(null);
+    UI_STATE.fixedContinuousConfigs = Object.create(null);
     byId('idadeAno').value = '';
     byId('idadeMes').value = '';
     byId('idadeDia').value = '';
@@ -2097,6 +2235,12 @@ function renderDrugCards(ctx) {
     assert(RESUSCITATION_DRUGS.every((item) => item.unit !== 'J'), 'Doses rápidas sem itens de energia elétrica');
     assert(RESUSCITATION_DRUGS.length === 21, 'Quantidade esperada de doses rápidas após consolidação');
     assert(CONTINUOUS_MEDS.length === 14, 'Quantidade esperada de infusões contínuas após consolidação');
+    assert(FIXED_CONTINUOUS_MEDS.length === 1, 'Quantidade esperada de infusões contínuas com preparo fixo');
+    assert(!!FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Precedex / Dexmedetomidina'), 'Precedex incluído nas infusões com preparo fixo');
+    const fixedPrecedex = FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Precedex / Dexmedetomidina');
+    const fixedPrecedexCalc = computeFixedContinuousPreparation(fixedPrecedex, 10, 0.5);
+    assert(Math.abs(fixedPrecedexCalc.totalVolumeMl - 52) < 1e-9, 'Precedex fixo: 2 mL + 50 mL = 52 mL finais');
+    assert(Math.abs(fixedPrecedexCalc.finalConcentrationMcgPerMl - (200 / 52)) < 1e-9, 'Precedex fixo: concentração final correta');
 
     const dopamine = CONTINUOUS_MEDS.find((item) => item.name === 'Dopamina');
     assert(formatContinuousConcentrationLimit(dopamine, 'peripheral') !== formatContinuousConcentrationLimit(dopamine, 'central'), 'Dopamina tem limites diferentes por acesso');
