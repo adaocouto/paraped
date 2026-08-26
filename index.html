@@ -86,7 +86,7 @@
     .kpi{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fbfdff}
     .kpi .label{font-size:.78rem;color:var(--muted);margin-bottom:4px}
     .kpi .value{font-size:1.15rem;font-weight:700;color:#173a6d;line-height:1.25}
-    #canulaOut{white-space:pre-line}
+    #canulaOut,#cateterOut{white-space:pre-line}
 
     .maintenance-neonatal-alert{
       display:block;
@@ -410,6 +410,7 @@
       <div class="kpi"><div class="label">Manutenção hídrica</div><div class="value" id="manutOut">—</div></div>
       <div class="kpi"><div class="label">Lâmina</div><div class="value" id="laminaOut">—</div></div>
       <div class="kpi"><div class="label">Cânula orotraqueal</div><div class="value" id="canulaOut">—</div></div>
+      <div class="kpi" style="grid-column:1/-1"><div class="label">Cateter venoso — inserção estimada</div><div class="value" id="cateterOut">—</div></div>
     </section>
 
     <details class="cardish" style="margin-top:14px">
@@ -445,7 +446,7 @@
     </details>
 
     <details class="cardish" style="margin-top:14px">
-      <summary>Infusões contínuas com preparo padronizado</summary>
+      <summary>Medicamentos comumente prescritos</summary>
       <div>
         <div id="fixedContinuousCards" class="info-grid" style="margin-top:12px"></div>
       </div>
@@ -456,7 +457,7 @@
       Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
     
     </div>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.09.07.16</span></div>
+<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.09.08.21</span></div>
     <div class="spacer-3lines" aria-hidden="true"></div>
 </main>
 
@@ -603,11 +604,13 @@
       ampMl:10,
       mgPerMl:50,
       diluent:'SF/SG/AD',
-      usual:'0,5 a 1 mg/kg/h',
-      defaultDose:0.5,
-      usualMin:0.5,
-      usualMax:1,
-      doseUnit:'mgkgh',
+      usual:'1 a 50 mcg/kg/min',
+      defaultDose:1,
+      usualMin:1,
+      usualMax:50,
+      absoluteMin:1,
+      absoluteMax:50,
+      doseUnit:'mcgkgmin',
       accessConcentrationLimits:{
         peripheral:{ value:2, label:'2 mg/mL' },
         central:{ value:10, label:'10 mg/mL' }
@@ -743,17 +746,33 @@
 
   const FIXED_CONTINUOUS_MEDS = [
     {
-      name:'Precedex / Dexmedetomidina',
-      presentation:'2 mL da droga (100 mcg/mL) + 48 mL de SF 0,9% = 50 mL finais (4 mcg/mL)',
-      drugMl:2,
-      drugConcentrationMcgPerMl:100,
-      diluent:'SF 0,9%',
-      diluentMl:48,
-      usual:'0,2 a 1 mcg/kg/h',
-      defaultDose:0.5,
-      usualMin:0.2,
-      usualMax:1,
-      doseUnit:'mcgkgh'
+      kind:'vancomycin',
+      name:'Vancomicina',
+      presentation:'Frasco-ampola 500 mg; reconstituir com 10 mL de AD = 50 mg/mL',
+      vialMg:500,
+      reconstitutionMl:10,
+      reconstitutedConcentrationMgPerMl:50,
+      reconstitutionDiluent:'AD',
+      finalDiluent:'SF 0,9% ou SG5%',
+      usual:'10 ou 15 mg/kg/dose',
+      defaultDose:15,
+      doseOptions:[10,15],
+      defaultFinalConcentration:5,
+      finalConcentrationOptions:[2.5,5],
+      infusionMinutes:60,
+      maxInfusionRateMgPerMin:10,
+      doseUnit:'mgkgdose'
+    },
+    {
+      kind:'meropenem',
+      name:'Meropenem',
+      presentation:'Meropenem IV — apresentação e diluição conforme produto disponível e protocolo institucional',
+      usual:'20 mg/kg/dose IV, de 8/8 horas',
+      defaultDose:20,
+      doseOptions:[20],
+      intervalHours:8,
+      infusionMinutes:180,
+      doseUnit:'mgkgdose'
     }
   ];
 
@@ -1296,17 +1315,81 @@
 
     if (!hasInformedAge(ctx)) {
       const byWeight = getTubeByWeight(ctx.weight);
-      return `Estimativa por peso: ${formatTubeEstimate(byWeight, 'diâmetro interno')}`;
+      return `Estimativa por peso:\n${formatTubeEstimate(byWeight, 'Diâmetro interno')}`;
     }
 
     const uncuffed = getAgeBasedUncuffedTube(ctx);
     const cuffed = Math.max(2.0, roundTubeHalf(uncuffed - 0.5));
 
-    return `${formatTubeEstimate(uncuffed, 'Sem balonete')}\n${formatTubeEstimate(cuffed, 'Com balonete')}`;
+    const sizeText = `${formatTubeEstimate(uncuffed, 'Sem balonete')}\n${formatTubeEstimate(cuffed, 'Com balonete')}`;
+    const depthText = getTubeInsertionDepth(ctx);
+    return depthText ? `${sizeText}\n${depthText}` : sizeText;
   }
 
   function hasInformedAge(ctx) {
     return Number.isFinite(ctx.ageDays) && Number.isFinite(ctx.ageYears);
+  }
+
+  // ==========================================================
+  // profundidades estimadas — via aérea e cateteres
+  // ==========================================================
+  function getNeonatalTubeDepthByWeight(weight) {
+    if (!(weight > 0)) return NaN;
+    // Tabela neonatal baseada no NRP 8ª ed./Kempley, usando peso quando IG não está disponível.
+    if (weight <= 0.6) return 5.5;
+    if (weight <= 0.8) return 6.0;
+    if (weight <= 1.0) return 6.5;
+    if (weight <= 1.4) return 7.0;
+    if (weight <= 1.8) return 7.5;
+    if (weight <= 2.4) return 8.0;
+    if (weight <= 3.1) return 8.5;
+    return 9.0; // aproximação pela faixa neonatal superior quando >3,1 kg.
+  }
+
+  function getTubeInsertionDepth(ctx) {
+    if (!ctx || !(ctx.weight > 0) || !hasInformedAge(ctx)) return '';
+
+    if (ctx.ageDays <= 28) {
+      const depth = getNeonatalTubeDepthByWeight(ctx.weight);
+      return Number.isFinite(depth)
+        ? `Inserção estimada no lábio: ${formatPtTrim(depth, 1)} cm`
+        : '';
+    }
+
+    if (ctx.ageYears < 2) {
+      const uncuffed = getAgeBasedUncuffedTube(ctx);
+      const cuffed = Math.max(2.0, roundTubeHalf(uncuffed - 0.5));
+      if (!(uncuffed > 0) || !(cuffed > 0)) return '';
+      return `Inserção estimada no lábio (3 × ID):\nSem balonete: ${formatPtTrim(uncuffed * 3, 1)} cm\nCom balonete: ${formatPtTrim(cuffed * 3, 1)} cm`;
+    }
+
+    const depth = 12 + (ctx.ageYears / 2);
+    return `Inserção estimada no lábio: ${formatPtTrim(depth, 1)} cm`;
+  }
+
+  function getVenousCatheterInsertion(ctx) {
+    if (!ctx || !(ctx.weight > 0)) return '—';
+
+    // RN no dia do nascimento: mostrar somente CVU, conforme solicitado.
+    if (hasInformedAge(ctx) && ctx.ageDays === 0) {
+      const uvcBase = (1.5 * ctx.weight) + 5.5;
+      return `CVU: ~${formatPtTrim(uvcBase, 1)} cm + comprimento do coto umbilical\nEstimativa inicial; confirmar posição da ponta por imagem/POCUS.`;
+    }
+
+    const lines = [];
+
+    if (Number.isFinite(ctx.height) && ctx.height > 0) {
+      const rightIj = 1.7 + (0.07 * ctx.height);
+      lines.push(`Jugular interna direita: ~${formatPtTrim(rightIj, 1)} cm`);
+    } else {
+      lines.push('Jugular interna direita: informar estatura');
+    }
+
+    const femoral = (0.45 * ctx.weight) + 8.13;
+    lines.push(`Femoral: ~${formatPtTrim(femoral, 1)} cm`);
+    lines.push('Estimativas a partir do ponto de punção.');
+
+    return lines.join('\n');
   }
 
   function inferAgeBandByAge(ctx) {
@@ -1513,7 +1596,7 @@
 
     const messages = [];
     if (isPropofolUnderThreeYears(item, ctx)) {
-      messages.push('Idade menor que 3 anos: a indução anestésica com propofol não é recomendada pela bula desta apresentação.');
+      messages.push('Idade menor que 3 anos: a indução anestésica com propofol não é recomendada.');
     }
 
     if (item.pediatricIcuSedationNotIndicated === true || item.runPure === true) {
@@ -1597,8 +1680,12 @@ function renderDrugCards(ctx) {
 
   function applyContinuousDoseLimit(item, doseValue) {
     const numericDose = Number(doseValue);
+    const absoluteMin = Number(item && item.absoluteMin);
     const absoluteMax = Number(item && item.absoluteMax);
     if (!Number.isFinite(numericDose) || numericDose <= 0) return { dose: numericDose, limited: false, message: '' };
+    if (Number.isFinite(absoluteMin) && absoluteMin > 0 && numericDose < absoluteMin) {
+      return { dose: absoluteMin, limited: true, message: `Dose solicitada (${formatPtTrim(numericDose, 3)} ${formatContinuousDoseUnit(item)}) abaixo do mínimo operacional cadastrado. Valor limitado a ${formatPtTrim(absoluteMin, 3)} ${formatContinuousDoseUnit(item)}.` };
+    }
     if (Number.isFinite(absoluteMax) && absoluteMax > 0 && numericDose > absoluteMax) {
       return { dose: absoluteMax, limited: true, message: `Dose solicitada (${formatPtTrim(numericDose, 3)} ${formatContinuousDoseUnit(item)}) acima do máximo operacional cadastrado. Valor limitado a ${formatPtTrim(absoluteMax, 3)} ${formatContinuousDoseUnit(item)}.` };
     }
@@ -1607,9 +1694,12 @@ function renderDrugCards(ctx) {
 
   function buildContinuousDoseRangeAlertMarkup(item, doseValue, config = null) {
     if (config && config.doseLimitMessage) {
+      const doseLimitLabel = /abaixo do mínimo operacional/.test(config.doseLimitMessage)
+        ? 'Limite mínimo de dose'
+        : 'Limite máximo de dose';
       return `
         <div class="item warn-bg" style="grid-column:1/-1">
-          <span class="k">Limite máximo de dose</span>
+          <span class="k">${doseLimitLabel}</span>
           <span class="v">${config.doseLimitMessage}</span>
         </div>
       `;
@@ -1898,39 +1988,79 @@ function renderDrugCards(ctx) {
     const key = continuousKey(item);
     if (!UI_STATE.fixedContinuousConfigs[key]) {
       UI_STATE.fixedContinuousConfigs[key] = {
-        dose: item.defaultDose
+        dose: item.defaultDose,
+        finalConcentration: item.defaultFinalConcentration
       };
     }
     return UI_STATE.fixedContinuousConfigs[key];
   }
 
-  function computeFixedContinuousPreparation(item, weight, dose) {
+  function computeFixedContinuousPreparation(item, weight, dose, finalConcentration) {
     const numericWeight = Number(weight);
     const numericDose = Number(dose);
-    const drugMl = Number(item.drugMl);
-    const concentrationMcgPerMl = Number(item.drugConcentrationMcgPerMl);
-    const diluentMl = Number(item.diluentMl);
+    const numericFinalConcentration = Number(finalConcentration);
+    const vialMg = Number(item.vialMg);
+    const reconstitutionMl = Number(item.reconstitutionMl);
+    const reconstitutedConcentrationMgPerMl = Number(item.reconstitutedConcentrationMgPerMl);
+    const infusionMinutes = Number(item.infusionMinutes);
+    const maxInfusionRateMgPerMin = Number(item.maxInfusionRateMgPerMin);
 
-    if (!(numericWeight > 0) || !(numericDose > 0) || !(drugMl > 0) || !(concentrationMcgPerMl > 0) || !(diluentMl >= 0)) {
+    if (!(numericWeight > 0) || !(numericDose > 0) || !(numericFinalConcentration > 0) ||
+        !(vialMg > 0) || !(reconstitutionMl > 0) || !(reconstitutedConcentrationMgPerMl > 0) ||
+        !(infusionMinutes > 0)) {
       return null;
     }
 
-    const totalDrugMcg = drugMl * concentrationMcgPerMl;
-    const totalVolumeMl = drugMl + diluentMl;
-    const finalConcentrationMcgPerMl = totalDrugMcg / totalVolumeMl;
-    const doseMcgPerHour = numericDose * numericWeight;
-    const rateMlPerHour = doseMcgPerHour / finalConcentrationMcgPerMl;
-    const durationHours = rateMlPerHour > 0 ? totalVolumeMl / rateMlPerHour : NaN;
+    const doseMg = numericDose * numericWeight;
+    const withdrawalMl = doseMg / reconstitutedConcentrationMgPerMl;
+    const finalVolumeMl = doseMg / numericFinalConcentration;
+    const finalDiluentMl = Math.max(0, finalVolumeMl - withdrawalMl);
+    const infusionHours = infusionMinutes / 60;
+    const rateMlPerHour = finalVolumeMl / infusionHours;
+    const infusionRateMgPerMin = doseMg / infusionMinutes;
+    const vialsNeeded = Math.max(1, Math.ceil(doseMg / vialMg));
+    const minimumInfusionMinutes = Number.isFinite(maxInfusionRateMgPerMin) && maxInfusionRateMgPerMin > 0
+      ? Math.max(infusionMinutes, Math.ceil(doseMg / maxInfusionRateMgPerMin))
+      : infusionMinutes;
 
     return {
-      totalDrugMcg,
-      totalVolumeMl,
-      finalConcentrationMcgPerMl,
-      doseMcgPerHour,
+      doseMg,
+      withdrawalMl,
+      finalVolumeMl,
+      finalDiluentMl,
+      finalConcentrationMgPerMl: numericFinalConcentration,
+      infusionMinutes,
       rateMlPerHour,
-      durationHours,
-      diluentMl,
-      drugMl
+      infusionRateMgPerMin,
+      vialsNeeded,
+      minimumInfusionMinutes,
+      exceedsRateLimit: minimumInfusionMinutes > infusionMinutes
+    };
+  }
+
+
+  function computeMeropenemRegimen(item, weight) {
+    const numericWeight = Number(weight);
+    const numericDose = Number(item && item.defaultDose);
+    const intervalHours = Number(item && item.intervalHours);
+    const infusionMinutes = Number(item && item.infusionMinutes);
+
+    if (!(numericWeight > 0) || !(numericDose > 0) || !(intervalHours > 0) || !(infusionMinutes > 0)) {
+      return null;
+    }
+
+    const doseMg = numericDose * numericWeight;
+    const dosesPerDay = 24 / intervalHours;
+    const dailyDoseMg = doseMg * dosesPerDay;
+
+    return {
+      doseMg,
+      doseMgPerKg: numericDose,
+      intervalHours,
+      infusionMinutes,
+      infusionHours: infusionMinutes / 60,
+      dosesPerDay,
+      dailyDoseMg
     };
   }
 
@@ -1941,45 +2071,117 @@ function renderDrugCards(ctx) {
 
     FIXED_CONTINUOUS_MEDS.forEach((item) => {
       const key = continuousKey(item);
-      const config = getFixedContinuousConfig(item);
-      const calc = computeFixedContinuousPreparation(item, ctx.weight, config.dose);
-      const doseUnitText = formatContinuousDoseUnit(item);
-      const doseText = `${formatPtTrim(config.dose, 3)} ${doseUnitText}`;
-      const doseRangeAlertMarkup = buildContinuousDoseRangeAlertMarkup(item, config.dose);
-
-      const preparationMarkup = calc ? `
-        <div class="item continuous-preparation-box" style="grid-column:1/-1">
-          <span class="k">Preparo fixo</span>
-          <span class="v">${formatPtTrim(calc.drugMl, 0)} mL da droga + ${formatPtTrim(calc.diluentMl, 0)} mL de ${item.diluent} = ${formatPtTrim(calc.totalVolumeMl, 0)} mL finais · Concentração final: ${formatPtTrim(calc.finalConcentrationMcgPerMl, 2)} mcg/mL</span>
-        </div>
-        <div class="item"><span class="k">Velocidade de infusão</span><span class="v">${formatPtTrim(calc.rateMlPerHour, 2)} mL/hora</span></div>
-        <div class="item"><span class="k">Dose entregue</span><span class="v">${formatPtTrim(calc.doseMcgPerHour, 2)} mcg/h</span></div>
-        <div class="item"><span class="k">Duração estimada da seringa</span><span class="v">${formatPtTrim(calc.durationHours, 1)} horas</span></div>
-      ` : `
-        <div class="item continuous-preparation-box preparation-infeasible" style="grid-column:1/-1">
-          <span class="k">Preparo fixo</span>
-          <span class="v">Informe peso e dose válidos para calcular a velocidade de infusão.</span>
-        </div>
-      `;
-
       const card = document.createElement('article');
       card.className = 'info-card';
       card.dataset.fixedContinuousKey = key;
+
+      if (item.kind === 'meropenem') {
+        const calc = computeMeropenemRegimen(item, ctx.weight);
+        const regimenMarkup = calc ? `
+          <div class="item continuous-preparation-box" style="grid-column:1/-1">
+            <span class="k">Esquema calculado</span>
+            <span class="v">
+              Administrar ${formatPtTrim(calc.doseMg, 1)} mg IV por dose (${formatPtTrim(calc.doseMgPerKg, 0)} mg/kg/dose), a cada ${formatPtTrim(calc.intervalHours, 0)} horas.<br>
+              Infundir cada dose em ${formatPtTrim(calc.infusionMinutes, 0)} minutos (${formatPtTrim(calc.infusionHours, 0)} horas).<br>
+              Total diário: ${formatPtTrim(calc.dailyDoseMg, 1)} mg/dia em ${formatPtTrim(calc.dosesPerDay, 0)} doses.
+            </span>
+          </div>
+          <div class="item"><span class="k">Dose calculada</span><span class="v">${formatPtTrim(calc.doseMg, 1)} mg/dose</span></div>
+          <div class="item"><span class="k">Intervalo</span><span class="v">8/8 horas</span></div>
+          <div class="item"><span class="k">Tempo de infusão</span><span class="v">3 horas</span></div>
+          <div class="item"><span class="k">Total diário</span><span class="v">${formatPtTrim(calc.dailyDoseMg, 1)} mg/dia</span></div>
+          <div class="item warn-bg" style="grid-column:1/-1">
+            <span class="k">Ajuste clínico</span>
+            <span class="v">A dose e o intervalo devem ser revistos conforme função renal e protocolo institucional.</span>
+          </div>
+        ` : `
+          <div class="item continuous-preparation-box preparation-infeasible" style="grid-column:1/-1">
+            <span class="k">Esquema</span>
+            <span class="v">Informe um peso válido para calcular a dose de meropenem.</span>
+          </div>
+        `;
+
+        card.innerHTML = `
+          <h3>${item.name}</h3>
+          <div class="info-sub">${item.presentation}</div>
+          <div class="info-meta">
+            <div class="item"><span class="k">Dose</span><span class="v">20 mg/kg/dose IV</span></div>
+            <div class="item"><span class="k">Prescrição</span><span class="v">8/8 horas; infusão em 3 horas</span></div>
+            <div class="continuous-controls">
+              <div class="continuous-dose-prep-stack">
+                <div class="continuous-prep-below-dose">
+                  ${regimenMarkup}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+        return;
+      }
+
+      const config = getFixedContinuousConfig(item);
+      const calc = computeFixedContinuousPreparation(item, ctx.weight, config.dose, config.finalConcentration);
+      const doseOptions = item.doseOptions.map((value) =>
+        `<option value="${value}" ${Number(config.dose) === Number(value) ? 'selected' : ''}>${formatPtTrim(value, 1)} mg/kg/dose</option>`
+      ).join('');
+      const concentrationOptions = item.finalConcentrationOptions.map((value) =>
+        `<option value="${value}" ${Number(config.finalConcentration) === Number(value) ? 'selected' : ''}>${formatPtTrim(value, 1)} mg/mL</option>`
+      ).join('');
+
+      const preparationMarkup = calc ? `
+        <div class="item continuous-preparation-box" style="grid-column:1/-1">
+          <span class="k">Preparo</span>
+          <span class="v">
+            Reconstituir ${calc.vialsNeeded === 1 ? '1 frasco-ampola' : `${calc.vialsNeeded} frascos-ampola`} de 500 mg, cada um com 10 mL de AD = 50 mg/mL.<br>
+            Aspirar ${formatPtTrim(calc.withdrawalMl, 2)} mL da solução reconstituída = ${formatPtTrim(calc.doseMg, 1)} mg.<br>
+            Adicionar ${formatPtTrim(calc.finalDiluentMl, 2)} mL de ${item.finalDiluent}, completando ${formatPtTrim(calc.finalVolumeMl, 2)} mL finais (${formatPtTrim(calc.finalConcentrationMgPerMl, 1)} mg/mL).<br>
+            Infundir em ${formatPtTrim(calc.infusionMinutes, 0)} minutos, a ${formatPtTrim(calc.rateMlPerHour, 2)} mL/h.
+          </span>
+        </div>
+        <div class="item"><span class="k">Dose calculada</span><span class="v">${formatPtTrim(calc.doseMg, 1)} mg/dose</span></div>
+        <div class="item"><span class="k">Volume da solução 50 mg/mL</span><span class="v">${formatPtTrim(calc.withdrawalMl, 2)} mL</span></div>
+        <div class="item"><span class="k">Volume final</span><span class="v">${formatPtTrim(calc.finalVolumeMl, 2)} mL</span></div>
+        <div class="item"><span class="k">Taxa de administração</span><span class="v">${formatPtTrim(calc.infusionRateMgPerMin, 2)} mg/min</span></div>
+        ${calc.exceedsRateLimit ? `
+          <div class="item warn-bg" style="grid-column:1/-1">
+            <span class="k">Atenção à velocidade</span>
+            <span class="v">Em 60 minutos, a taxa ultrapassa 10 mg/min. Prolongar a infusão para pelo menos ${formatPtTrim(calc.minimumInfusionMinutes, 0)} minutos.</span>
+          </div>
+        ` : ''}
+        <div class="item warn-bg" style="grid-column:1/-1">
+          <span class="k">Ajuste clínico</span>
+          <span class="v">A dose e o intervalo devem ser revistos conforme função renal e protocolo institucional.</span>
+        </div>
+      ` : `
+        <div class="item continuous-preparation-box preparation-infeasible" style="grid-column:1/-1">
+          <span class="k">Preparo</span>
+          <span class="v">Informe um peso válido para calcular a dose e o preparo.</span>
+        </div>
+      `;
+
       card.innerHTML = `
         <h3>${item.name}</h3>
         <div class="info-sub">${item.presentation}</div>
         <div class="info-meta">
-          <div class="item"><span class="k">Apresentação</span><span class="v">Ampola 100 mcg/mL</span></div>
-          <div class="item"><span class="k">Dose usual</span><span class="v">${item.usual}</span></div>
+          <div class="item"><span class="k">Apresentação</span><span class="v">Frasco-ampola 500 mg</span></div>
+          <div class="item"><span class="k">Dose</span><span class="v">${item.usual}</span></div>
           <div class="continuous-controls">
             <div class="continuous-dose-prep-stack">
               <div class="continuous-field">
-                <label for="fixed_dose_${key}">Dose (${doseUnitText})</label>
-                <input id="fixed_dose_${key}" class="fixed-continuous-dose-input" type="text" inputmode="decimal" value="${formatPtTrim(config.dose, 3)}" data-fixed-continuous-key="${key}" autocomplete="off">
+                <label for="fixed_dose_${key}">Dose</label>
+                <select id="fixed_dose_${key}" class="fixed-continuous-dose-select" data-fixed-continuous-key="${key}">
+                  ${doseOptions}
+                </select>
+              </div>
+              <div class="continuous-field">
+                <label for="fixed_concentration_${key}">Concentração final após rediluição</label>
+                <select id="fixed_concentration_${key}" class="fixed-continuous-concentration-select" data-fixed-continuous-key="${key}">
+                  ${concentrationOptions}
+                </select>
               </div>
               <div class="continuous-prep-below-dose">
                 ${preparationMarkup}
-                ${doseRangeAlertMarkup}
               </div>
             </div>
           </div>
@@ -1995,25 +2197,30 @@ function renderDrugCards(ctx) {
     const grid = byId('fixedContinuousCards');
     if (!grid) return;
 
-    grid.querySelectorAll('.fixed-continuous-dose-input').forEach((input) => {
-      input.addEventListener('input', () => {
-        input.value = sanitizeContinuousDoseInput(input.value);
-      });
-
-      const updateDose = () => {
-        const key = input.dataset.fixedContinuousKey;
+    grid.querySelectorAll('.fixed-continuous-dose-select').forEach((select) => {
+      select.addEventListener('change', () => {
+        const key = select.dataset.fixedContinuousKey;
         const item = FIXED_CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
         if (!item) return;
         const config = getFixedContinuousConfig(item);
-        config.dose = normalizeContinuousDoseInput(input.value, item.defaultDose);
+        const value = Number(select.value);
+        if (item.doseOptions.includes(value)) config.dose = value;
         renderFixedContinuousCards(UI_STATE.lastContext || emptyContext());
-      };
+      });
+    });
 
-      input.addEventListener('blur', updateDose);
-      input.addEventListener('change', updateDose);
+    grid.querySelectorAll('.fixed-continuous-concentration-select').forEach((select) => {
+      select.addEventListener('change', () => {
+        const key = select.dataset.fixedContinuousKey;
+        const item = FIXED_CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
+        if (!item) return;
+        const config = getFixedContinuousConfig(item);
+        const value = Number(select.value);
+        if (item.finalConcentrationOptions.includes(value)) config.finalConcentration = value;
+        renderFixedContinuousCards(UI_STATE.lastContext || emptyContext());
+      });
     });
   }
-
 
 
 
@@ -2038,6 +2245,7 @@ function renderDrugCards(ctx) {
     byId('manutOut').innerHTML = buildMaintenanceOutput(ctx);
     byId('laminaOut').textContent = ctx.weight > 0 ? getBlade(ctx.weight) : '—';
     byId('canulaOut').textContent = ctx.weight > 0 ? getTube(ctx) : '—';
+    byId('cateterOut').textContent = ctx.weight > 0 ? getVenousCatheterInsertion(ctx) : '—';
 
     const heartBand = getHeartBand(ctx);
     const respBand = getRespBand(ctx);
@@ -2380,12 +2588,24 @@ function renderDrugCards(ctx) {
     assert(RESUSCITATION_DRUGS.every((item) => item.unit !== 'J'), 'Doses rápidas sem itens de energia elétrica');
     assert(RESUSCITATION_DRUGS.length === 21, 'Quantidade esperada de doses rápidas após consolidação');
     assert(CONTINUOUS_MEDS.length === 14, 'Quantidade esperada de infusões contínuas após consolidação');
-    assert(FIXED_CONTINUOUS_MEDS.length === 1, 'Quantidade esperada de infusões contínuas com preparo fixo');
-    assert(!!FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Precedex / Dexmedetomidina'), 'Precedex incluído nas infusões com preparo fixo');
-    const fixedPrecedex = FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Precedex / Dexmedetomidina');
-    const fixedPrecedexCalc = computeFixedContinuousPreparation(fixedPrecedex, 10, 0.5);
-    assert(Math.abs(fixedPrecedexCalc.totalVolumeMl - 50) < 1e-9, 'Precedex fixo: 2 mL + 48 mL = 50 mL finais');
-    assert(Math.abs(fixedPrecedexCalc.finalConcentrationMcgPerMl - 4) < 1e-9, 'Precedex fixo: concentração final de 4 mcg/mL');
+    assert(FIXED_CONTINUOUS_MEDS.length === 2, 'Quantidade esperada de medicamentos comumente prescritos');
+    assert(!!FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Vancomicina'), 'Vancomicina incluída nos medicamentos com preparo fixo');
+    const fixedVancomycin = FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Vancomicina');
+    const fixedVancomycinCalc15 = computeFixedContinuousPreparation(fixedVancomycin, 10, 15, 5);
+    assert(Math.abs(fixedVancomycinCalc15.doseMg - 150) < 1e-9, 'Vancomicina 15 mg/kg: 10 kg = 150 mg');
+    assert(Math.abs(fixedVancomycinCalc15.withdrawalMl - 3) < 1e-9, 'Vancomicina 150 mg: aspirar 3 mL da solução 50 mg/mL');
+    assert(Math.abs(fixedVancomycinCalc15.finalVolumeMl - 30) < 1e-9, 'Vancomicina 150 mg a 5 mg/mL: 30 mL finais');
+    assert(Math.abs(fixedVancomycinCalc15.finalDiluentMl - 27) < 1e-9, 'Vancomicina 150 mg a 5 mg/mL: adicionar 27 mL de diluente');
+    const fixedVancomycinCalc10 = computeFixedContinuousPreparation(fixedVancomycin, 10, 10, 2.5);
+    assert(Math.abs(fixedVancomycinCalc10.doseMg - 100) < 1e-9, 'Vancomicina 10 mg/kg: 10 kg = 100 mg');
+    assert(Math.abs(fixedVancomycinCalc10.finalVolumeMl - 40) < 1e-9, 'Vancomicina 100 mg a 2,5 mg/mL: 40 mL finais');
+    const fixedMeropenem = FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Meropenem');
+    assert(!!fixedMeropenem, 'Meropenem incluído nos medicamentos comumente prescritos');
+    const fixedMeropenemCalc = computeMeropenemRegimen(fixedMeropenem, 10);
+    assert(Math.abs(fixedMeropenemCalc.doseMg - 200) < 1e-9, 'Meropenem 20 mg/kg: 10 kg = 200 mg/dose');
+    assert(fixedMeropenemCalc.intervalHours === 8, 'Meropenem prescrito de 8/8 horas');
+    assert(fixedMeropenemCalc.infusionMinutes === 180, 'Meropenem com infusão em 3 horas');
+    assert(Math.abs(fixedMeropenemCalc.dailyDoseMg - 600) < 1e-9, 'Meropenem 10 kg: total diário de 600 mg');
 
     const dopamine = CONTINUOUS_MEDS.find((item) => item.name === 'Dopamina');
     assert(formatContinuousConcentrationLimit(dopamine, 'peripheral') !== formatContinuousConcentrationLimit(dopamine, 'central'), 'Dopamina tem limites diferentes por acesso');
@@ -2398,6 +2618,12 @@ function renderDrugCards(ctx) {
     const norepinephrineInf = CONTINUOUS_MEDS.find((item) => item.name === 'Noradrenalina / Levophed');
     assert(getAccessConcentrationLimit(midazolamInf, 'peripheral').value === 2 && getAccessConcentrationLimit(midazolamInf, 'central').value === 5, 'Limites de midazolam atualizados');
     assert(getAccessConcentrationLimit(ketamineInf, 'central').value === 10, 'Limite central de cetamina atualizado');
+    assert(ketamineInf.doseUnit === 'mcgkgmin', 'Cetamina contínua usa mcg/kg/min');
+    assert(ketamineInf.usualMin === 1 && ketamineInf.usualMax === 50, 'Cetamina contínua: faixa 1–50 mcg/kg/min');
+    assert(ketamineInf.defaultDose === 1, 'Cetamina contínua: dose inicial 1 mcg/kg/min');
+    assert(applyContinuousDoseLimit(ketamineInf, 0.5).dose === 1, 'Cetamina contínua limita abaixo de 1 mcg/kg/min');
+    assert(applyContinuousDoseLimit(ketamineInf, 25).limited === false, 'Cetamina contínua aceita 25 mcg/kg/min');
+    assert(applyContinuousDoseLimit(ketamineInf, 75).dose === 50, 'Cetamina contínua limita acima de 50 mcg/kg/min');
     assert(getAccessConcentrationLimit(dobutamineInf, 'peripheral').value === 5 && getAccessConcentrationLimit(dobutamineInf, 'central').value === 10, 'Limites de dobutamina atualizados');
     assert(getAccessConcentrationLimit(dopamine, 'central').value === 10, 'Limite central de dopamina atualizado');
     assert(getAccessConcentrationLimit(lidocaineInf, 'central').value === 20, 'Limite central de lidocaína atualizado');
@@ -2461,7 +2687,23 @@ function renderDrugCards(ctx) {
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
     assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free').includes('Concentração Livre selecionada'), 'Concentração Livre alerta quando ultrapassa limites de acesso cadastrados');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
-    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.09.07.16', 'versionName visível abaixo do desenvolvedor');
+    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.09.08.21', 'versionName visível abaixo do desenvolvedor');
+
+    const neonatalDepth = getTubeInsertionDepth({ weight:3, ageDays:0, ageYears:0, ageMonths:0 });
+    assert(neonatalDepth.includes('8,5 cm'), 'TOT neonatal de 3 kg usa profundidade estimada de 8,5 cm no lábio');
+
+    const infantDepth = getTubeInsertionDepth({ weight:7, ageDays:180, ageYears:180/365, ageMonths:6 });
+    assert(infantDepth.includes('3 × ID') && infantDepth.includes('12 cm'), 'Lactente usa profundidade aproximada 3 × ID do TOT');
+
+    const childDepth = getTubeInsertionDepth({ weight:20, ageDays:2190, ageYears:6, ageMonths:72 });
+    assert(childDepth.includes('15 cm'), 'Criança de 6 anos usa 12 + idade/2 = 15 cm');
+
+    const newbornCatheter = getVenousCatheterInsertion({ weight:3, height:50, ageDays:0, ageYears:0, ageMonths:0 });
+    assert(newbornCatheter.includes('CVU') && !newbornCatheter.includes('Jugular') && !newbornCatheter.includes('Femoral'), 'RN com 0 dias mostra somente inserção do CVU');
+
+    const pediatricCatheter = getVenousCatheterInsertion({ weight:10, height:100, ageDays:365, ageYears:1, ageMonths:12 });
+    assert(pediatricCatheter.includes('8,7 cm'), 'Jugular interna direita 100 cm = 8,7 cm');
+    assert(pediatricCatheter.includes('12,6 cm'), 'Femoral 10 kg ≈ 12,6 cm');
 
     return checks;
   }
@@ -2497,9 +2739,13 @@ function renderDrugCards(ctx) {
     getPICBand,
     getBlade,
     getTube,
+    getTubeInsertionDepth,
+    getNeonatalTubeDepthByWeight,
+    getVenousCatheterInsertion,
     classifyPatient,
     inferAgeBandLabel,
     computeContinuousPreparation,
+    computeMeropenemRegimen,
     getSmallestContinuousScheme,
     buildContinuousConcentrationAlertMarkup,
     isPropofolUnderThreeYears,
