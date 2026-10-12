@@ -1,4 +1,5 @@
 <!-- NomeDoApp = "Drogas na PCR Pediátrica" -->
+<!-- AndroidVersionCode = "262562033"; Timestamp = "2026-09-13T20:33:55-03:00" -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -321,19 +322,47 @@
     .espaco-antes-titulo {
       height: 1em;
     }
-  
-    .legal-disclaimer {
-      margin: 16px 0 0;
-      font-size: 12px;
-      line-height: 1.2;
-      color: #5c6f87;
-      text-align: justify;
-      word-break: break-word;
-      background: var(--surface, #ffffff);
-      border: 1px solid var(--border, #cddbea);
-      border-radius: var(--radius-xl, 22px);
-      box-shadow: var(--shadow, 0 16px 34px rgba(18, 44, 73, 0.10));
-      padding: 16px;
+    .legal-disclaimer{
+      margin-top:16px;
+      padding:0;
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      background:#f8fafc;
+      box-shadow:none;
+      color:#64748b;
+      font-size:.76rem;
+      line-height:1.45;
+      text-align:left;
+      overflow:hidden;
+    }
+    .legal-disclaimer > summary{
+      list-style:none;
+      cursor:pointer;
+      position:relative;
+      padding:11px 38px 11px 13px;
+      color:#5c6f87;
+      font-size:.78rem;
+      font-weight:700;
+      user-select:none;
+    }
+    .legal-disclaimer > summary::-webkit-details-marker{display:none}
+    .legal-disclaimer > summary::after{
+      content:'＋';
+      position:absolute;
+      right:13px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#7b8da0;
+      font-size:.9rem;
+      font-weight:800;
+    }
+    .legal-disclaimer[open] > summary::after{content:'−'}
+    .legal-disclaimer-content{
+      padding:0 13px 12px;
+      border-top:1px solid #edf2f7;
+      padding-top:11px;
+      text-align:justify;
+      overflow-wrap:anywhere;
     }
 
     .signature-block {
@@ -451,13 +480,13 @@
         <div id="fixedContinuousCards" class="info-grid" style="margin-top:12px"></div>
       </div>
     </details>
-
-    <div class="legal-disclaimer">
-      <strong>Aviso Legal e Isenção de Responsabilidade:</strong><br>
-      Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
-    
-    </div>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.09.08.21</span></div>
+    <details class="legal-disclaimer legal-disclaimer-collapsible">
+      <summary>Aviso Legal e Isenção de Responsabilidade</summary>
+      <div class="legal-disclaimer-content">
+        Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
+      </div>
+    </details>
+<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.10.09.13</span></div>
     <div class="spacer-3lines" aria-hidden="true"></div>
 </main>
 
@@ -2687,7 +2716,7 @@ function renderDrugCards(ctx) {
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
     assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free').includes('Concentração Livre selecionada'), 'Concentração Livre alerta quando ultrapassa limites de acesso cadastrados');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
-    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.09.08.21', 'versionName visível abaixo do desenvolvedor');
+    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.10.09.13', 'versionName visível abaixo do desenvolvedor');
 
     const neonatalDepth = getTubeInsertionDepth({ weight:3, ageDays:0, ageYears:0, ageMonths:0 });
     assert(neonatalDepth.includes('8,5 cm'), 'TOT neonatal de 3 kg usa profundidade estimada de 8,5 cm no lábio');
