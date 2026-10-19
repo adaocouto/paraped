@@ -1,8 +1,8 @@
 <!-- NomeDoApp = "Drogas na PCR Pediátrica" -->
-<!-- AndroidVersionName = "1.11.10.11" -->
-<!-- VersionName = "1.11.10.11" -->
-<!-- VersionCode = "262840821" -->
-<!-- AndroidVersionCode = "262840821"; Timestamp = "2026-09-13T20:33:55-03:00" -->
+<!-- AndroidVersionName = "1.012.10.16" -->
+<!-- VersionName = "1.012.10.16" -->
+<!-- VersionCode = "262892002" -->
+<!-- AndroidVersionCode = "262892002"; Timestamp = "2026-10-16T20:02:49-03:00" -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -518,7 +518,7 @@
         <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
       </div>
     </details>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.10.09.13</span></div>
+<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.16</span></div>
     <div class="spacer-3lines" aria-hidden="true"></div>
 </main>
 
@@ -3065,7 +3065,7 @@ function renderDrugCards(ctx) {
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
     assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free').includes('Concentração Livre selecionada'), 'Concentração Livre alerta quando ultrapassa limites de acesso cadastrados');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
-    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.10.09.13', 'versionName visível abaixo do desenvolvedor');
+    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.012.10.16', 'versionName visível abaixo do desenvolvedor');
 
     const neonatalDepth = getTubeInsertionDepth({ weight:3, ageDays:0, ageYears:0, ageMonths:0 });
     assert(neonatalDepth.includes('8,5 cm'), 'TOT neonatal de 3 kg usa profundidade estimada de 8,5 cm no lábio');
