@@ -1,8 +1,8 @@
 <!-- NomeDoApp = "Drogas na PCR Pediátrica" -->
-<!-- AndroidVersionName = "1.012.10.16" -->
-<!-- VersionName = "1.012.10.16" -->
-<!-- VersionCode = "262892002" -->
-<!-- AndroidVersionCode = "262892002"; Timestamp = "2026-10-16T20:02:49-03:00" -->
+<!-- AndroidVersionName = "1.012.10.20" -->
+<!-- VersionName = "1.012.10.20" -->
+<!-- VersionCode = "262931654" -->
+<!-- AndroidVersionCode = "262931654"; Timestamp = "2026-10-20T16:54:53.947362-03:00" -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -518,7 +518,7 @@
         <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
       </div>
     </details>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.16</span></div>
+<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.20</span></div>
     <div class="spacer-3lines" aria-hidden="true"></div>
 </main>
 
@@ -3065,7 +3065,7 @@ function renderDrugCards(ctx) {
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
     assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free').includes('Concentração Livre selecionada'), 'Concentração Livre alerta quando ultrapassa limites de acesso cadastrados');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
-    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.012.10.16', 'versionName visível abaixo do desenvolvedor');
+    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.012.10.20', 'versionName visível abaixo do desenvolvedor');
 
     const neonatalDepth = getTubeInsertionDepth({ weight:3, ageDays:0, ageYears:0, ageMonths:0 });
     assert(neonatalDepth.includes('8,5 cm'), 'TOT neonatal de 3 kg usa profundidade estimada de 8,5 cm no lábio');
@@ -3148,7 +3148,45 @@ function renderDrugCards(ctx) {
     }
   };
 
+
+  // Versão de esquema local 1: armazena apenas entradas e configurações da interface.
+  function installLastInputRecovery() {
+    const APP_STATE_SCHEMA_VERSION = 1, KEY = 'paraped-state-v1';
+    let timer = null;
+    const fields = ['idadeAno','idadeMes','idadeDia','peso','estatura'];
+    function persist() {
+      clearTimeout(timer);
+      try {
+        const values = Object.fromEntries(fields.map(id => [id, byId(id).value]));
+        localStorage.setItem(KEY, JSON.stringify({version:APP_STATE_SCHEMA_VERSION,values,
+          continuousConfigs:UI_STATE.continuousConfigs,
+          fixedContinuousConfigs:UI_STATE.fixedContinuousConfigs,
+          sections:Array.from(document.querySelectorAll('details')).map(d=>d.open),
+          y:window.scrollY||0}));
+      } catch (_) { /* storage opcional em contexto restrito */ }
+    }
+    function schedule() {clearTimeout(timer); timer=setTimeout(persist,180);}
+    try {
+      const data=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(data&&data.version===APP_STATE_SCHEMA_VERSION&&data.values&&typeof data.values==='object') {
+        fields.forEach(id=>{if(typeof data.values[id]==='string'&&data.values[id].length<=64)byId(id).value=data.values[id];});
+        if(data.continuousConfigs&&typeof data.continuousConfigs==='object'&&!Array.isArray(data.continuousConfigs))UI_STATE.continuousConfigs=data.continuousConfigs;
+        if(data.fixedContinuousConfigs&&typeof data.fixedContinuousConfigs==='object'&&!Array.isArray(data.fixedContinuousConfigs))UI_STATE.fixedContinuousConfigs=data.fixedContinuousConfigs;
+        renderAll();
+        if(Array.isArray(data.sections))document.querySelectorAll('details').forEach((d,i)=>{if(typeof data.sections[i]==='boolean')d.open=data.sections[i];});
+        if(Number.isFinite(data.y)&&data.y>0)requestAnimationFrame(()=>window.scrollTo(0,data.y));
+      }
+    } catch (_) { /* não abortar calculadora quando dados estiverem corrompidos */ }
+    document.addEventListener('input',schedule);
+    document.addEventListener('change',schedule);
+    document.addEventListener('toggle',schedule,true);
+    document.addEventListener('click',e=>{if(e.target.closest('#btnLimpar')){clearTimeout(timer);try{localStorage.removeItem(KEY);}catch(_){};setTimeout(persist,0);}else schedule();});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)persist();});
+    window.addEventListener('pagehide',persist);
+  }
+
   initialize();
+  installLastInputRecovery();
 })();
 
   </script>
