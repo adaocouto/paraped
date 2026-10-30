@@ -1,6 +1,6 @@
 <!-- NomeDoApp = "Drogas na PCR Pediátrica" -->
-<!-- AndroidVersionName = "1.012.10.20" -->
-<!-- VersionName = "1.012.10.20" -->
+<!-- AndroidVersionName = "1.014.11.01" -->
+<!-- VersionName = "1.014.11.01" -->
 <!-- VersionCode = "262931654" -->
 <!-- AndroidVersionCode = "262931654"; Timestamp = "2026-10-20T16:54:53.947362-03:00" -->
 <!doctype html>
@@ -87,7 +87,9 @@
     button{border:0;border-radius:14px;min-height:48px;padding:0 16px;font-weight:700;cursor:pointer}
     .btn-primary{background:var(--accent);color:#fff}
     .btn-secondary{background:#eef3f8;color:#264764;border:1px solid #d4e0eb}
-    .section-close-button{margin-left:auto;margin-right:auto}
+    .section-close-button{margin-left:0;margin-right:0}
+    .section-footer-actions{display:grid;grid-template-columns:minmax(0,1fr) 48px;align-items:center}
+    .section-footer-actions .paraped-up-arrow{width:48px;min-width:48px;padding:0}
     .btn-chip{min-height:48px;border-radius:999px;padding:0 12px;font-size:.88rem;background:#f3f7fb;color:#24425e;border:1px solid #d5e1ec}
     .btn-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
     .toolbar-inline{display:flex;flex-wrap:wrap;gap:8px}
@@ -396,14 +398,136 @@
     .spacer-3lines {
       height: 4.2em;
     }
+
+      .language-group{display:flex;align-items:center;gap:8px;min-height:48px;flex-wrap:wrap;font-size:.82rem;color:#19466f}
+      .language-group span{white-space:nowrap}
+      .language-group select{width:auto;min-height:48px;padding:8px 10px;border-radius:12px}
+      .reference-list{margin:0;padding-left:23px;font-size:.85rem;color:var(--text);line-height:1.6}
+      .reference-list li{padding-left:5px;overflow-wrap:anywhere}
+    /* Padronização sem mudar a geometria dos cards clínicos. */
+    .paraped-top-actions{align-items:center;justify-content:center;margin:2px 0 16px;gap:8px;flex-wrap:nowrap}
+    .paraped-bottom-actions{align-items:center;justify-content:flex-start}
+    .paraped-top-actions .language-group{font-size:.82rem}
+    #referenceSection .reference-list{font-size:inherit;line-height:inherit;color:inherit;padding-left:20px}
+    #referenceSection .reference-list li{overflow-wrap:anywhere;margin-bottom:5px}
+    #referenceSection .legal-disclaimer-content{font-family:inherit}
+    @media(max-width:380px){.paraped-top-actions{gap:6px}.paraped-top-actions .language-group select{min-width:0;padding:8px 6px}}
+  
+    /* Abas do ParaPed harmonizadas com as secoes do HvNeo.
+       Intervencao visual: a estrutura, as traducoes e os calculos sao preservados. */
+    #patientCard,
+    details.cardish {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+    }
+    #patientCard { padding: 0; }
+    #patientCard > .section-title,
+    details.cardish > summary {
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      margin: 0;
+      padding: 10px 18px;
+      color: #ffffff;
+      background: #1a3a6b;
+      border: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .8px;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+    details.cardish > summary {
+      position: relative;
+      padding-right: 44px;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+    }
+    details.cardish > summary::-webkit-details-marker { display: none; }
+    details.cardish > summary::after {
+      content: "▸";
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #ffffff;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: .9rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    details.cardish[open] > summary::after { content: "▾"; }
+    details.cardish > summary:focus-visible {
+      outline: 3px solid #60a5fa;
+      outline-offset: -3px;
+    }
+    details.cardish > div { padding: 14px; }
+    #patientCard > .fields,
+    #patientCard > .actions,
+    #patientCard > .alert {
+      margin-left: 14px;
+      margin-right: 14px;
+    }
+    #patientCard > .paraped-top-actions { margin-top: 14px; }
+    #patientCard > .alert { margin-bottom: 14px; }
+    #patientCard > .paraped-bottom-actions { margin-bottom: 14px; }
+    @media (min-width: 720px) {
+      #patientCard > .fields,
+      #patientCard > .actions,
+      #patientCard > .alert {
+        margin-left: 18px;
+        margin-right: 18px;
+      }
+      details.cardish > div { padding: 14px 18px; }
+    }
+
+/* Padronização visual de título, ações e rodapé — Apgar / Preparo */
+body{background:#e8f0fe}
+.wrap{width:min(980px,calc(100% - 32px));padding:24px 0 48px}
+.hero{padding:20px;background:linear-gradient(135deg,#f8fbff,#dbeafe);border:1px solid #cbd5e1;border-radius:22px;box-shadow:0 16px 34px rgba(18,44,73,.10);margin-bottom:20px}
+.hero h1{display:flex;align-items:center;justify-content:center;gap:9px;font-size:clamp(1.35rem,3.5vw,2.05rem);line-height:1.12;color:#1a3a6b}
+.hero .app-title-emoji{flex:0 0 auto}
+.hero p{margin-top:10px;font-size:.92rem;line-height:1.5}
+.paraped-top-actions{margin-top:14px;gap:10px}
+.paraped-top-actions .btn-secondary{min-height:44px;border:1px solid #cbd5e1;border-radius:10px}
+.paraped-bottom-actions{flex-wrap:nowrap}
+.paraped-bottom-actions .btn-primary,.paraped-bottom-actions .btn-secondary{flex:1;min-width:0}
+.paraped-up-arrow{flex:0 0 48px;width:48px;min-width:48px;min-height:44px;padding:8px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd5e1;border-radius:10px;background:#eef3f8;color:#1a3a6b}
+.paraped-up-arrow svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.paraped-result-return{display:flex;justify-content:flex-end;margin-top:20px;margin-bottom:36px;min-height:44px}
+#referenceSection{margin-top:14px}
+#referenceSection+.legal-disclaimer{margin-top:10px}
+.paraped-footer-row{position:relative;min-height:48px;display:flex;align-items:center;justify-content:center;margin-top:20px}
+.paraped-footer-row .signature-block{width:100%;margin:0;padding:0 54px;text-align:center;font-size:14px;line-height:1.5}
+.paraped-footer-row .paraped-up-arrow{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+@media(max-width:640px){.hero{padding:20px;margin-bottom:20px}.hero h1{font-size:clamp(1.3rem,5.5vw,1.6rem)}}
+@media(max-width:380px){.paraped-top-actions{gap:6px}.paraped-bottom-actions{gap:6px}.paraped-bottom-actions button:not(.paraped-up-arrow){padding-left:7px;padding-right:7px}}
+    .header-controls{margin:0 0 14px;justify-content:center;align-items:center;gap:10px}
+    .header-controls .language-group{font-size:.92rem}
+    .header-controls .language-group select{background:#eef3f8;color:#264764;border:1px solid #cbd5e1}
+    .recovered-data-notice{background:#FDE68A;color:#713F12;border:1px solid #B45309;border-radius:10px;padding:11px 12px;font-size:14px;line-height:1.4;margin:0 0 14px}
+    .recovered-data-notice[hidden]{display:none}
+    .recovered-title{font-size:15px;font-weight:600;margin-bottom:5px}
+    #patientCard>.fields{margin-top:14px}
+    .drug-card .drug-total{background:#FFF4CC}
+    /* P1/P2: controles superiores padronizados, sem afetar os campos do paciente. */
+    .header-controls .btn-secondary{background:#EEF3F8;color:#264764;border:1.5px solid #CBD5E1;border-radius:10px;min-height:44px;font-family:Arial,Helvetica,sans-serif;font-weight:700;white-space:nowrap}
+    .header-controls .language-group{display:flex;align-items:center;gap:6px;min-width:0;font-family:Arial,Helvetica,sans-serif;font-size:.92rem;font-weight:600;flex-wrap:nowrap}
+    .header-controls .language-group span{font-family:Arial,Helvetica,sans-serif;font-size:.92rem;font-weight:600}
+    .header-controls .language-group select{min-height:44px;width:auto;min-width:112px;max-width:100%;box-sizing:border-box;padding:8px 24px 8px 8px;border:1.5px solid #CBD5E1;border-radius:10px;background:#EEF3F8;color:#264764;font-family:Arial,Helvetica,sans-serif;font-size:.92rem;font-weight:400;color-scheme:light;cursor:pointer}
+    .header-controls .language-group select:focus-visible{outline:2px solid #2563A8;outline-offset:2px}
+    @media(max-width:370px){.header-controls{flex-wrap:wrap;gap:7px}.header-controls .btn-secondary{font-size:.86rem;padding:9px}.header-controls .language-group{gap:4px}.header-controls .language-group span{font-size:.84rem}}
   </style>
 </head>
 <body>
   <main class="wrap">
     <section class="hero">
-      <div class="espaco-antes-titulo" aria-hidden="true"></div>
-
-      <h1>Cálculo de doses na parada cardiorrespiratória pediátrica</h1>
+      <h1><span class="app-title-emoji" aria-hidden="true">💉</span><span>Cálculo de doses na parada cardiorrespiratória pediátrica</span></h1>
       <p>Medicamentos comumente usados na parada cardiorrespiratória em Pediatria</p>
       <div class="tag-row">
         <span class="pill" id="perfilPaciente">Perfil: —</span>
@@ -412,6 +536,8 @@
       </div>
     </section>
 
+    <div class="actions paraped-top-actions header-controls"><button class="btn-secondary" id="btnLimpar" type="button">Limpar dados</button><label class="language-group" for="languageSelect"><span>Idioma</span><select id="languageSelect" aria-label="Idioma"><option value="pt-BR">Português</option><option value="en-US">English</option></select></label></div>
+    <div id="recoveredDataNotice" class="recovered-data-notice" role="status" hidden><div class="recovered-title">ⓘ Dados recuperados</div><div>Dados anteriores foram recuperados. Confirme as informações antes de utilizar os resultados.</div></div>
     <section class="card" id="patientCard">
       <h2 class="section-title">Dados do paciente:</h2>
       <div class="fields">
@@ -420,15 +546,15 @@
             <div class="age-row">
               <div class="field">
                 <label for="idadeAno">Ano</label>
-                <input id="idadeAno" type="text" inputmode="numeric" maxlength="2" placeholder="">
+                <input id="idadeAno" type="text" inputmode="numeric" maxlength="2" value="1" placeholder="">
               </div>
               <div class="field">
                 <label for="idadeMes">Mês</label>
-                <input id="idadeMes" type="text" inputmode="numeric" maxlength="2" placeholder="">
+                <input id="idadeMes" type="text" inputmode="numeric" maxlength="2" value="2" placeholder="">
               </div>
               <div class="field">
                 <label for="idadeDia">Dias</label>
-                <input id="idadeDia" type="text" inputmode="numeric" maxlength="2" placeholder="">
+                <input id="idadeDia" type="text" inputmode="numeric" maxlength="2" value="10" placeholder="">
               </div>
             </div>
             <div class="hint">Ano: 0 a 18. Mês: 0 a 11. Dias: 0 a 30. Valores fora da faixa não são aceitos.</div>
@@ -447,9 +573,10 @@
           </div>
         </div>
       </div>
-      <div class="actions">
-        <button class="btn-primary" id="btnModelo" type="button">Atualizar cálculos</button>
-        <button class="btn-secondary" id="btnLimpar" type="button">Limpar</button>
+      <div class="actions paraped-bottom-actions">
+        <button class="btn-primary" id="btnModelo" type="button">Calcular</button>
+        <button class="btn-secondary" id="btnLimparInferior" type="button">Limpar</button>
+        <button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
       <div class="alert" id="alertBox" role="alert" aria-atomic="true"></div>
     </section>
@@ -461,7 +588,7 @@
         <div id="drugGrid" class="drug-grid" style="margin-top:12px"></div>
         <h3 class="subsection-heading">Situações especiais</h3>
         <div id="specialDrugGrid" class="drug-grid"></div>
-        <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
+        <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
 
@@ -475,7 +602,7 @@
           <div class="kpi"><div class="label">Cânula orotraqueal</div><div class="value" id="canulaOut">—</div></div>
           <div class="kpi" style="grid-column:1/-1"><div class="label">Cateter venoso — inserção estimada</div><div class="value" id="cateterOut">—</div></div>
         </section>
-        <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
+        <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
 
@@ -492,7 +619,7 @@
           <div class="kpi"><div class="label">PAM</div><div class="value" id="pamOut">—</div></div>
           <div class="kpi"><div class="label">PIC</div><div class="value" id="picOut">—</div></div>
         </div>
-        <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
+        <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
 
@@ -500,7 +627,7 @@
       <summary>Infusões contínuas com preparo fixo</summary>
       <div>
         <div id="continuousCards" class="info-grid" style="margin-top:12px"></div>
-        <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
+        <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
 
@@ -508,18 +635,25 @@
       <summary>Medicamentos comumente prescritos</summary>
       <div>
         <div id="fixedContinuousCards" class="info-grid" style="margin-top:12px"></div>
-        <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
+        <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
+      </div>
+    </details>
+    <details id="referenceSection" class="legal-disclaimer legal-disclaimer-collapsible">
+      <summary>Referências</summary>
+      <div class="legal-disclaimer-content">
+        <ol class="reference-list">
+          <li>AMERICAN HEART ASSOCIATION. <em>Pediatric Advanced Life Support (PALS) Provider Manual</em>. Dallas: American Heart Association, 2020.</li>
+        </ol>
       </div>
     </details>
     <details class="legal-disclaimer legal-disclaimer-collapsible">
       <summary>Aviso Legal e Isenção de Responsabilidade</summary>
       <div class="legal-disclaimer-content">
         Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
-        <div class="actions"><button class="btn-secondary section-close-button" type="button"><span aria-hidden="true">↑</span> Fechar seção</button></div>
+        <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.20</span></div>
-    <div class="spacer-3lines" aria-hidden="true"></div>
+<div class="paraped-footer-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.014.11.01</span></div><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
 </main>
 
   <script>
@@ -940,11 +1074,11 @@
   function prepareEntry(input) {
     entryArmed.set(input, input.value !== '');
     entryEdited.set(input, false);
-    input.select();
+    // Não selecionar texto automaticamente ao receber foco (Android).
   }
 
   function selectForFirstEdit(input) {
-    if (entryArmed.get(input)) input.select();
+    // A seleção permanece sob controle explícito do usuário.
   }
 
   function focusField(id, reveal = true) {
@@ -1211,24 +1345,13 @@
 
     if (!Number.isFinite(numeric) || numeric <= 0) return '';
 
-    if (numeric < 5) {
-      const capped = Math.min(Math.floor(numeric * 1000) / 1000, 4.999);
-      return capped.toLocaleString('pt-BR', {
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3
-      });
-    }
-
+    // Três casas decimais para todas as faixas pediátricas. Não perder
+    // centésimos ou milésimos acima de 5 kg.
     const capped = Math.min(numeric, 120);
-    const truncated = Math.floor(capped * 10) / 10;
-
-    if (Number.isInteger(truncated)) {
-      return String(truncated);
-    }
-
+    const truncated = Math.floor(capped * 1000 + 1e-9) / 1000;
     return truncated.toLocaleString('pt-BR', {
-      minimumFractionDigits: 1,
-      maximumFractionDigits: 1
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3
     });
   }
 
@@ -2165,8 +2288,54 @@ function renderDrugCards(ctx) {
     const grid = byId('continuousCards');
 
     grid.querySelectorAll('.continuous-dose-input').forEach((input) => {
-      input.addEventListener('input', () => {
-        input.value = sanitizeContinuousDoseInput(input.value);
+      // A dose e um decimal explicito (nao utiliza mascara progressiva de peso).
+      // Aceitar tanto ponto quanto virgula, preservando o cursor durante a edicao.
+      input.addEventListener('beforeinput', (event) => {
+        if (event.isComposing) return;
+        const start = input.selectionStart ?? input.value.length;
+        const end = input.selectionEnd ?? start;
+        if (start !== end) return; // respeitar a substituicao de uma selecao
+
+        if (event.inputType === 'insertText' && /^[.,]$/.test(event.data || '')) {
+          const separator = input.value.search(/[,.]/);
+          if (separator >= 0) {
+            // Um segundo separador nao deve levar o cursor ao fim do campo.
+            event.preventDefault();
+            const target = separator + 1;
+            input.setSelectionRange(target, target);
+          }
+          return;
+        }
+
+        const backward = event.inputType === 'deleteContentBackward';
+        const forward = event.inputType === 'deleteContentForward';
+        const separatorIndex = backward ? start - 1 : start;
+        if ((backward || forward) && /[,.]/.test(input.value[separatorIndex] || '')) {
+          // Evitar que excluir a virgula transforme '1,25' em '125'.
+          // Remover a parte decimal junto com o separador e manter o inteiro.
+          event.preventDefault();
+          const integerPart = input.value.slice(0, separatorIndex);
+          input.value = integerPart;
+          input.setSelectionRange(integerPart.length, integerPart.length);
+          input.dispatchEvent(new InputEvent('input', {
+            bubbles: true, inputType: event.inputType, data: null
+          }));
+        }
+      });
+
+      input.addEventListener('input', (event) => {
+        if (event.isComposing) return;
+        const raw = input.value;
+        const start = input.selectionStart ?? raw.length;
+        const end = input.selectionEnd ?? start;
+        const sanitized = sanitizeContinuousDoseInput(raw);
+        if (sanitized === raw) return;
+        const mappedStart = Math.min(sanitized.length,
+          sanitizeContinuousDoseInput(raw.slice(0, start)).length);
+        const mappedEnd = Math.min(sanitized.length,
+          sanitizeContinuousDoseInput(raw.slice(0, end)).length);
+        input.value = sanitized;
+        input.setSelectionRange(mappedStart, mappedEnd);
       });
 
       const updateDose = () => {
@@ -2647,8 +2816,8 @@ function renderDrugCards(ctx) {
     byId('peso').value = '';
     byId('estatura').value = '';
     clearAlert();
-    renderAll();
-    UI_STATE.clearing = false;
+    try { renderAll(); }
+    finally { UI_STATE.clearing = false; }
     announceText('');
     focusField('idadeAno');
   }
@@ -2680,48 +2849,88 @@ function renderDrugCards(ctx) {
     const weightInput = byId('peso');
     const heightInput = byId('estatura');
 
-    function sanitizeWeightDuringTyping(value) {
-      const raw = String(value ?? '').replace(/\s+/g, '').replace(/[^\d,.]/g, '');
-      if (raw === '') return '';
+    // Máscara pediátrica progressiva; separador digitado explicitamente
+    // inicia a parte dos gramas. Nunca preencher zeros durante a edição.
+    const weightTyping = { explicit: false };
 
-      let output = '';
-      let hasSeparator = false;
-      let decimalCount = 0;
-
-      for (const char of raw) {
-        if (/\d/.test(char)) {
-          if (hasSeparator) {
-            if (decimalCount < 3) {
-              output += char;
-              decimalCount += 1;
-            }
-          } else {
-            const integerDigits = output.replace(/\D/g, '');
-            if (integerDigits.length < 3) {
-              output += char;
-            }
-          }
-          continue;
-        }
-
-        if ((char === ',' || char === '.') && !hasSeparator) {
-          hasSeparator = true;
-          output += char;
-        }
+    function pediatricWeightDraft(value, explicitSeparator) {
+      const raw = String(value ?? '').replace(/[^\d,.]/g, '');
+      if (!raw) return '';
+      if (explicitSeparator && /[,.]/.test(raw)) {
+        const index = raw.search(/[,.]/);
+        const integer = (raw.slice(0, index).replace(/\D/g, '').replace(/^0+(?=\d)/, '') || '0').slice(0, 3);
+        const decimal = raw.slice(index + 1).replace(/\D/g, '').slice(0, 3);
+        return integer + ',' + decimal;
       }
-
-      return output;
+      const digits = raw.replace(/\D/g, '').replace(/^0+(?=\d)/, '').slice(0, 6);
+      if (digits.length <= 2) return digits;
+      const integerLength = digits.length <= 5 ? 2 : 3;
+      return digits.slice(0, integerLength) + ',' + digits.slice(integerLength);
     }
 
-    weightInput.addEventListener('input', () => {
-      const previous = String(weightInput.value ?? '');
-      const sanitized = sanitizeWeightDuringTyping(previous);
-
-      // Não normalizar nem truncar durante a digitação.
-      // Isso preserva entradas intermediárias como "4,", "4,8", "12," e "120".
-      if (sanitized !== previous) {
-        weightInput.value = sanitized;
+    function setWeightDraftPreservingCaret(draft) {
+      const original = weightInput.value;
+      if (draft === original) return;
+      const caret = weightInput.selectionStart ?? original.length;
+      const digitOffset = (original.slice(0, caret).match(/\d/g) || []).length;
+      let nextCaret = 0, digitsSeen = 0;
+      while (nextCaret < draft.length && digitsSeen < digitOffset) {
+        if (/\d/.test(draft[nextCaret])) digitsSeen++;
+        nextCaret++;
       }
+      if (caret >= original.length) nextCaret = draft.length;
+      weightInput.value = draft;
+      try {weightInput.setSelectionRange(nextCaret, nextCaret);} catch (_) {}
+    }
+
+    weightInput.addEventListener('focus', () => {
+      weightTyping.explicit = weightInput.value.includes(',') || weightInput.value.includes('.');
+    });
+
+    weightInput.addEventListener('beforeinput', (event) => {
+      if (event.isComposing) return;
+      if (event.inputType === 'insertText' && /^[,.]$/.test(event.data || '')) {
+        event.preventDefault();
+        const start = weightInput.selectionStart ?? weightInput.value.length;
+        const end = weightInput.selectionEnd ?? start;
+        const before = weightInput.value.slice(0, start).replace(/\D/g, '');
+        const after = weightInput.value.slice(end).replace(/\D/g, '');
+        weightTyping.explicit = true;
+        weightInput.value = pediatricWeightDraft(before + ',' + after, true);
+        weightInput.setSelectionRange(Math.min(before.length + 1, weightInput.value.length), Math.min(before.length + 1, weightInput.value.length));
+        weightInput.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: ',' }));
+        return;
+      }
+      // A vírgula da máscara automática não pode consumir um Backspace.
+      const start = weightInput.selectionStart ?? 0;
+      const end = weightInput.selectionEnd ?? start;
+      const backward = event.inputType === 'deleteContentBackward';
+      const forward = event.inputType === 'deleteContentForward';
+      if (start === end && ((backward && weightInput.value[start - 1] === ',') || (forward && weightInput.value[start] === ','))) {
+        event.preventDefault();
+        const removeAt = backward ? start - 2 : start + 1;
+        if (removeAt >= 0 && removeAt < weightInput.value.length) {
+          weightInput.value = weightInput.value.slice(0, removeAt) + weightInput.value.slice(removeAt + 1);
+          weightTyping.explicit = true;
+          const pos = backward ? start - 1 : start;
+          weightInput.setSelectionRange(pos, pos);
+          weightInput.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: event.inputType }));
+        }
+      } else if ((backward || forward) && start !== weightInput.value.length) {
+        weightTyping.explicit = true;
+      }
+    });
+
+    weightInput.addEventListener('paste', (event) => {
+      if (/[,.]/.test(event.clipboardData?.getData('text') || '')) weightTyping.explicit = true;
+    });
+
+    weightInput.addEventListener('input', (event) => {
+      if (event.isComposing) return;
+      if (weightInput.value === '') weightTyping.explicit = false;
+      if (event.inputType === 'insertFromPaste' && /[,.]/.test(weightInput.value)) weightTyping.explicit = true;
+      const draft = pediatricWeightDraft(weightInput.value, weightTyping.explicit);
+      setWeightDraftPreservingCaret(draft);
     });
 
     const normalizeAndRenderWeight = (event) => {
@@ -2879,6 +3088,15 @@ function renderDrugCards(ctx) {
     assert(adolescent18.ageYears >= 18, 'Idade de 18 anos preservada');
     assert(parseAgeFields('1', '12', '0').valid === false, 'Mês 12 é rejeitado, sem correção silenciosa');
     assert(parseAgeFields('1', '0', '31').valid === false, 'Dia 31 é rejeitado, sem correção silenciosa');
+    // Regressão: campo mensal vazio equivale exatamente a zero mês, sem alterar os dias.
+    const idadeMesVazio = parseAgeFields('1', '', '1');
+    const idadeMesZero = parseAgeFields('1', '0', '1');
+    const idadeDoisAnos = parseAgeFields('2', '', '10');
+    assert(idadeMesVazio.valid && idadeMesVazio.totalDays === 366 && idadeMesVazio.text === '1a 1d', '1 ano, mês vazio, 1 dia = 366 dias');
+    assert(idadeMesZero.valid && idadeMesZero.totalDays === idadeMesVazio.totalDays && idadeMesZero.months === idadeMesVazio.months, 'Mês vazio e mês zero produzem a mesma idade');
+    assert(idadeDoisAnos.valid && idadeDoisAnos.totalDays === 740 && idadeDoisAnos.text === '2a 10d', '2 anos, mês vazio, 10 dias = 740 dias');
+    assert(parseAgeFields('', '', '0').valid && parseAgeFields('', '', '0').totalDays === 0, 'Idade zero explícita é válida');
+    assert(parseAgeFields('', '', '').empty === true, 'Idade totalmente em branco é não informada');
     const tubeAgeEstimate = String(getTube({ weight:20, ageYears:6, ageMonths:72, ageDays:2190 }));
     assert(tubeAgeEstimate.includes('Com balonete'), 'Cânula informa automaticamente a estimativa com balonete');
     assert(tubeAgeEstimate.includes('Sem balonete'), 'Cânula informa automaticamente a estimativa sem balonete');
@@ -3065,7 +3283,7 @@ function renderDrugCards(ctx) {
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
     assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free').includes('Concentração Livre selecionada'), 'Concentração Livre alerta quando ultrapassa limites de acesso cadastrados');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
-    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.012.10.20', 'versionName visível abaixo do desenvolvedor');
+    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.014.11.01', 'versionName visível abaixo do desenvolvedor');
 
     const neonatalDepth = getTubeInsertionDepth({ weight:3, ageDays:0, ageYears:0, ageMonths:0 });
     assert(neonatalDepth.includes('8,5 cm'), 'TOT neonatal de 3 kg usa profundidade estimada de 8,5 cm no lábio');
@@ -3095,12 +3313,13 @@ function renderDrugCards(ctx) {
       renderAll({ required: true, restoreFocus: true });
     });
     byId('btnLimpar').addEventListener('click', resetAll);
+    byId('btnLimparInferior').addEventListener('click', resetAll);
     bindAgeFieldEvents();
     bindNumericFieldEvents();
     bindGlobalFieldEvents();
     bindSectionCloseEvents();
     renderAll();
-    focusField('idadeAno', false);
+    // Não forçar foco na inicialização.
     try {
       const checks = runSelfAudit();
       console.info('ParaPed self-audit OK:', checks);
@@ -3161,8 +3380,7 @@ function renderDrugCards(ctx) {
         localStorage.setItem(KEY, JSON.stringify({version:APP_STATE_SCHEMA_VERSION,values,
           continuousConfigs:UI_STATE.continuousConfigs,
           fixedContinuousConfigs:UI_STATE.fixedContinuousConfigs,
-          sections:Array.from(document.querySelectorAll('details')).map(d=>d.open),
-          y:window.scrollY||0}));
+          sections:Array.from(document.querySelectorAll('details')).map(d=>d.open)}));
       } catch (_) { /* storage opcional em contexto restrito */ }
     }
     function schedule() {clearTimeout(timer); timer=setTimeout(persist,180);}
@@ -3170,17 +3388,18 @@ function renderDrugCards(ctx) {
       const data=JSON.parse(localStorage.getItem(KEY)||'null');
       if(data&&data.version===APP_STATE_SCHEMA_VERSION&&data.values&&typeof data.values==='object') {
         fields.forEach(id=>{if(typeof data.values[id]==='string'&&data.values[id].length<=64)byId(id).value=data.values[id];});
+        UI_STATE.emptyPatient = !String(byId('peso').value).trim();
         if(data.continuousConfigs&&typeof data.continuousConfigs==='object'&&!Array.isArray(data.continuousConfigs))UI_STATE.continuousConfigs=data.continuousConfigs;
         if(data.fixedContinuousConfigs&&typeof data.fixedContinuousConfigs==='object'&&!Array.isArray(data.fixedContinuousConfigs))UI_STATE.fixedContinuousConfigs=data.fixedContinuousConfigs;
         renderAll();
         if(Array.isArray(data.sections))document.querySelectorAll('details').forEach((d,i)=>{if(typeof data.sections[i]==='boolean')d.open=data.sections[i];});
-        if(Number.isFinite(data.y)&&data.y>0)requestAnimationFrame(()=>window.scrollTo(0,data.y));
+        byId('recoveredDataNotice').hidden = false;
       }
     } catch (_) { /* não abortar calculadora quando dados estiverem corrompidos */ }
     document.addEventListener('input',schedule);
     document.addEventListener('change',schedule);
     document.addEventListener('toggle',schedule,true);
-    document.addEventListener('click',e=>{if(e.target.closest('#btnLimpar')){clearTimeout(timer);try{localStorage.removeItem(KEY);}catch(_){};setTimeout(persist,0);}else schedule();});
+    document.addEventListener('click',e=>{if(e.target.closest('#btnLimpar, #btnLimparInferior')){clearTimeout(timer);try{localStorage.removeItem(KEY);}catch(_){};byId('recoveredDataNotice').hidden=true;setTimeout(persist,0);}else schedule();});
     document.addEventListener('visibilitychange',()=>{if(document.hidden)persist();});
     window.addEventListener('pagehide',persist);
   }
@@ -3190,6 +3409,97 @@ function renderDrugCards(ctx) {
 })();
 
   </script>
+
+<script id="paraped-i18n">
+(() => {
+  'use strict';
+  const DICTIONARY = [["Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.", "This software and all information it contains are provided exclusively for educational purposes and as a medical reference aid. THIS SYSTEM DOES NOT REPLACE INDIVIDUAL CLINICAL JUDGMENT, HISTORY TAKING, OR PHYSICAL EXAMINATION. The information provided must not be used on its own for diagnosis, management, or treatment. All clinical decisions, prescriptions, and interventions remain the responsibility of the qualified attending healthcare professional. The developers do not guarantee absolute accuracy and disclaim liability for direct or indirect harm arising from misuse, misinterpretation, or exclusive reliance on the software. Patients and non-professionals must consult a qualified physician before making health-related decisions."], ["Propofol não é indicado para sedação em UTI pediátrica. O preparo calculado corresponde a no máximo 12 horas; descartar produto remanescente, reservatório e equipo ao completar 12 horas.", "Propofol is not indicated for sedation in the pediatric ICU. The calculated preparation covers a maximum of 12 hours; discard any remaining medication and replace the reservoir and infusion tubing after 12 hours."], ["A fórmula de Holliday-Segar (100-50-20) é absolutamente contraindicada para a fase de transição neonatal (primeiros 28 dias).", "The Holliday–Segar formula (100–50–20) is absolutely contraindicated during the neonatal transition period (the first 28 days)."], ["Este card corresponde à indução anestésica e não deve ser usado como prescrição de sedação contínua em UTI pediátrica.", "This card is for anesthetic induction and must not be used as a continuous sedation prescription in pediatric ICU."], ["Este card corresponde à indução anestésica e não deve ser usado como prescrição de sedação contínua em UTI pediátrica.", "This card is for anesthetic induction and must not be used as a continuous sedation prescription in the pediatric ICU."], ["Em neonatos e crianças <2 anos: administrar lentamente; evitar injeção rápida de solução hipertônica.", "In neonates and children under 2 years: administer slowly; avoid rapid injection of a hypertonic solution."], ["A dose e o intervalo devem ser revistos conforme função renal e protocolo institucional.", "The dose and dosing interval must be reviewed in accordance with renal function and institutional protocol."], ["Ano: 0 a 18. Mês: 0 a 11. Dias: 0 a 30. Valores fora da faixa não são aceitos.", "Years: 0–18. Months: 0–11. Days: 0–30. Values outside these ranges are not accepted."], ["Estatura informada acima de 200 cm; cálculo limitado automaticamente a 200 cm.", "Height above 200 cm; calculations are automatically capped at 200 cm."], ["Apresentação e diluição conforme produto disponível e protocolo institucional", "Presentation and dilution depend on the available product and institutional protocol"], ["apresentação e diluição conforme produto disponível e protocolo institucional", "presentation and dilution depend on the available product and institutional protocol"], ["Idade menor que 3 anos: a indução anestésica com propofol não é recomendada.", "Under 3 years: anesthetic induction with propofol is not recommended."], ["Reconstituir 1 frasco-ampola de 500 mg, cada um com 10 mL de AD = 50 mg/mL.", "Reconstitute one 500 mg vial with 10 mL of SWFI to obtain 50 mg/mL."], ["Peso informado acima de 120 kg; cálculo limitado automaticamente a 120 kg.", "Weight above 120 kg; calculations are automatically capped at 120 kg."], ["confirmar dose total, disponibilidade de ampolas e protocolo institucional", "confirm total dose, ampoule availability, and institutional protocol"], ["usar somente como alternativa temporária enquanto o acesso IV/IO é obtido", "use only as a temporary alternative while IV/IO access is obtained"], ["Medicamentos comumente usados na parada cardiorrespiratória em Pediatria", "Medications commonly used during pediatric resuscitation"], ["Concentração final após diluição inadequada para o acesso periférico:", "Final concentration after dilution is unsuitable for peripheral access:"], ["Para propofol, o volume exibido corresponde a no máximo 12 horas;", "For propofol, the displayed volume covers no more than 12 hours;"], ["Cálculo de doses na parada cardiorrespiratória pediátrica", "Pediatric cardiopulmonary resuscitation dose calculator"], ["e não deve ser usado como prescrição de sedação contínua", "and must not be used as a continuous sedation prescription"], ["Propofol não é indicado para sedação em UTI pediátrica.", "Propofol is not indicated for sedation in a pediatric ICU."], ["não deve ser usado como prescrição de sedação contínua", "must not be used as a continuous sedation prescription"], ["para a fase de transição neonatal (primeiros 28 dias).", "during the neonatal transition period (the first 28 days)."], ["O preparo calculado corresponde a no máximo 12 horas;", "The calculated preparation covers no more than 12 hours;"], ["por aumento de tônus vagal ou bloqueio AV primário", "due to increased vagal tone or primary AV block"], ["intoxicação por bloqueadores dos canais de cálcio", "calcium channel blocker toxicity"], ["administrar IV lentamente quando usada via venosa", "administer slowly when given intravenously"], ["intoxicação por bloqueadores dos canais de sódio", "sodium channel blocker toxicity"], ["que este card corresponde à indução anestésica", "that this card represents anesthetic induction"], ["não é indicado para sedação em UTI pediátrica", "is not indicated for sedation in pediatric ICU"], ["evitar injeção rápida de solução hipertônica", "avoid rapid injection of hypertonic solution"], ["Considerar apenas em situações selecionadas", "Consider only in selected situations"], ["não indicado para sedação em UTI pediátrica", "not indicated for sedation in pediatric ICU"], ["Este card corresponde à indução anestésica", "This card is for anesthetic induction"], ["A fórmula de Holliday-Segar (100-50-20) é ", "The Holliday–Segar formula (100–50–20) is "], ["Aviso Legal e Isenção de Responsabilidade", "Legal notice and disclaimer"], ["A fórmula de Holliday-Segar (100-50-20) é", "The Holliday–Segar formula (100–50–20) is"], ["Estimativas a partir do ponto de punção.", "Estimates measured from the puncture site."], ["Dias fora da faixa permitida (0 a 30).", "Days must be between 0 and 30."], ["Endotraqueal — alternativa temporária", "Endotracheal — temporary alternative"], ["Ano fora da faixa permitida (0 a 18).", "Years must be between 0 and 18."], ["Mês fora da faixa permitida (0 a 11).", "Months must be between 0 and 11."], ["conforme PALS/protocolo institucional", "per PALS/institutional protocol"], ["Infusões contínuas com preparo fixo", "Continuous infusions with fixed preparation"], ["inadequada para o acesso periférico", "unsuitable for peripheral access"], ["Cateter venoso — inserção estimada", "Venous catheter — estimated insertion length"], ["Concentração final após rediluição", "Final concentration after further dilution"], ["Medicamentos comumente prescritos", "Commonly prescribed medications"], ["Desenvolvido por Adão L. L. Couto", "Developed by Adão L. L. Couto"], ["usar em bradicardia sintomática", "use for symptomatic bradycardia"], ["Não administrar rotineiramente", "Do not administer routinely"], ["não administrar rotineiramente", "do not routinely administer"], ["Não administrar rotineiramente", "Do not routinely administer"], ["máximo operacional cadastrado", "configured operational maximum"], ["Valor fora da faixa permitida", "Value outside the allowed range"], ["absolutamente contraindicada", "absolutely contraindicated"], ["limite do acesso selecionado", "limit for the selected access"], ["Emulsão lipídica a 10 mg/mL.", "Lipid emulsion at 10 mg/mL."], ["Sinais vitais de referência", "Reference vital signs"], ["Inserção estimada no lábio:", "Estimated depth at the lips:"], ["inserção estimada no lábio:", "estimated depth at the lips:"], ["acima do limite configurado", "above the configured limit"], ["Volume da solução 50 mg/mL", "Volume of 50 mg/mL solution"], ["parada cardiorrespiratória", "cardiopulmonary arrest"], ["disponibilidade de ampolas", "ampoule availability"], ["Não foi possível calcular.", "Unable to calculate."], ["sedação em UTI pediátrica", "sedation in pediatric ICU"], ["ao completar esse período", "at the end of that period"], ["Diluir 1 mL da ampola com", "Dilute 1 mL from the ampoule with"], ["que este card corresponde", "that this card corresponds"], ["Preparo de doses rápidas", "Rapid-dose preparation"], ["pode repetir até 3 doses", "may repeat up to 3 doses"], ["inadequada para o acesso", "unsuitable for the access"], ["da solução reconstituída", "of the reconstituted solution"], ["Diluição / volume final", "Dilution / final volume"], ["ampola concentrada pura", "undiluted concentrated ampoule"], ["bradicardia sintomática", "symptomatic bradycardia"], ["protocolo institucional", "institutional protocol"], ["Jugular interna direita", "Right internal jugular"], ["fora da faixa permitida", "outside the allowed range"], ["quando usada via venosa", "when administered intravenously"], ["na Torsades de Pointes:", "For torsades de pointes:"], ["concentração inadequada", "unsuitable concentration"], ["Alerta de concentração", "Concentration alert"], ["Na Torsades de Pointes", "For torsades de pointes"], ["Em neonatos e crianças", "In neonates and children"], ["Taxa de administração", "Administration rate"], ["Solução reconstituída", "Reconstituted solution"], ["reservatório e equipo", "reservoir and infusion tubing"], ["ao completar 12 horas", "after 12 hours"], ["Diluir 1 mL da ampola", "Dilute 1 mL from the ampoule"], ["Alerta Holliday-Segar", "Holliday–Segar alert"], ["anestésica e não deve", "anesthetic and must not"], ["Dados complementares", "Additional information"], ["Volume após diluição", "Volume after dilution"], ["Alerta de dose baixa", "Low-dose alert"], ["Dose cumulativa máx.", "Maximum cumulative dose"], ["a no máximo 12 horas", "at most 12 hours"], ["produto remanescente", "remaining medication"], ["Estimativa por peso:", "Weight-based estimate:"], ["finais após diluição", "final after dilution"], ["Bicarbonato de sódio", "Sodium bicarbonate"], ["dose cumulativa máx.", "maximum cumulative dose"], ["Situações especiais", "Special situations"], ["Superfície corporal", "Body surface area"], ["Concentração limite", "Concentration limit"], ["Alerta de segurança", "Safety alert"], ["Alerta de dose alta", "High-dose alert"], ["Uso restrito na PCR", "Restricted use in cardiac arrest"], ["Sem teto automático", "No automatic maximum"], ["Concentração final:", "Final concentration:"], ["Provável Pediátrica", "Likely pediatric"], ["após reconstituição", "after reconstitution"], ["Gluconato de cálcio", "Calcium gluconate"], ["Sulfato de magnésio", "Magnesium sulfate"], ["Dados do paciente:", "Patient information:"], ["Atualizar cálculos", "Update calculations"], ["Manutenção hídrica", "Maintenance fluid"], ["Cânula orotraqueal", "Endotracheal tube"], ["Concentração livre", "Unrestricted concentration"], ["Concentração Livre", "Unrestricted concentration"], ["Concentração final", "Final concentration"], ["Diluição da ampola", "Ampoule dilution"], ["doses subsequentes", "subsequent doses"], ["Infusões contínuas", "Continuous infusions"], ["conforme protocolo", "per protocol"], ["não deve ser usado", "must not be used"], ["infusão prolongada", "prolonged infusion"], ["no máximo 12 horas", "at most 12 hours"], ["limite configurado", "configured limit"], ["concentração final", "final concentration"], ["Provável Lactente", "Likely infant"], ["Provável Neonatal", "Likely neonatal"], ["Esquema calculado", "Calculated regimen"], ["Dose inicial máx.", "Maximum initial dose"], ["em UTI pediátrica", "in pediatric ICU"], ["Reta 2–3 ou curva", "Straight size 2–3 or curved"], ["sendo recomendado", "it is recommended"], ["acesso periférico", "peripheral access"], ["como hipercalemia", "such as hyperkalemia"], ["PALS/bradicardia:", "PALS/bradycardia:"], ["Volume da ampola", "Ampoule volume"], ["Volume calculado", "Calculated volume"], ["Tempo de infusão", "Infusion time"], ["na PCR sem pulso", "during pulseless cardiac arrest"], ["Infusão contínua", "Continuous infusion"], ["em instabilidade", "in hemodynamic instability"], ["sedação contínua", "continuous sedation"], ["Emulsão lipídica", "Lipid emulsion"], ["emulsão lipídica", "lipid emulsion"], ["Diâmetro interno", "Internal diameter"], ["lactente pequeno", "young infant"], ["Lactente pequeno", "Young infant"], ["abaixo do limite", "below the limit"], ["pelo medicamento", "by the medication"], ["dentro do limite", "within the limit"], ["Pré-adolescente", "Pre-adolescent"], ["não administrar", "do not administer"], ["Não administrar", "Do not administer"], ["para asma grave", "for severe asthma"], ["IV/IO preferida", "IV/IO preferred"], ["após rediluição", "after further dilution"], ["Menor de 3 anos", "Younger than 3 years"], ["acima do limite", "above the limit"], ["máximo 12 horas", "maximum of 12 hours"], ["Dexmedetomidina", "Dexmedetomidine"], ["da concentração", "of the concentration"], ["Não informadas", "Not provided"], ["Dose calculada", "Calculated dose"], ["Ajuste clínico", "Clinical adjustment"], ["em 180 minutos", "over 180 minutes"], ["a cada 8 horas", "every 8 hours"], ["por asma grave", "for severe asthma"], ["não é indicado", "is not indicated"], ["Na asma grave:", "For severe asthma:"], ["não é adequado", "is not appropriate"], ["ao medicamento", "to the medication"], ["acesso central", "central access"], ["com o diluente", "with the diluent"], ["Faixa etária:", "Age group:"], ["Não informada", "Not provided"], ["Não informado", "Not provided"], ["Estatura (cm)", "Height (cm)"], ["PA diastólica", "Diastolic BP"], ["Nº de ampolas", "Number of ampoules"], ["Frasco-ampola", "Vial"], ["Reconstituída", "Reconstituted"], ["frasco-ampola", "vial"], ["em 60 minutos", "over 60 minutes"], ["adequado para", "appropriate for"], ["se necessário", "if needed"], ["Na asma grave", "For severe asthma"], ["Reservar para", "Reserve for"], ["administração", "administration"], ["Ao nascimento", "At birth"], ["após diluição", "after dilution"], ["Reconstituir ", "Reconstitute "], ["Volume final:", "Final volume:"], ["Total diário:", "Daily total:"], ["Após diluição", "After dilution"], ["acesso venoso", "venous access"], ["da droga pura", "of undiluted medication"], ["máximo 150 mg", "maximum 150 mg"], ["limite máximo", "maximum limit"], ["Noradrenalina", "Norepinephrine"], ["para o acesso", "for the access"], ["para propofol", "for propofol"], ["Fechar seção", "Close section"], ["Não definido", "Not defined"], ["PA sistólica", "Systolic BP"], ["Apresentação", "Presentation"], ["Volume final", "Final volume"], ["Total diário", "Daily total"], ["Reconstituir", "Reconstitute"], ["Sem diluição", "No dilution"], ["Preparo puro", "Undiluted preparation"], ["Dose inicial", "Initial dose"], ["bolus rápido", "rapid bolus"], ["Não indicado", "Not indicated"], ["não indicado", "not indicated"], ["reservatório", "reservoir"], ["hipocalcemia", "hypocalcemia"], ["hipercalemia", "hyperkalemia"], ["Com balonete", "Cuffed"], ["Sem balonete", "Uncuffed"], ["RN prematuro", "Preterm newborn"], ["função renal", "renal function"], ["preparo fixo", "fixed preparation"], ["Administrar ", "Administer "], ["infundir em ", "infuse over "], ["não definido", "not specified"], ["acesso IV/IO", "IV/IO access"], ["em no máximo", "for up to"], ["Vasopressina", "Vasopressin"], ["para sedação", "for sedation"], ["quando usada", "when administered"], ["Referências", "References"], ["Pré-escolar", "Preschool child"], ["Adolescente", "Adolescent"], ["FC acordado", "HR awake"], ["FC dormindo", "HR asleep"], ["Droga / 24h", "Medication / 24 h"], ["Droga / 12h", "Medication / 12 h"], ["Administrar", "Administer"], ["ampola pura", "undiluted ampoule"], ["infundir em", "infuse over"], ["pelo acesso", "through the access"], ["pela cânula", "through the endotracheal tube"], ["bradicardia", "bradycardia"], ["Estimativas", "Estimates"], ["inteligível", "intelligible"], ["Diluir 1 mL", "Dilute 1 mL"], ["Infundir a ", "Infuse at "], ["Dose máxima", "Maximum dose"], ["este método", "this method"], ["pela cânula", "through the ETT"], ["Diluir para", "Dilute to"], ["diluir para", "dilute to"], ["administrar", "administer"], ["selecionado", "selected"], ["selecionada", "selected"], ["das ampolas", "from the ampoules"], ["pela ampola", "from the ampoule"], ["por exemplo", "for example"], ["configurado", "configured"], ["cada um com", "each with"], ["Periférico", "Peripheral"], ["Dose usual", "Usual dose"], ["Prescrição", "Prescription"], ["droga pura", "undiluted medication"], ["da mistura", "of the mixture"], ["dose total", "total dose"], ["não diluir", "do not dilute"], ["lentamente", "slowly"], ["em 3 horas", "over 3 hours"], ["pela sonda", "through the tube"], ["repetir 1x", "repeat once"], ["Estimativa", "Estimate"], ["prescritos", "prescribed"], ["necessário", "required"], ["automático", "automatic"], ["Os valores", "Values"], ["Não existe", "There is no"], ["Pediátrica", "Pediatric"], ["Pediátrico", "Pediatric"], ["via venosa", "intravenous route"], ["administre", "administer"], ["fica acima", "remains above"], ["da solução", "of the solution"], ["por minuto", "per minute"], ["periférica", "peripheral"], ["periférico", "peripheral"], ["Adrenalina", "Epinephrine"], ["Amiodarona", "Amiodarone"], ["Dobutamina", "Dobutamine"], ["prescrição", "prescription"], ["da infusão", "of the infusion"], ["máx. PALS:", "PALS maximum:"], ["infusão em", "infusion over"], ["inadequada", "unsuitable"], ["Peso (kg)", "Weight (kg)"], ["Dose máx.", "Maximum dose"], ["Intervalo", "Interval"], ["s/ diluir", "No dilution"], ["da ampola", "of the ampoule"], ["a mistura", "the mixture"], ["em 10 min", "over 10 min"], ["em 20 min", "over 20 min"], ["por etapa", "per stage"], ["com pulso", "with a pulse"], ["Com pulso", "With a pulse"], ["sem pulso", "without a pulse"], ["Intubação", "Intubation"], ["intubação", "intubation"], ["convulsão", "seizure"], ["Anestesia", "Anesthesia"], ["anestesia", "anesthesia"], ["confirmar", "confirm"], ["protocolo", "protocol"], ["descartar", "discard"], ["abaixo de", "below"], ["menor que", "younger than"], ["comumente", "commonly"], ["calculado", "calculated"], ["calculada", "calculated"], ["preferida", "preferred"], ["Infundir ", "Infuse "], ["reavaliar", "reassess"], ["diluir em", "dilute in"], ["ao acesso", "for the access"], ["respeitar", "respect"], ["da ampola", "from the ampoule"], ["com 10 mL", "with 10 mL"], ["segurança", "safety"], ["Rocurônio", "Rocuronium"], ["Lidocaína", "Lidocaine"], ["Adenosina", "Adenosine"], ["Meropenem", "Meropenem"], ["no acesso", "in the access"], ["para asma", "for asthma"], ["principal", "main"], ["aplicação", "administration"], ["Lactente", "Infant"], ["Neonatal", "Neonatal"], ["FC média", "Mean HR"], ["Diluição", "Dilution"], ["Diluente", "Diluent"], ["Infundir", "Infuse"], ["da droga", "of medication"], ["por dose", "per dose"], ["por peso", "by weight"], ["por hora", "per hour"], ["IV lento", "slow IV"], ["conforme", "according to"], ["RN termo", "Term newborn"], ["crianças", "children"], ["neonatos", "neonates"], ["acima de", "over"], ["Acima de", "Over"], ["corrente", "current"], ["SF/SG/AD", "NS/D5W/SWFI"], ["Aplicar ", "Administer "], ["Preparo ", "Preparation "], ["pela via", "via"], ["ou curva", "or curved"], ["Retirada", "Withdrawal"], ["utilizar", "use"], ["mesmo em", "even with"], ["Mesmo em", "Even with"], ["da droga", "of the medication"], ["de droga", "of medication"], ["com 9 mL", "with 9 mL"], ["com 4 mL", "with 4 mL"], ["com 1 mL", "with 1 mL"], ["Potássio", "Potassium"], ["Cetamina", "Ketamine"], ["Fentanil", "Fentanyl"], ["Dopamina", "Dopamine"], ["atropina", "atropine"], ["Atropina", "Atropine"], ["adequada", "suitable"], ["IV lenta", "slow IV"], ["acima do", "above the"], ["acima de", "above"], ["Perfil:", "Profile:"], ["Escolar", "School-age child"], ["Central", "Central"], ["Preparo", "Preparation"], ["Aplicar", "Administer"], ["ampolas", "ampoules"], ["Ampolas", "Ampoules"], ["mistura", "mixture"], ["Infusão", "Infusion"], ["injetar", "inject"], ["injeção", "injection"], ["minutos", "minutes"], ["Estimar", "Estimate"], ["Jugular", "Jugular"], ["Femoral", "Femoral"], ["criança", "child"], ["Criança", "Child"], ["Neonato", "Neonate"], ["SF 0,9%", "NS 0.9%"], ["Diluir ", "Dilute "], ["Alerta:", "Alert:"], ["O valor", "The value"], ["por via", "via"], ["Glicose", "Glucose"], ["Morfina", "Morphine"], ["volumes", "volumes"], ["infusão", "infusion"], ["Idade:", "Age:"], ["Limpar dados", "Clear data"], ["Limpar", "Clear"], ["Lâmina", "Laryngoscope blade"], ["Acesso", "Access"], ["Diluir", "Dilute"], ["na PCR", "during cardiac arrest"], ["Volume", "Volume"], ["volume", "volume"], ["minuto", "minute"], ["ataque", "loading dose"], ["equipo", "infusion tubing"], ["trocar", "replace"], ["reação", "reaction"], ["RN até", "Newborn through"], ["mínimo", "minimal"], ["máximo", "maximum"], ["A dose", "The dose"], ["Ampola", "Ampoule"], ["Dose (", "Dose ("], ["Alerta", "Alert"], ["Não há", "There is no"], ["método", "method"], ["Reta 1", "Straight size 1"], ["evitar", "avoid"], ["Evitar", "Avoid"], ["diluir", "dilute"], ["finais", "final"], ["Cálcio", "Calcium"], ["quando", "when"], ["mL/dia", "mL/day"], ["mínimo", "minimum"], ["lento", "slowly"], ["horas", "hours"], ["Retal", "Rectal"], ["retal", "rectal"], ["bolus", "bolus"], ["Tempo", "Time"], ["Curva", "Curved"], ["amp x", "amp ×"], ["SF/AD", "NS/SWFI"], ["SG25%", "D25W"], ["SG10%", "D10W"], ["idade", "age"], ["Idade", "Age"], ["meses", "months"], ["final", "final"], ["livre", "unrestricted"], ["Sódio", "Sodium"], ["antes", "before"], ["total", "total"], ["doses", "doses"], ["droga", "medication"], ["baixa", "low"], ["Dose", "Dose"], ["Máx.", "Max."], ["Mín.", "Min."], ["Reta", "Straight"], ["RN a", "Newborn to"], ["SG5%", "D5W"], ["anos", "years"], ["dias", "days"], ["usar", "use"], ["após", "after"], ["alto", "high"], ["mín.", "min."], ["máx.", "max."], ["Ano", "Year"], ["Mês", "Month"], ["PAM", "MAP"], ["PIC", "ICP"], ["via", "via"], ["FR", "RR"], ["AD", "SWFI"], ["à", "to"]];
+  DICTIONARY.unshift(['Idioma', 'Language'], ['Calcular', 'Calculate']);
+  const SELECTOR = document.getElementById('languageSelect');
+  const STORAGE_KEY = 'paraped.language.v1';
+  const textSources = new WeakMap();
+  const attrSources = new WeakMap();
+  let current = 'pt-BR', pending = false;
+  const exact = new Map(DICTIONARY);
+  function translate(source) {
+    if (!source || !source.trim()) return source;
+    const pure=source.trim();
+    if (exact.has(pure)) return source.replace(pure, exact.get(pure));
+    let result=source;
+    for (const [a,b] of DICTIONARY) {
+      if (result.includes(a)) result=result.split(a).join(b);
+    }
+    // Only numeric ranges: keep decimal commas and the values unchanged.
+    result=result.replace(/(\d(?:[\d.,]*)\s+)a(\s+\d)/g, '$1to$2');
+    // Translate standalone connectors left by medication-instruction templates.
+    result=result.replace(/para\s+(?=\d[\d.,]*%)/g,'to ')
+      .replace(/\s+de\s+/g,' of ').replace(/\s+da\s+/g,' of the ')
+      .replace(/\s+do\s+/g,' of the ').replace(/\s+com\s+/g,' with ')
+      .replace(/\s+ou\s+/g,' or ').replace(/\s+e\s+/g,' and ')
+      .replace(/\s+para\s+/g,' for ').replace(/\s+em\s+/g,' in ')
+      .replace(/\s+no\s+/g,' in the ').replace(/\s+na\s+/g,' in the ')
+      .replace(/\sa undiluted\s/g,' an undiluted ')
+      .replace(/torsades of pointes/gi,'torsades de pointes')
+      .replace(/after dilution for (\d)/g,'after dilution to $1');
+    // Presentation-only numeric punctuation, preserving each value.
+    result=result.replace(/\d{1,3}(?:\.\d{3})+(?:,\d+)?/g, m=>m.replace(/\./g,'#').replace(',', '.').replace(/#/g,','));
+    result=result.replace(/(\d),(\d)/g,'$1.$2');
+    return result;
+  }
+  function translateNode(node){
+    if (!node.parentElement || /^(SCRIPT|STYLE|NOSCRIPT)$/.test(node.parentElement.tagName)) return;
+    let data=textSources.get(node), content=node.nodeValue;
+    if (!data) data={pt:content,last:content};
+    else if (content!==data.last && content!==data.pt){data.pt=content;data.last=content;}
+    else if (content!==data.last && content===data.pt){data.last=content;}
+    const next=current==='en-US'?translate(data.pt):data.pt;
+    textSources.set(node,{pt:data.pt,last:next});
+    if(content!==next) node.nodeValue=next;
+  }
+  function translateAttributes(el){
+    if(!(el instanceof Element))return;
+    // A tradução não modifica atributos dos controles nativos de ação.
+    if (el.matches('button,select,input[type="button"],input[type="reset"],input[type="submit"]')) return;
+    let stored=attrSources.get(el)||{};
+    for(const name of ['placeholder','title','aria-label']){
+      if(!el.hasAttribute(name))continue;
+      const now=el.getAttribute(name);
+      const old=stored[name];
+      if(!old|| (now!==old.last && now!==old.pt))stored[name]={pt:now,last:now};
+      const next=current==='en-US'?translate(stored[name].pt):stored[name].pt;
+      if(now!==next) el.setAttribute(name,next);
+      stored[name].last=next;
+    }
+    attrSources.set(el,stored);
+  }
+  function translateAll(){
+    const walk=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    while(walk.nextNode()) translateNode(walk.currentNode);
+    document.querySelectorAll('[placeholder],[title],[aria-label]').forEach(translateAttributes);
+    document.documentElement.lang=current;
+    document.title=current==='en-US'?'Pediatric Resuscitation Dose Calculator':'Cálculo de doses na parada cardiorrespiratória pediátrica';
+  }
+  function schedule(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;translateAll();});}
+  function setLanguage(lang){
+    current=lang==='en-US'?'en-US':'pt-BR';
+    SELECTOR.value=current;
+    try{localStorage.setItem(STORAGE_KEY,current);}catch(_error){}
+    translateAll();
+  }
+  const obs=new MutationObserver(schedule);
+  obs.observe(document.body,{subtree:true,childList:true,characterData:true});
+  SELECTOR.addEventListener('change',()=>setLanguage(SELECTOR.value));
+  let saved='pt-BR';
+  try{saved=localStorage.getItem(STORAGE_KEY)||saved;}catch(_error){}
+  setLanguage(saved);
+  window.ParaPedI18n=Object.freeze({setLanguage,getLanguage:()=>current, translate});
+})();
+</script>
+<script>
+document.querySelectorAll('.paraped-up-arrow').forEach(function(button){
+  button.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+});
+</script>
 </body>
 <!--
 REFERÊNCIAS TÉCNICAS E FONTES DE APOIO
