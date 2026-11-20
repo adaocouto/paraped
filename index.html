@@ -1,6 +1,6 @@
 <!-- NomeDoApp = "Drogas na PCR Pediátrica" -->
-<!-- AndroidVersionName = "1.014.11.01" -->
-<!-- VersionName = "1.014.11.01" -->
+<!-- AndroidVersionName = "1.15.11.06" -->
+<!-- VersionName = "1.15.11.06" -->
 <!-- VersionCode = "262931654" -->
 <!-- AndroidVersionCode = "262931654"; Timestamp = "2026-10-20T16:54:53.947362-03:00" -->
 <!doctype html>
@@ -522,7 +522,84 @@ body{background:#e8f0fe}
     .header-controls .language-group select{min-height:44px;width:auto;min-width:112px;max-width:100%;box-sizing:border-box;padding:8px 24px 8px 8px;border:1.5px solid #CBD5E1;border-radius:10px;background:#EEF3F8;color:#264764;font-family:Arial,Helvetica,sans-serif;font-size:.92rem;font-weight:400;color-scheme:light;cursor:pointer}
     .header-controls .language-group select:focus-visible{outline:2px solid #2563A8;outline-offset:2px}
     @media(max-width:370px){.header-controls{flex-wrap:wrap;gap:7px}.header-controls .btn-secondary{font-size:.86rem;padding:9px}.header-controls .language-group{gap:4px}.header-controls .language-group span{font-size:.84rem}}
-  </style>
+  
+
+/* Padronização restrita ao cabeçalho e às barras de informações legais. */
+.header-controls, .standard-top-actions.header-controls, .planoc-top-actions, .paraped-top-actions, .acoes-superior {
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px;
+}
+.header-controls button, .standard-top-actions button, .planoc-top-actions button, .paraped-top-actions button, .acoes-superior button { min-height:44px; white-space:nowrap; }
+#btnSair { min-width:78px; }
+/* O controle de idioma permanece oculto para compatibilidade com scripts legados. */
+.language-group, .language-control, .hvneo-language-control {display:none!important;}
+.legal-disclaimer + .legal-disclaimer {margin-top:6px!important;}
+.legal-disclaimer.legal-policy-row {
+  box-sizing:border-box;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:11px 13px; margin-top:6px!important;
+  margin-bottom:0!important;
+  border:1px solid #e2e8f0; border-radius:14px;
+  background:#f8fafc; box-shadow:none;
+  color:#5c6f87; font-size:.78rem; font-weight:700;
+  line-height:1.45; text-decoration:none;
+}
+.legal-disclaimer.legal-policy-row svg {
+  width:16px; height:16px; flex:0 0 16px;
+  fill:none; stroke:#7b8da0; stroke-width:2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.legal-disclaimer.legal-policy-row:focus-visible {outline:3px solid #2563a8;outline-offset:2px;}
+body {padding-bottom:42px;}
+.spacer-3lines {height:0!important;display:none!important;}
+.footer-version-row, .versao-rodape, .planoc-footer-row, .paraped-footer-row, .hvneo-footer-row, .hidra-footer {margin-top:12px!important;margin-bottom:0!important;}
+.signature-block strong {font-size:clamp(12px,3.5vw,14px);}
+@media(min-width:345px){.signature-block strong{white-space:nowrap;}}
+
+.wrap{padding-bottom:0!important}.paraped-top-actions{margin-top:12px!important;margin-bottom:14px!important}
+
+/* Padronização visual validada no Apgar: ações superiores e barras do rodapé. */
+.paraped-top-actions.header-controls {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:stretch; justify-content:stretch;
+  width:100%; gap:10px;
+  margin-top:14px !important;
+  margin-bottom:16px !important;
+}
+.paraped-top-actions.header-controls > #btnLimpar,
+.paraped-top-actions.header-controls > #btnSair {
+  width:100%; min-width:0 !important; max-width:100%;
+  min-height:48px; height:auto; padding:10px 12px;
+  box-sizing:border-box; flex:none;
+  border-radius:10px;
+  background:#EEF3F8;
+  color:#264764;
+  border:1px solid #d4e0eb;
+  font-family:inherit; font-size:1rem; font-weight:700;
+  white-space:nowrap;
+}
+.paraped-top-actions.header-controls > #btnLimpar:hover,
+.paraped-top-actions.header-controls > #btnSair:hover { background:#e2e8f0; }
+.paraped-top-actions.header-controls > select[hidden] {display:none !important;}
+@media(max-width:350px) {
+ .paraped-top-actions.header-controls > #btnLimpar,
+ .paraped-top-actions.header-controls > #btnSair {font-size:.90rem;padding:9px 6px;}
+}
+.legal-bars-group {
+  display:flex; flex-direction:column; gap:6px;
+  width:100%; min-width:0; max-width:100%;
+  margin:20px 0 0;
+}
+.legal-bars-group > .legal-disclaimer,
+.legal-bars-group > a.legal-disclaimer {
+  margin:0 !important;
+  box-sizing:border-box; width:100%; max-width:100%;
+}
+.legal-bars-group > a.legal-policy-row {display:flex;}
+
+/* Preserve a disposição dos indicadores do título. */
+.hero > p { margin-top:12px; }
+</style>
 </head>
 <body>
   <main class="wrap">
@@ -536,7 +613,8 @@ body{background:#e8f0fe}
       </div>
     </section>
 
-    <div class="actions paraped-top-actions header-controls"><button class="btn-secondary" id="btnLimpar" type="button">Limpar dados</button><label class="language-group" for="languageSelect"><span>Idioma</span><select id="languageSelect" aria-label="Idioma"><option value="pt-BR">Português</option><option value="en-US">English</option></select></label></div>
+    <div class="actions paraped-top-actions header-controls"><button class="btn-secondary" id="btnLimpar" type="button">Limpar dados</button>
+      <button class="btn-secondary" id="btnSair" type="button">Sair</button><select id="languageSelect" hidden aria-hidden="true" tabindex="-1" style="display:none!important"><option value="pt-BR" selected>Português</option><option value="en-US">English</option></select></div>
     <div id="recoveredDataNotice" class="recovered-data-notice" role="status" hidden><div class="recovered-title">ⓘ Dados recuperados</div><div>Dados anteriores foram recuperados. Confirme as informações antes de utilizar os resultados.</div></div>
     <section class="card" id="patientCard">
       <h2 class="section-title">Dados do paciente:</h2>
@@ -546,15 +624,15 @@ body{background:#e8f0fe}
             <div class="age-row">
               <div class="field">
                 <label for="idadeAno">Ano</label>
-                <input id="idadeAno" type="text" inputmode="numeric" maxlength="2" value="1" placeholder="">
+                <input id="idadeAno" type="text" inputmode="numeric" maxlength="2" value="" placeholder="">
               </div>
               <div class="field">
                 <label for="idadeMes">Mês</label>
-                <input id="idadeMes" type="text" inputmode="numeric" maxlength="2" value="2" placeholder="">
+                <input id="idadeMes" type="text" inputmode="numeric" maxlength="2" value="" placeholder="">
               </div>
               <div class="field">
                 <label for="idadeDia">Dias</label>
-                <input id="idadeDia" type="text" inputmode="numeric" maxlength="2" value="10" placeholder="">
+                <input id="idadeDia" type="text" inputmode="numeric" maxlength="2" value="" placeholder="">
               </div>
             </div>
             <div class="hint">Ano: 0 a 18. Mês: 0 a 11. Dias: 0 a 30. Valores fora da faixa não são aceitos.</div>
@@ -564,11 +642,11 @@ body{background:#e8f0fe}
           <div class="pair-row">
             <div class="field">
               <label for="peso">Peso (kg)</label>
-              <input id="peso" type="text" inputmode="decimal" value="10" placeholder="Ex.: 4,000 ou 12,5">
+              <input id="peso" type="text" inputmode="decimal" value="" placeholder="Ex.: 4,000 ou 12,5">
             </div>
             <div class="field">
               <label for="estatura">Estatura (cm)</label>
-              <input id="estatura" type="text" inputmode="numeric" value="80" placeholder="Ex.: 125">
+              <input id="estatura" type="text" inputmode="numeric" value="" placeholder="Ex.: 125">
             </div>
           </div>
         </div>
@@ -638,6 +716,7 @@ body{background:#e8f0fe}
         <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
+    <div class="legal-bars-group">
     <details id="referenceSection" class="legal-disclaimer legal-disclaimer-collapsible">
       <summary>Referências</summary>
       <div class="legal-disclaimer-content">
@@ -653,7 +732,11 @@ body{background:#e8f0fe}
         <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
-<div class="paraped-footer-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.014.11.01</span></div><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
+
+<a class="legal-disclaimer legal-policy-row" id="privacyPolicyLink" href="https://adaocouto.github.io/pp/" rel="noopener noreferrer"><span>Política de Privacidade</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></svg></a>
+<a class="legal-disclaimer legal-policy-row" id="termsPolicyLink" href="https://adaocouto.github.io/ts/" rel="noopener noreferrer"><span>Termos de Serviço</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></svg></a>
+    </div><!-- fim das barras legais -->
+<div class="paraped-footer-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.15.11.06</span></div><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
 </main>
 
   <script>
@@ -3283,7 +3366,7 @@ function renderDrugCards(ctx) {
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
     assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free').includes('Concentração Livre selecionada'), 'Concentração Livre alerta quando ultrapassa limites de acesso cadastrados');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
-    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.014.11.01', 'versionName visível abaixo do desenvolvedor');
+    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.15.11.06', 'versionName visível abaixo do desenvolvedor');
 
     const neonatalDepth = getTubeInsertionDepth({ weight:3, ageDays:0, ageYears:0, ageMonths:0 });
     assert(neonatalDepth.includes('8,5 cm'), 'TOT neonatal de 3 kg usa profundidade estimada de 8,5 cm no lábio');
@@ -3318,6 +3401,8 @@ function renderDrugCards(ctx) {
     bindNumericFieldEvents();
     bindGlobalFieldEvents();
     bindSectionCloseEvents();
+    // Primeira abertura não representa um paciente com dados já preenchidos.
+    UI_STATE.emptyPatient = !String(byId('peso').value).trim();
     renderAll();
     // Não forçar foco na inicialização.
     try {
@@ -3393,7 +3478,7 @@ function renderDrugCards(ctx) {
         if(data.fixedContinuousConfigs&&typeof data.fixedContinuousConfigs==='object'&&!Array.isArray(data.fixedContinuousConfigs))UI_STATE.fixedContinuousConfigs=data.fixedContinuousConfigs;
         renderAll();
         if(Array.isArray(data.sections))document.querySelectorAll('details').forEach((d,i)=>{if(typeof data.sections[i]==='boolean')d.open=data.sections[i];});
-        byId('recoveredDataNotice').hidden = false;
+        byId('recoveredDataNotice').hidden = !fields.some(id => String(byId(id).value).trim() !== '');
       }
     } catch (_) { /* não abortar calculadora quando dados estiverem corrompidos */ }
     document.addEventListener('input',schedule);
@@ -3491,7 +3576,7 @@ function renderDrugCards(ctx) {
   SELECTOR.addEventListener('change',()=>setLanguage(SELECTOR.value));
   let saved='pt-BR';
   try{saved=localStorage.getItem(STORAGE_KEY)||saved;}catch(_error){}
-  setLanguage(saved);
+  setLanguage('pt-BR');
   window.ParaPedI18n=Object.freeze({setLanguage,getLanguage:()=>current, translate});
 })();
 </script>
@@ -3500,6 +3585,32 @@ document.querySelectorAll('.paraped-up-arrow').forEach(function(button){
   button.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
 });
 </script>
+
+<script>
+/* Comandos superiores de navegação. Não altera resultados nem apaga dados. */
+(function () {
+  'use strict';
+  var exitButton = document.getElementById('btnSair');
+  if (!exitButton) return;
+  exitButton.addEventListener('click', function () {
+    try {
+      if (window.AndroidApp && typeof window.AndroidApp.exitApp === 'function') {
+        window.AndroidApp.exitApp();
+        return;
+      }
+    } catch (_error) { /* A ponte nativa não está disponível. */ }
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    try { window.close(); } catch (_error) { /* Fechamento bloqueado. */ }
+    if (!window.closed) {
+      window.alert('O navegador não permite fechar esta aba automaticamente. Feche-a pelos controles do navegador.');
+    }
+  });
+})();
+</script>
+
 </body>
 <!--
 REFERÊNCIAS TÉCNICAS E FONTES DE APOIO
