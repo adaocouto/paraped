@@ -1,8 +1,8 @@
 <!-- NomeDoApp = "Drogas na PCR Pediátrica" -->
-<!-- AndroidVersionName = "1.15.11.06" -->
-<!-- VersionName = "1.15.11.06" -->
-<!-- VersionCode = "262931654" -->
-<!-- AndroidVersionCode = "262931654"; Timestamp = "2026-10-20T16:54:53.947362-03:00" -->
+<!-- AndroidVersionName = "1.15.11.23" -->
+<!-- VersionName = "1.15.11.23" -->
+<!-- VersionCode = "263271919" -->
+<!-- AndroidVersionCode = "263271919"; Timestamp = "2026-10-20T16:54:53.947362-03:00" -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -891,7 +891,7 @@ details.cardish > div > .section-footer-actions {margin-top:16px;}
 <a class="legal-disclaimer legal-policy-row" id="privacyPolicyLink" href="https://adaocouto.github.io/pp/" rel="noopener noreferrer"><span>Política de Privacidade</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></svg></a>
 <a class="legal-disclaimer legal-policy-row" id="termsPolicyLink" href="https://adaocouto.github.io/ts/" rel="noopener noreferrer"><span>Termos de Serviço</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></svg></a>
     </div><!-- fim das barras legais -->
-<div class="paraped-footer-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.15.11.06</span></div><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
+<div class="paraped-footer-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.15.11.23</span></div><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
 </main>
 
   <script>
@@ -3944,7 +3944,7 @@ details.cardish > div > .section-footer-actions {margin-top:16px;}
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
     assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free') === '', 'Concentração Livre não gera alerta de concentração / preparo');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
-    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.15.11.06', 'versionName visível abaixo do desenvolvedor');
+    assert(document.querySelector('.signature-block .version-name')?.textContent === '1.15.11.23', 'versionName visível abaixo do desenvolvedor');
 
     const neonatalDepth = getTubeInsertionDepth({ weight:3, ageDays:0, ageYears:0, ageMonths:0 });
     assert(neonatalDepth.includes('8,5 cm'), 'TOT neonatal de 3 kg usa profundidade estimada de 8,5 cm no lábio');
