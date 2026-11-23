@@ -18,7 +18,7 @@
       --bg:#eef4fb;
       --card:#ffffff;
       --line:#d6e2ef;
-      --text:#17324d;
+      --text:#1e293b;
       --muted:#5e7288;
       --accent:#2c6fb7;
       --accent-2:#114170;
@@ -38,6 +38,7 @@
       font-family:Arial,Helvetica,sans-serif;
       background:linear-gradient(180deg,#eef4fa 0%,#f8fbff 100%);
       color:var(--text);
+      line-height:1.45;
     }
     .wrap{
       width:min(1180px,calc(100% - 20px));
@@ -67,25 +68,30 @@
     .fields{display:grid;grid-template-columns:1fr;gap:12px}
     .field{display:flex;flex-direction:column;gap:6px}
     .field.full{grid-column:1/-1}
-    label{font-size:.92rem;font-weight:700;color:#19466f}
+    label{font-size:.78rem;font-weight:700;color:#475569}
     .hint{font-size:.8rem;color:var(--muted);line-height:1.35}
     input,select,button,textarea{
       font:inherit;
     }
     input,select{
-      width:100%;min-height:48px;border-radius:14px;border:1px solid #bfd2e4;background:#fcfeff;
-      padding:11px 13px;font-size:1rem;color:var(--text);outline:none;
+      min-width:0;width:100%;min-height:48px;border-radius:9px;
+      border:1.5px solid #cbd5e1;background:#f1f5f9;
+      padding:9px 10px;font-size:1rem;color:var(--text);outline:none;
       transition:border-color .15s ease, box-shadow .15s ease;
     }
-    input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(44,111,183,.12)}
-    input[aria-invalid="true"],input[aria-invalid="true"]:focus{border-color:var(--warn);box-shadow:0 0 0 3px rgba(141,35,35,.12)}
+    input:focus,select:focus{border-color:#2563a8;box-shadow:0 0 0 2px #dbeafe}
+    input:focus-visible,select:focus-visible{outline:3px solid #2563a8;outline-offset:2px}
+    #peso:focus:placeholder-shown:not([aria-invalid="true"]){background:#fef9c3;border-color:#fde047}
+    input[aria-invalid="true"],input[aria-invalid="true"]:focus{
+      background:#fff8f8;border-color:#fca5a5;box-shadow:0 0 0 4px rgba(153,27,27,.08);
+    }
     .field-error{padding:9px 10px;border:1px solid #f1c2c2;border-radius:10px;background:var(--warn-bg);color:var(--warn);font-size:.82rem;line-height:1.4}
     .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     .auto-updated{background:#dbeafe!important;border-radius:5px;box-shadow:0 0 0 2px rgba(90,147,214,.25)}
     .preparation-line{display:block;margin-top:4px}.preparation-line:first-child{margin-top:0}
     .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
     button{border:0;border-radius:14px;min-height:48px;padding:0 16px;font-weight:700;cursor:pointer}
-    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary{background:#1a3a6b;color:#fff}
     .btn-secondary{background:#eef3f8;color:#264764;border:1px solid #d4e0eb}
     .section-close-button{margin-left:0;margin-right:0}
     .section-footer-actions{display:grid;grid-template-columns:minmax(0,1fr) 48px;align-items:center}
@@ -93,9 +99,9 @@
     .btn-chip{min-height:48px;border-radius:999px;padding:0 12px;font-size:.88rem;background:#f3f7fb;color:#24425e;border:1px solid #d5e1ec}
     .btn-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
     .toolbar-inline{display:flex;flex-wrap:wrap;gap:8px}
-    .alert{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid #f1c2c2;background:#fff2f2;color:var(--warn);font-weight:700;line-height:1.4}
+    .alert{display:none;margin-top:12px;padding:12px 14px;border-radius:10px;border:1px solid #fca5a5;background:#fee2e2;color:#991b1b;font-size:.88rem;font-weight:700;line-height:1.45}
     .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-    .kpi{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fbfdff}
+    .kpi{border:1px solid #cbd5e1;border-radius:16px;padding:12px;background:#ffffff}
     .kpi .label{font-size:.78rem;color:var(--muted);margin-bottom:4px}
     .kpi .value{font-size:1.15rem;font-weight:700;color:#173a6d;line-height:1.25}
     #canulaOut,#cateterOut{white-space:pre-line}
@@ -143,10 +149,10 @@
       column-gap:12px;
     }
     .drug-card{
-      border:1px solid var(--line);
+      border:1px solid #cbd5e1;
       border-radius:16px;
       padding:12px;
-      background:#fbfdff;
+      background:#ffffff;
       display:inline-grid;
       gap:8px;
       width:100%;
@@ -193,10 +199,10 @@
     }
     .info-grid{display:grid;grid-template-columns:1fr;gap:12px}
     .info-card{
-      border:1px solid var(--line);
+      border:1px solid #cbd5e1;
       border-radius:16px;
       padding:12px;
-      background:#fbfdff;
+      background:#ffffff;
       display:grid;
       gap:8px;
     }
@@ -419,9 +425,9 @@
     details.cardish {
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .07);
     }
     #patientCard { padding: 0; }
     #patientCard > .section-title,
@@ -430,14 +436,14 @@
       align-items: center;
       min-height: 48px;
       margin: 0;
-      padding: 10px 18px;
+      padding: 12px 18px;
       color: #ffffff;
       background: #1a3a6b;
       border: 0;
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      font-size: .82rem;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: .88rem;
       font-weight: 700;
-      letter-spacing: .8px;
+      letter-spacing: .7px;
       line-height: 1.25;
       text-transform: uppercase;
     }
@@ -466,16 +472,16 @@
       outline: 3px solid #60a5fa;
       outline-offset: -3px;
     }
-    details.cardish > div { padding: 14px; }
+    details.cardish > div { padding: 18px; }
     #patientCard > .fields,
     #patientCard > .actions,
     #patientCard > .alert {
-      margin-left: 14px;
-      margin-right: 14px;
+      margin-left: 18px;
+      margin-right: 18px;
     }
     #patientCard > .paraped-top-actions { margin-top: 14px; }
     #patientCard > .alert { margin-bottom: 14px; }
-    #patientCard > .paraped-bottom-actions { margin-bottom: 14px; }
+    #patientCard > .paraped-bottom-actions { margin-top:16px; margin-bottom:18px; }
     @media (min-width: 720px) {
       #patientCard > .fields,
       #patientCard > .actions,
@@ -483,37 +489,37 @@
         margin-left: 18px;
         margin-right: 18px;
       }
-      details.cardish > div { padding: 14px 18px; }
+      details.cardish > div { padding: 18px; }
     }
 
 /* Padronização visual de título, ações e rodapé — Apgar / Preparo */
 body{background:#e8f0fe}
 .wrap{width:min(980px,calc(100% - 32px));padding:24px 0 48px}
-.hero{padding:20px;background:linear-gradient(135deg,#f8fbff,#dbeafe);border:1px solid #cbd5e1;border-radius:22px;box-shadow:0 16px 34px rgba(18,44,73,.10);margin-bottom:20px}
-.hero h1{display:flex;align-items:center;justify-content:center;gap:9px;font-size:clamp(1.35rem,3.5vw,2.05rem);line-height:1.12;color:#1a3a6b}
+.hero{padding:20px;background:linear-gradient(135deg,#f8fbff,#dbeafe);border:1px solid #cbd5e1;border-radius:22px;box-shadow:0 16px 34px rgba(18,44,73,.10);margin-bottom:14px}
+.hero h1{display:flex;align-items:center;justify-content:center;gap:8px;font-size:clamp(1.35rem,3.5vw,2.05rem);line-height:1.15;color:#1a3a6b}
 .hero .app-title-emoji{flex:0 0 auto}
-.hero p{margin-top:10px;font-size:.92rem;line-height:1.5}
+.hero p{margin-top:12px;font-size:.92rem;line-height:1.55;color:#61778f}
 .paraped-top-actions{margin-top:14px;gap:10px}
 .paraped-top-actions .btn-secondary{min-height:44px;border:1px solid #cbd5e1;border-radius:10px}
 .paraped-bottom-actions{flex-wrap:nowrap}
 .paraped-bottom-actions .btn-primary,.paraped-bottom-actions .btn-secondary{flex:1;min-width:0}
-.paraped-up-arrow{flex:0 0 48px;width:48px;min-width:48px;min-height:44px;padding:8px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd5e1;border-radius:10px;background:#eef3f8;color:#1a3a6b}
-.paraped-up-arrow svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.paraped-up-arrow{flex:0 0 48px;width:48px;min-width:48px;min-height:48px;padding:8px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd5e1;border-radius:10px;background:#eef3f8;color:#1a3a6b}
+.paraped-up-arrow svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .paraped-result-return{display:flex;justify-content:flex-end;margin-top:20px;margin-bottom:36px;min-height:44px}
 #referenceSection{margin-top:14px}
 #referenceSection+.legal-disclaimer{margin-top:10px}
 .paraped-footer-row{position:relative;min-height:48px;display:flex;align-items:center;justify-content:center;margin-top:20px}
 .paraped-footer-row .signature-block{width:100%;margin:0;padding:0 54px;text-align:center;font-size:14px;line-height:1.5}
 .paraped-footer-row .paraped-up-arrow{position:absolute;right:0;top:50%;transform:translateY(-50%)}
-@media(max-width:640px){.hero{padding:20px;margin-bottom:20px}.hero h1{font-size:clamp(1.3rem,5.5vw,1.6rem)}}
+@media(max-width:640px){.hero{padding:20px;margin-bottom:14px}.hero h1{font-size:clamp(1.3rem,5.5vw,1.6rem)}}
 @media(max-width:380px){.paraped-top-actions{gap:6px}.paraped-bottom-actions{gap:6px}.paraped-bottom-actions button:not(.paraped-up-arrow){padding-left:7px;padding-right:7px}}
     .header-controls{margin:0 0 14px;justify-content:center;align-items:center;gap:10px}
     .header-controls .language-group{font-size:.92rem}
     .header-controls .language-group select{background:#eef3f8;color:#264764;border:1px solid #cbd5e1}
-    .recovered-data-notice{background:#FDE68A;color:#713F12;border:1px solid #B45309;border-radius:10px;padding:11px 12px;font-size:14px;line-height:1.4;margin:0 0 14px}
+    .recovered-data-notice{background:#FDE68A;color:#713F12;border:1px solid #B45309;border-radius:10px;padding:11px 12px;font-size:14px;line-height:1.4;margin:0 0 20px}
     .recovered-data-notice[hidden]{display:none}
     .recovered-title{font-size:15px;font-weight:600;margin-bottom:5px}
-    #patientCard>.fields{margin-top:14px}
+    #patientCard>.fields{margin-top:18px}
     .drug-card .drug-total{background:#FFF4CC}
     /* P1/P2: controles superiores padronizados, sem afetar os campos do paciente. */
     .header-controls .btn-secondary{background:#EEF3F8;color:#264764;border:1.5px solid #CBD5E1;border-radius:10px;min-height:44px;font-family:Arial,Helvetica,sans-serif;font-weight:700;white-space:nowrap}
@@ -551,7 +557,7 @@ body{background:#e8f0fe}
 .legal-disclaimer.legal-policy-row:focus-visible {outline:3px solid #2563a8;outline-offset:2px;}
 body {padding-bottom:42px;}
 .spacer-3lines {height:0!important;display:none!important;}
-.footer-version-row, .versao-rodape, .planoc-footer-row, .paraped-footer-row, .hvneo-footer-row, .hidra-footer {margin-top:12px!important;margin-bottom:0!important;}
+.footer-version-row, .versao-rodape, .planoc-footer-row, .paraped-footer-row, .hvneo-footer-row, .hidra-footer {margin-top:20px!important;margin-bottom:0!important;}
 .signature-block strong {font-size:clamp(12px,3.5vw,14px);}
 @media(min-width:345px){.signature-block strong{white-space:nowrap;}}
 
@@ -563,8 +569,8 @@ body {padding-bottom:42px;}
   grid-template-columns:repeat(2,minmax(0,1fr));
   align-items:stretch; justify-content:stretch;
   width:100%; gap:10px;
-  margin-top:14px !important;
-  margin-bottom:16px !important;
+  margin-top:0 !important;
+  margin-bottom:20px !important;
 }
 .paraped-top-actions.header-controls > #btnLimpar,
 .paraped-top-actions.header-controls > #btnSair {
@@ -574,7 +580,7 @@ body {padding-bottom:42px;}
   border-radius:10px;
   background:#EEF3F8;
   color:#264764;
-  border:1px solid #d4e0eb;
+  border:1.5px solid #cbd5e1;
   font-family:inherit; font-size:1rem; font-weight:700;
   white-space:nowrap;
 }
@@ -599,6 +605,161 @@ body {padding-bottom:42px;}
 
 /* Preserve a disposição dos indicadores do título. */
 .hero > p { margin-top:12px; }
+
+/* Ajuste de acomodação em áreas úteis extremamente estreitas (E01). */
+@media (max-width: 270px) {
+  .wrap, .hero, #patientCard, details.cardish {min-width:0;}
+  .hero h1 {overflow-wrap:anywhere;}
+  .hero h1 > span:last-child {min-width:0;}
+  details.cardish > summary {overflow-wrap:anywhere;}
+  #patientCard .paraped-bottom-actions > #btnModelo,
+  #patientCard .paraped-bottom-actions > #btnLimparInferior {
+    padding:0 4px;font-size:.8rem;line-height:1.2;white-space:normal;overflow-wrap:anywhere;
+  }
+  .hero .pill {max-width:100%;overflow-wrap:anywhere;white-space:normal;}
+  .paraped-top-actions.header-controls > #btnLimpar,
+  .paraped-top-actions.header-controls > #btnSair {
+    white-space:normal;overflow-wrap:anywhere;padding:8px 3px;font-size:.8rem;
+  }
+  #patientCard .age-row {gap:4px;}
+  #patientCard .age-row > .field {min-width:0;}
+  #patientCard .pair-row {grid-template-columns:minmax(0,1fr);}
+  #patientCard .paraped-bottom-actions {
+    display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:7px;
+  }
+  #patientCard .paraped-bottom-actions > #btnModelo {grid-column:1;grid-row:1;}
+  #patientCard .paraped-bottom-actions > #btnLimparInferior {grid-column:1;grid-row:2;}
+  #patientCard .paraped-bottom-actions > .paraped-up-arrow {grid-column:2;grid-row:1/3;align-self:center;}
+  .paraped-footer-row {flex-direction:column;gap:8px;}
+  .paraped-footer-row .signature-block {padding:0;overflow-wrap:anywhere;}
+  .paraped-footer-row .paraped-up-arrow {position:static;transform:none;align-self:flex-end;}
+  .legal-disclaimer {overflow-wrap:anywhere;}
+}
+
+
+/* Meropenem: os parâmetros existentes seguem a apresentação dos campos da Vancomicina,
+   sem transformá-los em seletores ou alterar o esquema medicamentoso. */
+#fixedContinuousCards .fixed-meropenem-card .meropenem-readonly-field {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:8px 10px;
+  border:1px solid #e3ebf4;
+  border-radius:12px;
+  background:#ffffff;
+}
+#fixedContinuousCards .fixed-meropenem-card .meropenem-readonly-field .k {
+  display:block;
+  margin:0;
+  font-size:.72rem;
+  font-weight:700;
+  color:#475569;
+}
+#fixedContinuousCards .fixed-meropenem-card .meropenem-readonly-field .v {
+  display:flex;
+  align-items:center;
+  min-height:48px;
+  padding:9px 10px;
+  border:1.5px solid #cbd5e1;
+  border-radius:9px;
+  background:#f1f5f9;
+  color:#1e293b;
+  font-size:.92rem;
+  font-weight:400;
+}
+
+
+    /* Controles editáveis dos antibióticos antes do preparo, em todas as larguras. */
+    #fixedContinuousCards .continuous-controls { grid-template-columns: minmax(0,1fr); }
+    #fixedContinuousCards .continuous-dose-prep-stack { min-width: 0; }
+  
+/* Auditoria Cores.md 23/11/2026: exclusivamente E01, P01–P12 e I01.
+   Ajustes de apresentação; sem mudanças de texto, conteúdo, cálculo ou persistência. */
+
+/* P01 / P02: geometria externa de cartões de medicamentos e espaço entre cartões. */
+.drug-card, .info-card {
+  border-radius:12px;
+  overflow:hidden;
+}
+.drug-card, #continuousCards .info-card {margin-bottom:16px;}
+.info-grid {gap:16px;}
+
+/* P04: distância interna que antecede a faixa de ações da seção. */
+details.cardish > div > .section-footer-actions {margin-top:16px;}
+
+/* P05: amarelo reservado à prescrição/resultado principal. */
+.info-meta .item.continuous-preparation-box:not(.preparation-infeasible) {
+  background:#fff4cc;
+}
+
+/* P06 / P07: cores de texto secundário e dos contornos internos neutros. */
+:root {--muted:#475569;}
+.drug-meta .item, .info-meta .item, .continuous-field,
+#fixedContinuousCards .fixed-meropenem-card .meropenem-readonly-field {
+  border-color:#cbd5e1;
+}
+
+/* P08 / P09: campos e respectivos rótulos. */
+.continuous-field input, .continuous-field select {
+  padding:9px 10px;
+  border-radius:9px;
+  font-size:1rem;
+}
+.continuous-field label {font-size:.78rem;}
+
+/* P10: avisos vermelhos existentes, sem mudar sua condição de exibição. */
+.drug-meta .item.warn-bg, .info-meta .item.warn-bg,
+.maintenance-neonatal-alert, .field-error {
+  background:#fee2e2;
+  border-color:#fca5a5;
+  color:#991b1b;
+}
+.drug-meta .item.warn-bg .k, .drug-meta .item.warn-bg .v,
+.info-meta .item.warn-bg .k, .info-meta .item.warn-bg .v {color:#991b1b;}
+
+/* P11: advertências amarelas existentes, distintas do resultado principal. */
+.drug-meta .item.concentration-alert-yellow,
+.info-meta .item.concentration-alert-yellow,
+.info-meta .item.continuous-preparation-box.preparation-infeasible {
+  background:#fef9c3;
+  border-color:#fde047;
+  color:#854d0e;
+}
+.drug-meta .item.concentration-alert-yellow .k,
+.drug-meta .item.concentration-alert-yellow .v,
+.info-meta .item.concentration-alert-yellow .k,
+.info-meta .item.concentration-alert-yellow .v,
+.info-meta .item.continuous-preparation-box.preparation-infeasible .k,
+.info-meta .item.continuous-preparation-box.preparation-infeasible .v,
+.info-meta .item.continuous-preparation-box.preparation-infeasible .muted {color:#854d0e;}
+
+/* P12: proporções dos avisos já presentes no arquivo. */
+.drug-meta .item.warn-bg, .info-meta .item.warn-bg,
+.drug-meta .item.concentration-alert-yellow,
+.info-meta .item.concentration-alert-yellow,
+.info-meta .item.continuous-preparation-box.preparation-infeasible,
+.maintenance-neonatal-alert, .field-error {
+  border-radius:10px;
+  padding:10px 14px;
+}
+
+/* I01: largura integral do placeholder original do campo Peso em 320px. */
+@media (max-width:350px) {
+  #patientCard .pair-row {grid-template-columns:minmax(0,1fr);}
+}
+
+/* E01: opção selecionada legível na largura útil extrema (195px). */
+@media (max-width:270px) {
+  details.cardish > div {padding:10px;}
+  #fixedContinuousCards .info-card {padding:8px;}
+  #fixedContinuousCards .continuous-field {padding:8px 6px;}
+  #fixedContinuousCards .continuous-field select {padding:9px 1px;font-size:.75rem;}
+}
+
+
+    /* Doses rápidas: Prescrição ocupa o antigo quadro de volume. */
+    .drug-card .drug-total.rapid-prescription{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:5px}
+    .drug-card .drug-total.rapid-prescription .v{margin-left:0;text-align:left;font-size:.92rem;line-height:1.45;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -660,17 +821,17 @@ body {padding-bottom:42px;}
     </section>
     <div id="updateAnnouncement" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
 
-    <details class="cardish" style="margin-top:14px">
+    <details class="cardish" style="margin-top:20px">
       <summary>Preparo de doses rápidas</summary>
       <div>
-        <div id="drugGrid" class="drug-grid" style="margin-top:12px"></div>
+        <div id="drugGrid" class="drug-grid" style="margin-top:0"></div>
         <h3 class="subsection-heading">Situações especiais</h3>
         <div id="specialDrugGrid" class="drug-grid"></div>
         <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
 
-    <details class="cardish" style="margin-top:14px">
+    <details class="cardish" style="margin-top:20px">
       <summary>Dados complementares</summary>
       <div>
         <section class="grid grid-4">
@@ -680,13 +841,7 @@ body {padding-bottom:42px;}
           <div class="kpi"><div class="label">Cânula orotraqueal</div><div class="value" id="canulaOut">—</div></div>
           <div class="kpi" style="grid-column:1/-1"><div class="label">Cateter venoso — inserção estimada</div><div class="value" id="cateterOut">—</div></div>
         </section>
-        <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
-      </div>
-    </details>
-
-    <details class="cardish" style="margin-top:14px">
-      <summary>Sinais vitais de referência</summary>
-      <div>
+        <h3 class="section-title" style="margin:20px 0 12px">Sinais vitais de referência</h3>
         <div class="mini-grid">
           <div class="kpi"><div class="label">FC acordado</div><div class="value" id="fcAwakeOut">—</div></div>
           <div class="kpi"><div class="label">FC média</div><div class="value" id="fcMeanOut">—</div></div>
@@ -701,18 +856,18 @@ body {padding-bottom:42px;}
       </div>
     </details>
 
-    <details class="cardish" style="margin-top:14px">
+    <details class="cardish" style="margin-top:20px">
       <summary>Infusões contínuas com preparo fixo</summary>
       <div>
-        <div id="continuousCards" class="info-grid" style="margin-top:12px"></div>
+        <div id="continuousCards" class="info-grid" style="margin-top:0"></div>
         <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
 
-    <details class="cardish" style="margin-top:14px">
+    <details class="cardish" style="margin-top:20px">
       <summary>Medicamentos comumente prescritos</summary>
       <div>
-        <div id="fixedContinuousCards" class="info-grid" style="margin-top:12px"></div>
+        <div id="fixedContinuousCards" class="info-grid" style="margin-top:0"></div>
         <div class="actions section-footer-actions"><button class="btn-secondary section-close-button" type="button">Fechar seção</button><button class="paraped-up-arrow" type="button" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       </div>
     </details>
@@ -748,27 +903,27 @@ body {padding-bottom:42px;}
   // constants
   // ==========================================================
   const RESUSCITATION_DRUGS = [
-{name:'Adrenalina IV/IO', presentation:'1 mg/mL', doseLabel:'0,01 mg/kg IV/IO', mlKgLabel:'0,10', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 9 mL de AD = 10 mL (0,1 mg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura. Via IV/IO preferida.`, diluent:'AD', maxLabel:'1 mg = 10 mL da mistura', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
-{name:'Adrenalina Endotraqueal — alternativa temporária', presentation:'1 mg/mL', doseLabel:'0,1 mg/kg pela cânula', mlKgLabel:'0,10', dilution:'s/ diluir; usar somente como alternativa temporária enquanto o acesso IV/IO é obtido', diluent:'—', maxLabel:'2,5 mg = 2,5 mL', total:(w)=>Math.min(w*0.1,2.5), unit:'mL'},
-{name:'Midazolam / Dormonid', presentation:'5 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,02 (puro)' : '0,10 após diluição 1:4', dilution:(ctx,drug)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 4 mL de AD ou SF 0,9% = 5 mL (1 mg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:(ctx)=>usePureRapidDose(ctx) ? '5 mg = 1 mL da ampola' : '5 mg = 5 mL finais após diluição', total:(w,ctx)=>usePureRapidDose(ctx) ? Math.min(w*0.02,1) : Math.min(w*0.1,5), unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição'},
-{name:'Fentanil', presentation:'50 mcg/mL', doseLabel:'2 mcg/kg', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,04 (puro)' : '0,20 após diluição 1:4', dilution:(ctx,drug)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 3)} mL da ampola pura.` : `Diluir 1 mL da ampola com 4 mL de AD ou SF 0,9% = 5 mL (10 mcg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 3)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'Sem teto automático; confirmar dose total, disponibilidade de ampolas e protocolo institucional', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.04 : w*0.2, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição'},
-{name:'Rocurônio / Esmeron', presentation:'10 mg/mL', doseLabel:'0,6 a 1,2 mg/kg IV (intubação/RSI)', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,06 a 0,12 (puro)' : '0,30 a 0,60 após diluição 1:4', dilution:(ctx)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(ctx.weight*0.06, 2)} a ${formatPtTrim(ctx.weight*0.12, 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 4 mL de AD ou SF 0,9% = 5 mL (2 mg/mL). Aplicar ${formatPtTrim(ctx.weight*0.3, 2)} a ${formatPtTrim(ctx.weight*0.6, 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.06 : w*0.3, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição', displayTotal:(w,ctx)=>usePureRapidDose(ctx) ? `${formatPtTrim(w*0.06, 2)} a ${formatPtTrim(w*0.12, 2)} mL` : `${formatPtTrim(w*0.3, 2)} a ${formatPtTrim(w*0.6, 2)} mL`},
-{name:'Cetamina / Ketalar', presentation:'50 mg/mL', doseLabel:'1 a 2 mg/kg IV (intubação)', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,02 a 0,04 (puro)' : '0,20 a 0,40 após diluição 1:9', dilution:(ctx)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(ctx.weight*0.02, 2)} a ${formatPtTrim(ctx.weight*0.04, 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 9 mL de AD ou SF 0,9% = 10 mL (5 mg/mL). Aplicar ${formatPtTrim(ctx.weight*0.2, 2)} a ${formatPtTrim(ctx.weight*0.4, 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.02 : w*0.2, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição', displayTotal:(w,ctx)=>usePureRapidDose(ctx) ? `${formatPtTrim(w*0.02, 2)} a ${formatPtTrim(w*0.04, 2)} mL` : `${formatPtTrim(w*0.2, 2)} a ${formatPtTrim(w*0.4, 2)} mL`},
-{name:'Dexmedetomidina / Precedex (ataque)', presentation:'100 mcg/mL', doseLabel:'1 mcg/kg em 10 min', mlKgLabel:'0,25 após diluição para 4 mcg/mL', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 24 mL de SF 0,9% ou SG5% = 25 mL (4 mcg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura em 10 min.`, diluent:'SF 0,9% ou SG5%', maxLabel:'Não administrar a ampola concentrada pura; diluir para 4 mcg/mL.', total:(w)=>w*0.25, unit:'mL', outputLabel:'Volume após diluição'},
-{name:'Atropina IV/IO', presentation:'0,25 mg/mL', doseLabel:'PALS/bradicardia: 0,02 mg/kg IV/IO; mín. 0,1 mg; repetir 1x se necessário', mlKgLabel:'0,08; mín. 0,4 mL', dilution:'s/ diluir; usar em bradicardia sintomática por aumento de tônus vagal ou bloqueio AV primário, conforme PALS/protocolo institucional', diluent:'—', maxLabel:'Mín.: 0,1 mg = 0,4 mL; máx. PALS: 0,5 mg = 2 mL', total:(w,ctx)=>atropinePalsVolumeMl(w,ctx), unit:'mL'},
-{name:'Lidocaína 2%', presentation:'20 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.05,5), unit:'mL'},
-{name:'Valium / Diazepam (convulsão)', presentation:'5 mg/mL', doseLabel:'Retal: 0,5 mg/kg; IV lento: 0,25 mg/kg', mlKgLabel:'Retal: 0,10<br>IV: 0,05', dilution:'s/ diluir; administrar IV lentamente quando usada via venosa', diluent:'—', maxLabel:'Máx.: 10 mg = 2 mL', total:(w)=>Math.min(w*0.05,2), unit:'mL', outputLabel:'Volume da ampola', displayTotal:(w)=>`IV: ${formatPtTrim(Math.min(w*0.05,2), 2)} mL<br>Retal: ${formatPtTrim(Math.min(w*0.1,2), 2)} mL`},
-{name:'Propofol', presentation:'10 mg/mL', doseLabel:'2,5 a 3,5 mg/kg (≥3 anos; titular à resposta)', mlKgLabel:'0,25 a 0,35', dilution:'s/ diluir', diluent:'—', maxLabel:'Evitar bolus rápido em instabilidade; não indicado para sedação em UTI pediátrica', total:(w)=>w*0.25, unit:'mL', outputLabel:'Volume calculado', displayTotal:(w)=>`${formatPtTrim(w*0.25, 2)} a ${formatPtTrim(w*0.35, 2)} mL`},
+{name:'Adrenalina (1mg/mL) IV', presentation:'1 mg/mL', doseLabel:'0,01 mg/kg IV/IO', mlKgLabel:'0,10', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 9 mL de AD = 10 mL (0,1 mg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura. Via IV/IO preferida.`, diluent:'AD', maxLabel:'1 mg = 10 mL', total:(w)=>Math.min(w*0.1,10), unit:'mL'},
+{name:'Adrenalina (1mg/mL) Endotraqueal', presentation:'1 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'Usar somente como alternativa temporária enquanto o acesso EV/IO é obtido.', total:(w)=>Math.min(w*0.1,2.5), unit:'mL'},
+{name:'Midazolam / Dormonid', presentation:'5 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,02 (puro)' : '0,10 após diluição 1:4', dilution:(ctx,drug)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 4 mL de AD ou SF 0,9% = 5 mL (1 mg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? Math.min(w*0.02,1) : Math.min(w*0.1,5), unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição'},
+{name:'Fentanil', presentation:'50 mcg/mL', doseLabel:'2 mcg/kg', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,04 (puro)' : '0,20 após diluição 1:4', dilution:(ctx,drug)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 3)} mL da ampola pura.` : `Diluir 1 mL da ampola com 4 mL de AD ou SF 0,9% = 5 mL (10 mcg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 3)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.04 : w*0.2, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição'},
+{name:'Rocurônio / Esmeron', presentation:'10 mg/mL', doseLabel:'0,6 a 1,2 mg/kg IV', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,06 a 0,12 (puro)' : '0,30 a 0,60 após diluição 1:4', dilution:(ctx)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(ctx.weight*0.06, 2)} a ${formatPtTrim(ctx.weight*0.12, 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 4 mL de AD ou SF 0,9% = 5 mL (2 mg/mL). Aplicar ${formatPtTrim(ctx.weight*0.3, 2)} a ${formatPtTrim(ctx.weight*0.6, 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.06 : w*0.3, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição', displayTotal:(w,ctx)=>usePureRapidDose(ctx) ? `${formatPtTrim(w*0.06, 2)} a ${formatPtTrim(w*0.12, 2)} mL` : `${formatPtTrim(w*0.3, 2)} a ${formatPtTrim(w*0.6, 2)} mL`},
+{name:'Cetamina / Ketalar', presentation:'50 mg/mL', doseLabel:'1 a 2 mg/kg IV', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,02 a 0,04 (puro)' : '0,20 a 0,40 após diluição 1:9', dilution:(ctx)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(ctx.weight*0.02, 2)} a ${formatPtTrim(ctx.weight*0.04, 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 9 mL de AD ou SF 0,9% = 10 mL (5 mg/mL). Aplicar ${formatPtTrim(ctx.weight*0.2, 2)} a ${formatPtTrim(ctx.weight*0.4, 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? w*0.02 : w*0.2, unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição', displayTotal:(w,ctx)=>usePureRapidDose(ctx) ? `${formatPtTrim(w*0.02, 2)} a ${formatPtTrim(w*0.04, 2)} mL` : `${formatPtTrim(w*0.2, 2)} a ${formatPtTrim(w*0.4, 2)} mL`},
+{name:'Dexmedetomidina / Precedex', presentation:'100 mcg/mL', doseLabel:'1 mcg/kg em 10 minutos.', mlKgLabel:'0,25 após diluição para 4 mcg/mL', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 24 mL de SF 0,9% ou SG5% = 25 mL (4 mcg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura em 10 min.`, diluent:'SF 0,9% ou SG5%', maxLabel:'—', total:(w)=>w*0.25, unit:'mL', outputLabel:'Volume após diluição'},
+{name:'Atropina IV/IO', presentation:'0,25 mg/mL', doseLabel:'0,02 mg/kg EV/IO', mlKgLabel:'0,08; mín. 0,4 mL', dilution:'s/ diluir', diluent:'—', maxLabel:'repetir 1x se necessário.', total:(w,ctx)=>atropinePalsVolumeMl(w,ctx), unit:'mL'},
+{name:'Lidocaína 2%', presentation:'20 mg/mL', doseLabel:'1 mg/kg', mlKgLabel:'0,05', dilution:'s/ diluir', diluent:'—', maxLabel:'—', total:(w)=>Math.min(w*0.05,5), unit:'mL'},
+{name:'Valium / Diazepam (convulsão)', presentation:'5 mg/mL', doseLabel:'EV: 0,25 mg/kg Retal: 0,5 mg/kg', mlKgLabel:'Retal: 0,10<br>IV: 0,05', dilution:'s/ diluir; administrar IV lentamente quando usada via venosa', diluent:'—', maxLabel:'Máx.: 10 mg = 2 mL', total:(w)=>Math.min(w*0.05,2), unit:'mL', outputLabel:'Volume da ampola', displayTotal:(w)=>`IV: ${formatPtTrim(Math.min(w*0.05,2), 2)} mL<br>Retal: ${formatPtTrim(Math.min(w*0.1,2), 2)} mL`},
+{name:'Propofol', presentation:'10 mg/mL', doseLabel:'2,5 a 3,5 mg/kg', mlKgLabel:'0,25 a 0,35', dilution:'s/ diluir', diluent:'—', maxLabel:'—', total:(w)=>w*0.25, unit:'mL', outputLabel:'Volume calculado', displayTotal:(w)=>`${formatPtTrim(w*0.25, 2)} a ${formatPtTrim(w*0.35, 2)} mL`},
 {name:'Glicose', presentation:(ctx)=>isNeonatalProfile(ctx) ? 'SG10%' : 'SG25%', doseLabel:(ctx)=>isNeonatalProfile(ctx) ? '0,2 g/kg' : '0,5 g/kg', mlKgLabel:'2,0', dilution:'s/ diluir', diluent:'—', maxLabel:(ctx)=>isNeonatalProfile(ctx) ? '—' : 'Máx. 50 g = 200 mL de SG25%', total:(w,ctx)=>isNeonatalProfile(ctx) ? w*2 : Math.min(w*2,200), unit:'mL'},
-{name:'Sulfato de magnésio 50%', presentation:'0,5 g/mL', doseLabel:'25 a 50 mg/kg IV para asma grave; infundir em 20 min', mlKgLabel:'0,125 a 0,25 após diluição para 20%', dilution:(ctx)=>`Diluir 1 mL da ampola com 1,5 mL de SF 0,9% ou SG5% = 2,5 mL (200 mg/mL; 20%). Aplicar ${formatPtTrim(Math.min(ctx.weight*0.125,10), 2)} a ${formatPtTrim(Math.min(ctx.weight*0.25,10), 2)} mL da mistura em 20 min.`, diluent:'SF 0,9% ou SG5%', maxLabel:'Máx.: 2 g = 4 mL da ampola; 10 mL finais após diluição. Na Torsades de Pointes: bolus rápido (1 a 2 minutos). Na asma grave: infundir em 20 min.', total:(w)=>Math.min(w*0.125,10), unit:'mL', outputLabel:'Volume após diluição', displayTotal:(w)=>`${formatPtTrim(Math.min(w*0.125,10), 2)} a ${formatPtTrim(Math.min(w*0.25,10), 2)} mL`},
-{name:'Gluconato de cálcio 10%', presentation:'100 mg/mL', doseLabel:'100 mg/kg', mlKgLabel:'2,0', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 1 mL de AD ou SF 0,9% = 2 mL. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura.`, diluent:'AD ou SF 0,9%', maxLabel:'2 g = 20 mL da ampola; 40 mL finais', total:(w)=>Math.min(w*2,40), unit:'mL', specialSituation:true, specialAlert:'Não administrar rotineiramente na PCR. Reservar para hipocalcemia, hipercalemia ou intoxicação por bloqueadores dos canais de cálcio, conforme protocolo.'},
-{name:'Bicarbonato de sódio 8,4%', presentation:'1 mEq/mL', doseLabel:'1 mEq/kg IV/IO lento', mlKgLabel:'2,0 após diluição 1:1', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 1 mL de AD = 2 mL (4,2%; 0,5 mEq/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura. Em neonatos e crianças <2 anos: administrar lentamente; evitar injeção rápida de solução hipertônica.`, diluent:'AD', maxLabel:'—', total:(w)=>w * 2, unit:'mL', specialSituation:true, specialAlert:'Não administrar rotineiramente na PCR. Considerar apenas em situações selecionadas, como hipercalemia ou intoxicação por bloqueadores dos canais de sódio, conforme protocolo.'},
-{name:'Morfina / Dimorf', presentation:'10 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,01 (puro)' : '0,10 após diluição 1:9', dilution:(ctx,drug)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 9 mL de AD ou SF 0,9% = 10 mL (1 mg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:(ctx)=>usePureRapidDose(ctx) ? '10 mg = 1 mL da ampola' : '10 mg = 10 mL finais após diluição', total:(w,ctx)=>usePureRapidDose(ctx) ? Math.min(w*0.01,1) : Math.min(w*0.1,10), unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição'},
+{name:'Sulfato de magnésio 50%', presentation:'0,5 g/mL', doseLabel:'25 a 50 mg/kg IV para asma grave', mlKgLabel:'0,125 a 0,25 após diluição para 20%', dilution:(ctx)=>`Diluir 1 mL da ampola com 1,5 mL de SF 0,9% ou SG5% = 2,5 mL (200 mg/mL; 20%). Aplicar ${formatPtTrim(Math.min(ctx.weight*0.125,10), 2)} a ${formatPtTrim(Math.min(ctx.weight*0.25,10), 2)} mL da mistura em 20 min.`, diluent:'SF 0,9% ou SG5%', maxLabel:'Na Torsades de Pointes: administrar em 1 a 2 minutos.', total:(w)=>Math.min(w*0.125,10), unit:'mL', outputLabel:'Volume após diluição', displayTotal:(w)=>`${formatPtTrim(Math.min(w*0.125,10), 2)} a ${formatPtTrim(Math.min(w*0.25,10), 2)} mL`},
+{name:'Gluconato de cálcio 10%', presentation:'100 mg/mL', doseLabel:'100 mg/kg', mlKgLabel:'2,0', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 1 mL de AD ou SF 0,9% = 2 mL. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura.`, diluent:'AD ou SF 0,9%', maxLabel:'—', total:(w)=>Math.min(w*2,40), unit:'mL', specialSituation:true, specialAlert:'Não administrar rotineiramente na PCR. Reservar para hipocalcemia, hipercalemia ou intoxicação por bloqueadores dos canais de cálcio ou conforme protocolo.'},
+{name:'Bicarbonato de sódio 8,4%', presentation:'1 mEq/mL', doseLabel:'1 mEq/kg IV/IO', mlKgLabel:'2,0 após diluição 1:1', dilution:(ctx,drug)=>`Diluir 1 mL da ampola com 1 mL de AD = 2 mL (4,2%; 0,5 mEq/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura. Em neonatos e crianças <2 anos: administrar lentamente; evitar injeção rápida de solução hipertônica.`, diluent:'AD', maxLabel:'—', total:(w)=>w * 2, unit:'mL', specialSituation:true, specialAlert:'Não administrar rotineiramente na PCR. Considerar apenas em situações selecionadas, como hipercalemia ou intoxicação por bloqueadores dos canais de sódio ou conforme protocolo.'},
+{name:'Morfina / Dimorf', presentation:'10 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:(ctx)=>usePureRapidDose(ctx) ? '0,01 (puro)' : '0,10 após diluição 1:9', dilution:(ctx,drug)=>usePureRapidDose(ctx) ? `Acima de 40 kg: não diluir. Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da ampola pura.` : `Diluir 1 mL da ampola com 9 mL de AD ou SF 0,9% = 10 mL (1 mg/mL). Aplicar ${formatPtTrim(drug.total(ctx.weight,ctx), 2)} mL da mistura.`, diluent:(ctx)=>usePureRapidDose(ctx) ? '—' : 'AD ou SF 0,9%', maxLabel:'—', total:(w,ctx)=>usePureRapidDose(ctx) ? Math.min(w*0.01,1) : Math.min(w*0.1,10), unit:'mL', outputLabel:(ctx)=>usePureRapidDose(ctx) ? 'Volume da ampola' : 'Volume após diluição'},
 {name:'Naloxona / Narcan', presentation:'0,4 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,25', dilution:'s/ diluir', diluent:'—', maxLabel:'5 mL', total:(w)=>Math.min(w*0.25,5), unit:'mL'},
-{name:'Flumazenil / Lanexat', presentation:'0,1 mg/mL', doseLabel:'0,01 mg/kg IV; repetir se necessário', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'Dose inicial máx.: 0,2 mg = 2 mL; dose cumulativa máx.: 1 mg = 10 mL', total:(w)=>Math.min(w*0.1,2), unit:'mL'},
+{name:'Flumazenil / Lanexat', presentation:'0,1 mg/mL', doseLabel:'0,01 mg/kg IV', mlKgLabel:'0,10', dilution:'s/ diluir', diluent:'—', maxLabel:'repetir se necessário.', total:(w)=>Math.min(w*0.1,2), unit:'mL'},
 {name:'Adenosina (ataque)', presentation:'3 mg/mL', doseLabel:'0,1 mg/kg', mlKgLabel:'0,033', dilution:'s/ diluir', diluent:'—', maxLabel:'6 mg = 2 mL', total:(w)=>Math.min(w*(0.1/3),2), unit:'mL'},
 {name:'Adenosina (2ª dose)', presentation:'3 mg/mL', doseLabel:'0,2 mg/kg', mlKgLabel:'0,067', dilution:'s/ diluir', diluent:'—', maxLabel:'12 mg = 4 mL', total:(w)=>Math.min(w*(0.2/3),4), unit:'mL'},
-{name:'Amiodarona', presentation:'50 mg/mL', doseLabel:'5 mg/kg IV/IO; pode repetir até 3 doses', mlKgLabel:'0,10', dilution:'s/ diluir na PCR sem pulso. Com pulso, diluir em SG5% e infundir em 20 a 60 minutos.', diluent:'SG5% quando infusão', maxLabel:'1ª dose: 300 mg = 6 mL; doses subsequentes: máximo 150 mg = 3 mL', total:(w)=>Math.min(w*0.1,6), unit:'mL'}
+{name:'Amiodarona', presentation:'50 mg/mL', doseLabel:'5 mg/kg IV/IO', mlKgLabel:'0,10', dilution:'s/ diluir na PCR sem pulso. Com pulso, diluir em SG5% e infundir em 20 a 60 minutos.', diluent:'SG5% quando infusão', maxLabel:'1ª dose: 300 mg = 6 mL; doses subsequentes: máximo 150 mg = 3 mL', total:(w)=>Math.min(w*0.1,6), unit:'mL'}
   ];
 
   const CONTINUOUS_MEDS = [
@@ -792,7 +947,7 @@ body {padding-bottom:42px;}
     },
 {
       name:'Noradrenalina / Levophed',
-      presentation:'1 amp x 4 mL (1 mg/mL base)',
+      presentation:'1 amp x 4 mL (hemitartarato 2 mg/mL = norepinefrina base 1 mg/mL)',
       ampCount:1,
       ampMl:4,
       mgPerMl:1,
@@ -1031,12 +1186,14 @@ body {padding-bottom:42px;}
       reconstitutionMl:10,
       reconstitutedConcentrationMgPerMl:50,
       reconstitutionDiluent:'AD',
-      finalDiluent:'SF 0,9% ou SG5%',
-      usual:'10 ou 15 mg/kg/dose',
+      finalDiluent:'SG 5%',
+      finalDiluentOptions:['SG 5%','SF 0,9%'],
+      usual:'10 a 15 mg/kg/dose IV (ajustável conforme avaliação clínica)',
       defaultDose:15,
       doseOptions:[10,15],
+      intervalHours:6,
       defaultFinalConcentration:5,
-      finalConcentrationOptions:[2.5,5],
+      finalConcentrationOptions:[2.5,4.5,5],
       infusionMinutes:60,
       maxInfusionRateMgPerMin:10,
       doseUnit:'mgkgdose'
@@ -1044,14 +1201,30 @@ body {padding-bottom:42px;}
     {
       kind:'meropenem',
       name:'Meropenem',
-      presentation:'Meropenem IV — apresentação e diluição conforme produto disponível e protocolo institucional',
-      usual:'20 mg/kg/dose IV, de 8/8 horas',
-      defaultDose:20,
-      doseOptions:[20],
+      presentation:'Frasco-ampola de 1 g; reconstituir com 20 mL de água para injeção (aprox. 50 mg/mL)',
+      vialMg:1000,
+      reconstitutionMl:20,
+      reconstitutedConcentrationMgPerMl:50,
+      finalDiluent:'SF 0,9%',
+      usual:'20 a 40 mg/kg/dose IV; selecionar 20 ou 40 mg/kg/dose conforme indicação',
+      defaultDose:40,
+      doseOptions:[20,40],
+      defaultFinalConcentration:10,
+      finalConcentrationOptions:[5,10,20],
       intervalHours:8,
       infusionMinutes:180,
       doseUnit:'mgkgdose'
     }
+  ];
+
+  // Opções de medicamentos com vias IM/EV. Protocolos indicados nas próprias apresentações.
+  const ADDITIONAL_PRESCRIBED_MEDS = [
+    {key:'dipirona', name:'Dipirona', presentation:'500 mg/mL', defaultDose:20,
+     doseOptions:[20,25], maxDoseMg:1000, interval:'a cada 6 horas'},
+    {key:'ondansetrona', name:'Ondansetrona', presentation:'2 mg/mL', defaultDose:0.1,
+     doseOptions:[0.1], maxDoseMg:4, interval:'dose única — pós-operatório'},
+    {key:'ceftriaxona', name:'Ceftriaxona', presentation:'frasco-ampola de 1 g', defaultDose:50,
+     doseOptions:[20,50,80], maxDoseMg:2000, interval:'a cada 24 horas'}
   ];
 
   const HEART_RATE_BANDS = [
@@ -1142,17 +1315,69 @@ body {padding-bottom:42px;}
     return document.getElementById(id);
   }
 
-  function scrollOptions() {
-    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    return { behavior: reducedMotion ? 'auto' : 'smooth', block: 'center', inline: 'nearest' };
-  }
+  // Navegação visual: centro do campo em ~75% da área visível, quando há rolagem disponível.
+  // Não altera entrada, validação ou resultados; respeita movimento reduzido.
+  const patientScroll = (() => {
+    let frame = null;
+    let currentTarget = null;
+    let ignoreScroll = false;
+    const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const cancel = () => {
+      if (frame !== null) cancelAnimationFrame(frame);
+      frame = null;
+      currentTarget = null;
+    };
+    const clamp = y => Math.min(Math.max(0, y), Math.max(0, document.documentElement.scrollHeight - window.innerHeight));
+    function animateTo(target) {
+      cancel();
+      const destination = clamp(target);
+      const start = window.scrollY;
+      const distance = destination - start;
+      if (Math.abs(distance) < 1) return;
+      if (reduced()) { window.scrollTo(0, destination); return; }
+      let startTime = null;
+      function step(now) {
+        if (startTime === null) startTime = now;
+        const progress = Math.min(1, (now - startTime) / 900);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        ignoreScroll = true;
+        window.scrollTo(0, start + distance * eased);
+        ignoreScroll = false;
+        frame = progress < 1 ? requestAnimationFrame(step) : null;
+      }
+      frame = requestAnimationFrame(step);
+    }
+    function align(element) {
+      if (!element || !element.isConnected) return;
+      const viewport = window.visualViewport;
+      const visibleTop = viewport ? viewport.offsetTop : 0;
+      const visibleHeight = viewport ? viewport.height : window.innerHeight;
+      const bounds = element.getBoundingClientRect();
+      const visualCenter = bounds.top + bounds.height / 2;
+      const desiredCenter = visibleTop + visibleHeight * .75;
+      const delta = visualCenter - desiredCenter;
+      const next = clamp(window.scrollY + delta);
+      if (Math.abs(next - window.scrollY) < 2) return;
+      currentTarget = element;
+      animateTo(next);
+      currentTarget = element;
+    }
+    function toTop() { animateTo(0); }
+    // Uma nova interação manual cancela a trajetória anterior imediatamente.
+    ['wheel', 'touchstart', 'pointerdown'].forEach(name =>
+      window.addEventListener(name, cancel, { passive:true, capture:true }));
+    window.addEventListener('keydown', event => {
+      if (['PageDown','PageUp','Home','End','ArrowDown','ArrowUp',' ','Spacebar'].includes(event.key) &&
+          !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)) cancel();
+    }, true);
+    window.visualViewport?.addEventListener('resize', () => {
+      if (currentTarget?.isConnected && document.activeElement === currentTarget) align(currentTarget);
+    }, { passive:true });
+    return Object.freeze({ align, toTop, cancel });
+  })();
+  window.ParaPedScroll = patientScroll;
 
-  function revealField(input) {
-    const field = input.closest('.field, .continuous-field') || input;
-    const bounds = field.getBoundingClientRect();
-    const height = window.visualViewport?.height || window.innerHeight;
-    if (bounds.top < 0 || bounds.bottom > height) field.scrollIntoView(scrollOptions());
-  }
+  function revealField(input) { patientScroll.align(input); }
 
   function prepareEntry(input) {
     entryArmed.set(input, input.value !== '');
@@ -2028,15 +2253,14 @@ body {padding-bottom:42px;}
 
     const messages = [];
     if (isPropofolUnderThreeYears(item, ctx)) {
-      messages.push('Idade menor que 3 anos: a indução anestésica com propofol não é recomendada.');
+      messages.push('Uso não recomendado em menor que 3 anos.');
     }
 
     if (item.pediatricIcuSedationNotIndicated === true || item.runPure === true) {
       messages.push('Propofol não é indicado para sedação em UTI pediátrica. O preparo calculado corresponde a no máximo 12 horas; descartar produto remanescente, reservatório e equipo ao completar 12 horas.');
-    } else {
-      messages.push('Este card corresponde à indução anestésica e não deve ser usado como prescrição de sedação contínua em UTI pediátrica.');
     }
 
+    if (!messages.length) return '';
     return `
       <div class="item warn-bg" style="grid-column:1/-1">
         <span class="k">Alerta de segurança — Propofol</span>
@@ -2046,29 +2270,154 @@ body {padding-bottom:42px;}
   }
 
 
-function renderDrugCards(ctx) {
+// Preparo das doses rápidas: proporções originais preservadas.
+  // A quantidade de solução preparada é ampliada quando a dose exibida exige mais de uma mistura.
+  const RAPID_PREP_RULES = Object.freeze({
+    'Adrenalina (1mg/mL) IV': {ratio:9, diluents:'AD'},
+    'Midazolam / Dormonid': {ratio:4, diluents:'AD ou S.F.0,9%', pureAbove40:true},
+    'Fentanil': {ratio:4, diluents:'AD ou S.F.0,9%', pureAbove40:true},
+    'Rocurônio / Esmeron': {ratio:4, diluents:'AD ou S.F.0,9%', pureAbove40:true,
+      highestDoseMl:(w)=>w*0.6},
+    'Cetamina / Ketalar': {ratio:9, diluents:'AD ou S.F.0,9%', pureAbove40:true,
+      highestDoseMl:(w)=>w*0.4},
+    'Dexmedetomidina / Precedex': {ratio:24, diluents:'S.F.0,9% ou S.G.5%'},
+    'Sulfato de magnésio 50%': {ratio:1.5, diluents:'S.F.0,9% ou S.G.5%',
+      highestDoseMl:(w)=>Math.min(w*0.25,10)},
+    'Gluconato de cálcio 10%': {ratio:1, diluents:'S.F.0,9%'},
+    'Bicarbonato de sódio 8,4%': {ratio:1, diluents:'AD'},
+    'Morfina / Dimorf': {ratio:9, diluents:'AD ou S.F.0,9%', pureAbove40:true}
+  });
+
+  // Administração das doses rápidas por indicação/via já cadastrada.
+  // Não impõe um tempo numérico quando este depende da situação e do protocolo.
+  function rapidAdministration(drug) {
+    const info = {
+      'Adrenalina (1mg/mL) IV': ' em bolus',
+      'Adrenalina (1mg/mL) Endotraqueal': '',
+      'Midazolam / Dormonid': ' lento',
+      'Fentanil': ' lento',
+      'Rocurônio / Esmeron': ' em bolus',
+      'Cetamina / Ketalar': ' em 60 segundos',
+      'Dexmedetomidina / Precedex': '',
+      'Atropina IV/IO': ' em bolus',
+      'Lidocaína 2%': ' em bolus',
+      'Valium / Diazepam (convulsão)': '',
+      'Propofol': ' lento',
+      'Glicose': ' lento',
+      'Sulfato de magnésio 50%': ' em 20 minutos para asma grave',
+      'Gluconato de cálcio 10%': ' lento ou conforme protocolo.',
+      'Bicarbonato de sódio 8,4%': ' lento ou conforme protocolo.',
+      'Morfina / Dimorf': ' lento',
+      'Naloxona / Narcan': ' em bolus',
+      'Flumazenil / Lanexat': ' em 15 segundos',
+      'Adenosina (ataque)': ' em bolus',
+      'Amiodarona': ' em bolus na PCR sem pulso'
+    };
+    return info[drug.name] || '';
+  }
+
+  // Prescrição no local do antigo quadro de volume das doses rápidas.
+  // Mantém os mesmos volumes calculados e as concentrações dos preparos existentes.
+  function rapidPrescription(drug, ctx, displayValue) {
+    if (!(ctx.weight > 0)) return '—';
+
+    if (drug.name === 'Amiodarona') {
+      return `Aplicar ${displayValue} EV/IO em bolus na PCR sem pulso`;
+    }
+
+    if (drug.name === 'Valium / Diazepam (convulsão)') {
+      const ivMl=formatPtTrim(Math.min(ctx.weight*0.05,2),2);
+      const rectalMl=formatPtTrim(Math.min(ctx.weight*0.1,2),2);
+      return `Aplicar ${ivMl} mL IV lento ou ${rectalMl} mL via retal`;
+    }
+
+    const route = drug.name === 'Adrenalina (1mg/mL) Endotraqueal'
+      ? 'pela cânula endotraqueal'
+      : /IV\/IO/.test(String(resolveDrugField(drug.doseLabel, ctx, drug)))
+        ? 'IV/IO' : 'IV';
+
+    const rule=RAPID_PREP_RULES[drug.name];
+    if (drug.name === 'Dexmedetomidina / Precedex' && rule) {
+      const targetMl=drug.total(ctx.weight,ctx);
+      const stockMl=Math.max(1,Math.ceil(targetMl/(1+rule.ratio)-1e-10));
+      return `Diluir ${formatPtTrim(stockMl,3)} mL em ${formatPtTrim(stockMl*rule.ratio,3)} mL de ${rule.diluents} e Infundir ${displayValue} EV em 10 minutos`;
+    }
+    if (rule && !(rule.pureAbove40 && usePureRapidDose(ctx))) {
+      const targetMl=rule.highestDoseMl ? rule.highestDoseMl(ctx.weight) : drug.total(ctx.weight,ctx);
+      if (!(Number.isFinite(targetMl) && targetMl>0)) return '—';
+      const stockMl=Math.max(1,Math.ceil(targetMl/(1+rule.ratio)-1e-10));
+      const diluentMl=stockMl*rule.ratio;
+      return `Diluir ${formatPtTrim(stockMl,3)} mL em ${formatPtTrim(diluentMl,3)} mL de ${rule.diluents} e Aplicar ${displayValue} ${route}${rapidAdministration(drug)}`;
+    }
+    return `Aplicar ${displayValue} ${route}${rapidAdministration(drug)}`;
+  }
+
+  // Padroniza exclusivamente o texto exibido nos quadros Observações.
+  // Mantém intactos volumes, cálculos, identificadores e quebras entre linhas.
+  function formatObservationText(value) {
+    return String(value).split(/(<br\s*\/?>)/gi).map((part) => {
+      if (/^<br\s*\/?>$/i.test(part) || !part.trim()) return part;
+      const leading = (part.match(/^\s*/) || [''])[0];
+      const trailing = (part.match(/\s*$/) || [''])[0];
+      let content = part.slice(leading.length, part.length - trailing.length);
+      content = content.replace(/^[a-zà-ÿ]/u, (letter) => letter.toLocaleUpperCase('pt-BR'));
+      if (!/[.!?…]$/u.test(content)) content += '.';
+      return leading + content + trailing;
+    }).join('');
+  }
+
+  function rapidObservations(drug, ctx, originalText, maxLabel) {
+    if (drug.name === 'Amiodarona') return 'pode repetir até 3 doses.';
+    if (drug.name === 'Naloxona / Narcan' || drug.name === 'Flumazenil / Lanexat') return '';
+    if (drug.name === 'Adenosina (ataque)') {
+      const second = RESUSCITATION_DRUGS.find((item) => item.name === 'Adenosina (2ª dose)');
+      const secondVolume = ctx.weight > 0 && second ? second.total(ctx.weight, ctx) : NaN;
+      const secondPrescription = Number.isFinite(secondVolume)
+        ? `2ª dose: Aplicar ${formatPtTrim(secondVolume, secondVolume < 1 ? 3 : 2)} mL EV.` : '2ª dose: Aplicar — mL EV.';
+      return `Infundir em bolus em veia calibrosa ou central.<br>${secondPrescription}`;
+    }
+    const observations=[];
+    if (maxLabel && String(maxLabel).trim() !== '—') observations.push(String(maxLabel).trim());
+    // Distinct clinical route/indication guidance already present in the source.
+    if (typeof originalText === 'string') {
+      if (/^\s*s\/\s*diluir\s*;\s*/i.test(originalText)) {
+        const note=originalText.replace(/^\s*s\/\s*diluir\s*;\s*/i,'').trim();
+        if(note && !/administrar IV lentamente quando usada via venosa/i.test(note)) observations.push(note);
+      }
+    }
+    return observations.join(' ');
+  }
+
+  // Apresentação visível no título; preserva nomes já acompanhados de concentração.
+  function headingWithPresentation(name, presentation) {
+    const title = String(name || '');
+    const details = String(presentation || '').trim();
+    if (!details) return title;
+    const normalized = (value) => String(value).toLowerCase().replace(/\s+/g, '');
+    return normalized(title).includes(normalized(details)) ? title : `${title} (${details})`;
+  }
+
+  function renderDrugCards(ctx) {
     const regularGrid = byId('drugGrid');
     const specialGrid = byId('specialDrugGrid');
     regularGrid.innerHTML = '';
     specialGrid.innerHTML = '';
 
     RESUSCITATION_DRUGS.forEach((drug) => {
+      if (drug.name === 'Adenosina (2ª dose)') return; // 2ª dose exibida no cartão da 1ª; cálculo original preservado.
       const presentation = resolveDrugField(drug.presentation, ctx, drug);
-      const doseLabel = resolveDrugField(drug.doseLabel, ctx, drug);
-      const mlKgLabel = resolveDrugField(drug.mlKgLabel, ctx, drug);
+      const doseLabel = drug.name === 'Adenosina (ataque)'
+        ? `1ª dose: ${resolveDrugField(drug.doseLabel, ctx, drug)}; máx.: 6 mg`
+        : resolveDrugField(drug.doseLabel, ctx, drug);
       const dilution = resolveDrugField(drug.dilution, ctx, drug);
-      const diluent = resolveDrugField(drug.diluent, ctx, drug);
       const maxLabel = resolveDrugField(drug.maxLabel, ctx, drug);
       const total = ctx.weight > 0 ? drug.total(ctx.weight, ctx) : NaN;
-      const customOutputLabel = resolveDrugField(drug.outputLabel, ctx, drug);
-      const outputLabel = customOutputLabel || (drug.unit === 'J'
-        ? 'Energia calculada'
-        : (dilution && dilution !== 's/ diluir' && dilution !== '—'
-          ? 'Volume após diluição'
-          : 'Volume da ampola'));
       const displayValue = ctx.weight > 0 && typeof drug.displayTotal === 'function'
         ? drug.displayTotal(ctx.weight, ctx)
         : (Number.isFinite(total) ? `${formatPtTrim(total, total < 1 ? 3 : 2)} ${drug.unit}` : '—');
+      const prescription = rapidPrescription(drug, ctx, displayValue);
+      const observations = drug.name === 'Glicose' && presentation === 'SG25%'
+        ? '' : rapidObservations(drug, ctx, dilution, maxLabel);
       const propofolAlertMarkup = buildPropofolSafetyAlertMarkup(drug, ctx);
       const specialAlertMarkup = drug.specialAlert
         ? `<div class="item warn-bg" style="grid-column:1/-1"><span class="k">Uso restrito na PCR</span><span class="v">${drug.specialAlert}</span></div>`
@@ -2076,18 +2425,14 @@ function renderDrugCards(ctx) {
       const card = document.createElement('article');
       card.className = 'drug-card';
       card.innerHTML = `
-        <h3>${drug.name}</h3>
-        <div class="drug-total">
-          <span>${outputLabel}</span>
-          <span class="v">${displayValue}</span>
+        <h3>${headingWithPresentation(drug.name === 'Valium / Diazepam (convulsão)' ? 'Valium / Diazepam' : (drug.name === 'Adenosina (ataque)' ? 'Adenosina' : drug.name), presentation)}</h3>
+        <div class="drug-total rapid-prescription">
+          <span>Prescrição</span>
+          <span class="v">${prescription}</span>
         </div>
         <div class="drug-meta">
-          <div class="item"><span class="k">Apresentação</span><span class="v">${presentation}</span></div>
           <div class="item"><span class="k">Dose</span><span class="v">${doseLabel}</span></div>
-          <div class="item"><span class="k">mL/kg</span><span class="v">${mlKgLabel}</span></div>
-          <div class="item"><span class="k">Diluição</span><span class="v">${dilution}</span></div>
-          <div class="item"><span class="k">Diluente</span><span class="v">${diluent}</span></div>
-          <div class="item"><span class="k">Dose máx.</span><span class="v">${maxLabel}</span></div>
+          ${observations ? `<div class="item" style="grid-column:1/-1"><span class="k">Observações</span><span class="v">${formatObservationText(observations)}</span></div>` : ''}
           ${specialAlertMarkup}
           ${propofolAlertMarkup}
         </div>
@@ -2095,8 +2440,6 @@ function renderDrugCards(ctx) {
       (drug.specialSituation ? specialGrid : regularGrid).appendChild(card);
     });
   }
-
-
 
   function getContinuousDoseRangeStatus(item, doseValue) {
     const numericDose = Number(doseValue);
@@ -2164,6 +2507,7 @@ function renderDrugCards(ctx) {
     if (!calc || !selectedScheme || calc.runPure) return '';
 
     const normalizedAccess = normalizeContinuousAccess(selectedAccess);
+    if (normalizedAccess === 'free') return '';
     const accessLabel = normalizedAccess === 'central'
       ? 'central'
       : normalizedAccess === 'free'
@@ -2195,25 +2539,6 @@ function renderDrugCards(ctx) {
       alerts.push(`O volume inicialmente escolhido (${formatPtTrim(selectedScheme.requestedVolumeMl, 0)} mL) gerava concentração final inadequada para o acesso ${accessLabel}. O sistema ajustou para ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL.`);
     }
 
-    if (normalizedAccess === 'free') {
-      const peripheralLimit = getAccessConcentrationLimit(item, 'peripheral');
-      const centralLimit = getAccessConcentrationLimit(item, 'central');
-      const concentration = Number(selectedScheme.concentrationPerMl);
-      const peripheralValue = Number(peripheralLimit && peripheralLimit.value);
-      const centralValue = Number(centralLimit && centralLimit.value);
-      const freeWarnings = [];
-
-      if (Number.isFinite(concentration) && Number.isFinite(peripheralValue) && peripheralValue > 0 && concentration > peripheralValue + 1e-9) {
-        freeWarnings.push(`acima do limite periférico (${peripheralLimit.label || formatContinuousConcentrationLimit(item, 'peripheral')})`);
-      }
-      if (Number.isFinite(concentration) && Number.isFinite(centralValue) && centralValue > 0 && concentration > centralValue + 1e-9) {
-        freeWarnings.push(`acima do limite central (${centralLimit.label || formatContinuousConcentrationLimit(item, 'central')})`);
-      }
-
-      if (freeWarnings.length > 0) {
-        alerts.push(`Concentração Livre selecionada: concentração final após diluição = ${formatPtTrim(concentration, 4)} ${calc.concentrationUnit}, ${freeWarnings.join(' e ')}. Use apenas se essa concentração for intencional e clinicamente aceita.`);
-      }
-    }
 
     if (alerts.length === 0) return '';
 
@@ -2305,7 +2630,7 @@ function renderDrugCards(ctx) {
       } else if (calc.runPure) {
         selectedSchemeMarkup = `
           <div class="item continuous-preparation-box" style="grid-column:1/-1">
-            <span class="k">Preparo puro</span>
+            <span class="k">Prescrição</span>
             <span class="v">${preparationLines([`${formatPtTrim(calc.drugVolumeMlForPeriod, 2)} mL da droga pura`, 'Sem diluição', `Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit}`, `Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 2)} mL/hora`])}<br><span class="muted small">Emulsão lipídica a 10 mg/mL. Para propofol, o volume exibido corresponde a no máximo 12 horas; trocar reservatório e equipo ao completar esse período.</span></span>
           </div>
         `;
@@ -2315,7 +2640,7 @@ function renderDrugCards(ctx) {
           : '';
         selectedSchemeMarkup = `
           <div class="item continuous-preparation-box" style="grid-column:1/-1">
-            <span class="k">Preparo ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL (${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/h)</span>
+            <span class="k">Prescrição</span>
             <span class="v">${preparationLines([`Diluir ${formatPtTrim(calc.drugVolumeMlForPeriod, 2)} mL da droga com ${formatPtTrim(selectedScheme.diluentMl, 2)} mL de ${item.diluent}`, `Volume final: ${formatPtTrim(selectedScheme.totalVolumeMl, 0)} mL`, `Concentração final: ${formatPtTrim(selectedScheme.concentrationPerMl, 4)} ${concentrationUnit}`, `Infundir a ${formatPtTrim(selectedScheme.rateMlPerHour, 1)} mL/hora`])}${autoText}</span>
           </div>
         `;
@@ -2325,10 +2650,8 @@ function renderDrugCards(ctx) {
       card.className = 'info-card';
       card.dataset.continuousKey = key;
       card.innerHTML = `
-        <h3>${item.name}</h3>
-        <div class="info-sub">${extractConcentrationPerAmpoule(item.presentation)}</div>
+        <h3>${headingWithPresentation(item.name, presentationText)}</h3>
         <div class="info-meta">
-          <div class="item"><span class="k">Apresentação</span><span class="v">${presentationText}</span></div>
           <div class="item"><span class="k">Dose usual</span><span class="v">${item.usual}</span></div>
           <div class="continuous-controls">
             <div class="continuous-dose-prep-stack">
@@ -2484,78 +2807,144 @@ function renderDrugCards(ctx) {
     if (!UI_STATE.fixedContinuousConfigs[key]) {
       UI_STATE.fixedContinuousConfigs[key] = {
         dose: item.defaultDose,
-        finalConcentration: item.defaultFinalConcentration
+        finalConcentration: item.defaultFinalConcentration,
+        intervalHours: item.intervalHours,
+        finalDiluent: item.finalDiluent
       };
     }
-    return UI_STATE.fixedContinuousConfigs[key];
+    const config = UI_STATE.fixedContinuousConfigs[key];
+    // O intervalo não é editável: mesmo após recuperar dados salvos, aplicar o padrão do medicamento.
+    config.intervalHours = item.intervalHours;
+    // Aceita a faixa inclusiva de 2,5 a 5 mg/mL; não converte 5 mg/mL para 4,5.
+    // Valores persistidos fora da faixa permanecem inválidos, sem gerar prescrição.
+    if (item.kind === 'vancomycin' && config.finalConcentration == null) {
+      config.finalConcentration = item.defaultFinalConcentration;
+    }
+    return config;
   }
 
-  function computeFixedContinuousPreparation(item, weight, dose, finalConcentration) {
+  function fixedDoseControl(item, key, config) {
+    const custom = config.dose === '' || !item.doseOptions.includes(Number(config.dose));
+    const options = item.doseOptions.map((value) =>
+      `<option value="${value}" ${!custom && Number(config.dose) === value ? 'selected' : ''}>${formatPtTrim(value, 0)} mg/kg/dose</option>`
+    ).join('');
+    const customValue = config.dose === '' ? '' : Number(config.dose);
+    return `
+      <div class="continuous-field">
+        <label for="fixed_dose_${key}">Dose (mg/kg/dose)</label>
+        <select id="fixed_dose_${key}" class="fixed-continuous-dose-select" data-fixed-continuous-key="${key}">
+          ${options}
+          <option value="custom" ${custom ? 'selected' : ''}>Outra dose — personalizar</option>
+        </select>
+        ${custom ? `
+          <label for="fixed_custom_dose_${key}">Dose personalizada (mg/kg/dose)</label>
+          <input id="fixed_custom_dose_${key}" class="fixed-continuous-custom-dose-input" data-fixed-continuous-key="${key}"
+            type="number" inputmode="decimal" min="0.1" max="80" step="0.1" value="${customValue}"
+            placeholder="Informar dose (mg/kg/dose)">
+        ` : ''}
+      </div>`;
+  }
+
+  function computeFixedContinuousPreparation(item, weight, dose, finalConcentration, intervalHours = item.intervalHours) {
     const numericWeight = Number(weight);
     const numericDose = Number(dose);
     const numericFinalConcentration = Number(finalConcentration);
+    const numericIntervalHours = Number(intervalHours);
     const vialMg = Number(item.vialMg);
     const reconstitutionMl = Number(item.reconstitutionMl);
     const reconstitutedConcentrationMgPerMl = Number(item.reconstitutedConcentrationMgPerMl);
-    const infusionMinutes = Number(item.infusionMinutes);
+    const nominalInfusionMinutes = Number(item.infusionMinutes);
     const maxInfusionRateMgPerMin = Number(item.maxInfusionRateMgPerMin);
 
-    if (!(numericWeight > 0) || !(numericDose > 0) || !(numericFinalConcentration > 0) ||
-        !(vialMg > 0) || !(reconstitutionMl > 0) || !(reconstitutedConcentrationMgPerMl > 0) ||
-        !(infusionMinutes > 0)) {
+    // Vancomicina: faixa final inclusiva de 2,5 a 5 mg/mL.
+    // Não gerar prescrição com valor inferior a 2,5 ou superior a 5 mg/mL.
+    if (item.kind === 'vancomycin' &&
+        (!Number.isFinite(numericFinalConcentration) ||
+         numericFinalConcentration < 2.5 || numericFinalConcentration > 5)) {
+      return null;
+    }
+
+    if (!(numericWeight > 0) || !(numericDose >= 0.1 && numericDose <= 80) ||
+        !(numericFinalConcentration > 0) || !(numericIntervalHours >= 1 && numericIntervalHours <= 168) ||
+        !Number.isInteger(numericIntervalHours) || !(vialMg > 0) || !(reconstitutionMl > 0) ||
+        !(reconstitutedConcentrationMgPerMl > 0) || !(nominalInfusionMinutes > 0)) {
       return null;
     }
 
     const doseMg = numericDose * numericWeight;
     const withdrawalMl = doseMg / reconstitutedConcentrationMgPerMl;
     const finalVolumeMl = doseMg / numericFinalConcentration;
-    const finalDiluentMl = Math.max(0, finalVolumeMl - withdrawalMl);
-    const infusionHours = infusionMinutes / 60;
-    const rateMlPerHour = finalVolumeMl / infusionHours;
-    const infusionRateMgPerMin = doseMg / infusionMinutes;
-    const vialsNeeded = Math.max(1, Math.ceil(doseMg / vialMg));
+    const finalDiluentMl = finalVolumeMl - withdrawalMl;
+    if (!(finalDiluentMl >= 0)) return null;
     const minimumInfusionMinutes = Number.isFinite(maxInfusionRateMgPerMin) && maxInfusionRateMgPerMin > 0
-      ? Math.max(infusionMinutes, Math.ceil(doseMg / maxInfusionRateMgPerMin))
-      : infusionMinutes;
-
+      ? Math.max(nominalInfusionMinutes, Math.ceil(doseMg / maxInfusionRateMgPerMin))
+      : nominalInfusionMinutes;
+    const infusionMinutes = minimumInfusionMinutes;
+    const rateMlPerHour = finalVolumeMl / (infusionMinutes / 60);
+    const dosesPerDay = 24 / numericIntervalHours;
     return {
-      doseMg,
-      withdrawalMl,
-      finalVolumeMl,
-      finalDiluentMl,
+      doseMg, withdrawalMl, finalVolumeMl, finalDiluentMl,
       finalConcentrationMgPerMl: numericFinalConcentration,
-      infusionMinutes,
-      rateMlPerHour,
-      infusionRateMgPerMin,
-      vialsNeeded,
+      infusionMinutes, nominalInfusionMinutes, rateMlPerHour,
+      infusionRateMgPerMin: doseMg / infusionMinutes,
+      vialsNeeded: Math.max(1, Math.ceil(doseMg / vialMg)),
       minimumInfusionMinutes,
-      exceedsRateLimit: minimumInfusionMinutes > infusionMinutes
+      exceedsRateLimit: infusionMinutes > nominalInfusionMinutes,
+      intervalHours: numericIntervalHours,
+      dosesPerDay,
+      dailyFinalVolumeMl: finalVolumeMl * dosesPerDay
     };
   }
 
-
-  function computeMeropenemRegimen(item, weight) {
+  function computeMeropenemRegimen(item, weight, selectedDose = item?.defaultDose, selectedConcentration = item?.defaultFinalConcentration, selectedIntervalHours = item?.intervalHours) {
     const numericWeight = Number(weight);
-    const numericDose = Number(item && item.defaultDose);
-    const intervalHours = Number(item && item.intervalHours);
-    const infusionMinutes = Number(item && item.infusionMinutes);
+    const numericDose = Number(selectedDose);
+    const finalConcentrationMgPerMl = Number(selectedConcentration);
+    const vialMg = Number(item?.vialMg);
+    const reconstitutionMl = Number(item?.reconstitutionMl);
+    const stockConcentrationMgPerMl = Number(item?.reconstitutedConcentrationMgPerMl);
+    const intervalHours = Number(selectedIntervalHours);
+    const infusionMinutes = Number(item?.infusionMinutes);
 
-    if (!(numericWeight > 0) || !(numericDose > 0) || !(intervalHours > 0) || !(infusionMinutes > 0)) {
+    if (!(numericWeight > 0) || !(numericDose >= 0.1 && numericDose <= 80) ||
+        !item?.finalConcentrationOptions?.includes(finalConcentrationMgPerMl) ||
+        !(vialMg > 0) || !(reconstitutionMl > 0) || !(stockConcentrationMgPerMl > 0) ||
+        !(intervalHours >= 1 && intervalHours <= 168) || !Number.isInteger(intervalHours) || !(infusionMinutes > 0) ||
+        finalConcentrationMgPerMl >= stockConcentrationMgPerMl) {
       return null;
     }
 
-    const doseMg = numericDose * numericWeight;
+    // Limites por indicação: 20 mg/kg até 1 g e 40 mg/kg até 2 g, por dose.
+    // Para >50 kg, o cálculo não ultrapassa o máximo da dose selecionada.
+    const maximumDoseMg = numericDose > 20 ? 2000 : 1000;
+    const uncappedDoseMg = numericWeight * numericDose;
+    const doseMg = Math.min(uncappedDoseMg, maximumDoseMg);
+    const withdrawalMl = doseMg / stockConcentrationMgPerMl;
+    const finalVolumeMl = doseMg / finalConcentrationMgPerMl;
+    const finalDiluentMl = finalVolumeMl - withdrawalMl;
+    const infusionHours = infusionMinutes / 60;
+    const rateMlPerHour = finalVolumeMl / infusionHours;
     const dosesPerDay = 24 / intervalHours;
-    const dailyDoseMg = doseMg * dosesPerDay;
 
     return {
       doseMg,
       doseMgPerKg: numericDose,
+      uncappedDoseMg,
+      capped: uncappedDoseMg > maximumDoseMg,
+      maximumDoseMg,
+      stockConcentrationMgPerMl,
+      finalConcentrationMgPerMl,
+      withdrawalMl,
+      finalDiluentMl,
+      finalVolumeMl,
+      rateMlPerHour,
+      vialsNeeded: Math.max(1, Math.ceil(doseMg / vialMg)),
       intervalHours,
       infusionMinutes,
-      infusionHours: infusionMinutes / 60,
+      infusionHours,
       dosesPerDay,
-      dailyDoseMg
+      dailyDoseMg: doseMg * dosesPerDay,
+      dailyFinalVolumeMl: finalVolumeMl * dosesPerDay
     };
   }
 
@@ -2566,124 +2955,143 @@ function renderDrugCards(ctx) {
 
     FIXED_CONTINUOUS_MEDS.forEach((item) => {
       const key = continuousKey(item);
+      const config = getFixedContinuousConfig(item);
       const card = document.createElement('article');
       card.className = 'info-card';
       card.dataset.fixedContinuousKey = key;
+      const neonatalRegimen = Number.isFinite(ctx.ageDays) && ctx.ageDays < 90;
+      const doseControl = fixedDoseControl(item, key, config);
+      const concentrationOptions = item.finalConcentrationOptions.map((value) =>
+        `<option value="${value}" ${Number(config.finalConcentration) === Number(value) ? 'selected' : ''}>${formatPtTrim(value, 1)} mg/mL</option>`
+      ).join('');
+      const concentrationValue = config.finalConcentration === '' || !Number.isFinite(Number(config.finalConcentration))
+        ? '' : Number(config.finalConcentration);
+      const concentrationValid = concentrationValue !== '' && concentrationValue >= 2.5 && concentrationValue <= 5;
+      const concentrationControl = item.kind === 'vancomycin' ? `
+        <div class="continuous-field">
+          <label for="fixed_concentration_${key}">Concentração final após rediluição (2,5 a 5 mg/mL)</label>
+          <input id="fixed_concentration_${key}" class="fixed-continuous-concentration-input"
+            data-fixed-continuous-key="${key}" type="number" inputmode="decimal"
+            min="2.5" max="5" step="any" value="${concentrationValue}"
+            aria-invalid="${!concentrationValid}">
+        </div>` : `
+        <div class="continuous-field">
+          <label for="fixed_concentration_${key}">Concentração final após rediluição</label>
+          <select id="fixed_concentration_${key}" class="fixed-continuous-concentration-select" data-fixed-continuous-key="${key}">
+            ${concentrationOptions}
+          </select>
+        </div>`;
+      const isCustomDose = config.dose === '' || !item.doseOptions.includes(Number(config.dose));
 
       if (item.kind === 'meropenem') {
-        const calc = computeMeropenemRegimen(item, ctx.weight);
-        const regimenMarkup = calc ? `
+        const calc = computeMeropenemRegimen(item, ctx.weight, config.dose, config.finalConcentration, item.intervalHours);
+        const preparationMarkup = calc ? `
           <div class="item continuous-preparation-box" style="grid-column:1/-1">
-            <span class="k">Esquema calculado</span>
-            <span class="v">
-              Administrar ${formatPtTrim(calc.doseMg, 1)} mg IV por dose (${formatPtTrim(calc.doseMgPerKg, 0)} mg/kg/dose), a cada ${formatPtTrim(calc.intervalHours, 0)} horas.<br>
-              Infundir cada dose em ${formatPtTrim(calc.infusionMinutes, 0)} minutos (${formatPtTrim(calc.infusionHours, 0)} horas).<br>
-              Total diário: ${formatPtTrim(calc.dailyDoseMg, 1)} mg/dia em ${formatPtTrim(calc.dosesPerDay, 0)} doses.
-            </span>
+            <span class="k">Prescrição</span>
+            <span class="v">Meropenem 1gr - Diluir ${calc.vialsNeeded} ${calc.vialsNeeded === 1 ? 'frasco' : 'frascos'} com <strong>20 mL</strong> de AD${calc.vialsNeeded > 1 ? ' cada' : ''} e Fazer <strong>${formatPtTrim(calc.withdrawalMl, 2)} mL</strong> rediluidos em <strong>${formatPtTrim(calc.finalDiluentMl, 2)} mL</strong> de S.F.0,9%${neonatalRegimen ? '' : ` e Infundir em <strong>${formatPtTrim(calc.infusionMinutes, 0)} minutos</strong> a cada <strong>${item.intervalHours} horas</strong>`}.</span>
           </div>
-          <div class="item"><span class="k">Dose calculada</span><span class="v">${formatPtTrim(calc.doseMg, 1)} mg/dose</span></div>
-          <div class="item"><span class="k">Intervalo</span><span class="v">8/8 horas</span></div>
-          <div class="item"><span class="k">Tempo de infusão</span><span class="v">3 horas</span></div>
-          <div class="item"><span class="k">Total diário</span><span class="v">${formatPtTrim(calc.dailyDoseMg, 1)} mg/dia</span></div>
-          <div class="item warn-bg" style="grid-column:1/-1">
-            <span class="k">Ajuste clínico</span>
-            <span class="v">A dose e o intervalo devem ser revistos conforme função renal e protocolo institucional.</span>
-          </div>
+          ${neonatalRegimen ? `
+            <div class="item warn-bg" style="grid-column:1/-1">
+              <span class="k">Esquema neonatal</span>
+              <span class="v">Para menores de 3 meses, dose e intervalo dependem da idade gestacional, pós-natal e função renal. Não utilizar automaticamente este esquema; verificar protocolo neonatal.</span>
+            </div>
+          ` : ''}
+          ${calc.capped ? `
+            <div class="item warn-bg" style="grid-column:1/-1">
+              <span class="k">Dose limitada</span>
+              <span class="v">Aplicado o limite por dose de ${formatPtTrim(calc.maximumDoseMg, 0)} mg; reavaliar conforme indicação e peso.</span>
+            </div>
+          ` : ''}
+          ${isCustomDose ? `
+            <div class="item warn-bg" style="grid-column:1/-1">
+              <span class="k">Dose personalizada</span>
+              <span class="v">Confira a indicação e o limite máximo correspondente à dose personalizada; a alteração é manual, não um ajuste renal calculado.</span>
+            </div>
+          ` : ''}
         ` : `
           <div class="item continuous-preparation-box preparation-infeasible" style="grid-column:1/-1">
-            <span class="k">Esquema</span>
-            <span class="v">Informe um peso válido para calcular a dose de meropenem.</span>
+            <span class="k">Prescrição</span>
+            <span class="v">Informe peso e dose válidos para calcular os volumes do preparo e da BIC.</span>
           </div>
         `;
-
+        card.classList.add('fixed-meropenem-card');
         card.innerHTML = `
-          <h3>${item.name}</h3>
-          <div class="info-sub">${item.presentation}</div>
+          <h3>${item.name} (${item.vialMg === 500 ? '500 mg' : '1 g'})</h3>
           <div class="info-meta">
-            <div class="item"><span class="k">Dose</span><span class="v">20 mg/kg/dose IV</span></div>
-            <div class="item"><span class="k">Prescrição</span><span class="v">8/8 horas; infusão em 3 horas</span></div>
             <div class="continuous-controls">
               <div class="continuous-dose-prep-stack">
-                <div class="continuous-prep-below-dose">
-                  ${regimenMarkup}
-                </div>
+                ${doseControl}
+                ${concentrationControl}
+                <div class="continuous-prep-below-dose">${preparationMarkup}</div>
               </div>
             </div>
-          </div>
-        `;
+          </div>`;
         grid.appendChild(card);
         return;
       }
 
-      const config = getFixedContinuousConfig(item);
-      const calc = computeFixedContinuousPreparation(item, ctx.weight, config.dose, config.finalConcentration);
-      const doseOptions = item.doseOptions.map((value) =>
-        `<option value="${value}" ${Number(config.dose) === Number(value) ? 'selected' : ''}>${formatPtTrim(value, 1)} mg/kg/dose</option>`
+      const calc = computeFixedContinuousPreparation(item, ctx.weight, config.dose, config.finalConcentration, item.intervalHours);
+      const diluentOptions = item.finalDiluentOptions.map((value) =>
+        `<option value="${value}" ${config.finalDiluent === value ? 'selected' : ''}>${value}</option>`
       ).join('');
-      const concentrationOptions = item.finalConcentrationOptions.map((value) =>
-        `<option value="${value}" ${Number(config.finalConcentration) === Number(value) ? 'selected' : ''}>${formatPtTrim(value, 1)} mg/mL</option>`
-      ).join('');
-
+      const diluentControl = `
+        <div class="continuous-field">
+          <label for="fixed_diluent_${key}">Diluente após reconstituição</label>
+          <select id="fixed_diluent_${key}" class="fixed-continuous-diluent-select" data-fixed-continuous-key="${key}">
+            ${diluentOptions}
+          </select>
+        </div>`;
       const preparationMarkup = calc ? `
         <div class="item continuous-preparation-box" style="grid-column:1/-1">
-          <span class="k">Preparo</span>
-          <span class="v">
-            Reconstituir ${calc.vialsNeeded === 1 ? '1 frasco-ampola' : `${calc.vialsNeeded} frascos-ampola`} de 500 mg, cada um com 10 mL de AD = 50 mg/mL.<br>
-            Diluir ${formatPtTrim(calc.withdrawalMl, 2)} mL da solução reconstituída (${formatPtTrim(calc.doseMg, 1)} mg) com ${formatPtTrim(calc.finalDiluentMl, 2)} mL de ${item.finalDiluent} = ${formatPtTrim(calc.finalVolumeMl, 2)} mL (${formatPtTrim(calc.finalConcentrationMgPerMl, 1)} mg/mL).<br>
-            Infundir em ${formatPtTrim(calc.infusionMinutes, 0)} minutos, a ${formatPtTrim(calc.rateMlPerHour, 2)} mL/h.
-          </span>
+          <span class="k">Prescrição</span>
+          <span class="v">Vancomicina 500mg - Diluir ${calc.vialsNeeded} ${calc.vialsNeeded === 1 ? 'frasco' : 'frascos'} com <strong>10 mL</strong> de AD${calc.vialsNeeded > 1 ? ' cada' : ''} e Fazer <strong>${formatPtTrim(calc.withdrawalMl, 2)} mL</strong> rediluidos em <strong>${formatPtTrim(calc.finalDiluentMl, 2)} mL</strong> de ${config.finalDiluent === 'SG 5%' ? 'S.G.5%' : config.finalDiluent === 'SF 0,9%' ? 'S.F.0,9%' : config.finalDiluent}${neonatalRegimen ? '' : ` e Infundir em <strong>${formatPtTrim(calc.infusionMinutes, 0)} minutos</strong> a cada <strong>${item.intervalHours} horas</strong>`}.</span>
         </div>
-        <div class="item"><span class="k">Dose calculada</span><span class="v">${formatPtTrim(calc.doseMg, 1)} mg/dose</span></div>
-        <div class="item"><span class="k">Volume da solução 50 mg/mL</span><span class="v">${formatPtTrim(calc.withdrawalMl, 2)} mL</span></div>
-        <div class="item"><span class="k">Volume final</span><span class="v">${formatPtTrim(calc.finalVolumeMl, 2)} mL</span></div>
-        <div class="item"><span class="k">Taxa de administração</span><span class="v">${formatPtTrim(calc.infusionRateMgPerMin, 2)} mg/min</span></div>
-        ${calc.exceedsRateLimit ? `
+        ${neonatalRegimen ? `
           <div class="item warn-bg" style="grid-column:1/-1">
-            <span class="k">Atenção à velocidade</span>
-            <span class="v">Em 60 minutos, a taxa ultrapassa 10 mg/min. Prolongar a infusão para pelo menos ${formatPtTrim(calc.minimumInfusionMinutes, 0)} minutos.</span>
+            <span class="k">Esquema neonatal</span>
+            <span class="v">Em menores de 3 meses, não utilizar automaticamente a prescrição de 6/6 horas; individualizar conforme idade gestacional, pós-natal, função renal e monitorização.</span>
           </div>
         ` : ''}
-        <div class="item warn-bg" style="grid-column:1/-1">
-          <span class="k">Ajuste clínico</span>
-          <span class="v">A dose e o intervalo devem ser revistos conforme função renal e protocolo institucional.</span>
-        </div>
+        ${calc.exceedsRateLimit ? `
+          <div class="item warn-bg" style="grid-column:1/-1">
+            <span class="k">Infusão prolongada pelo limite de velocidade</span>
+            <span class="v">Uma hora excederia o limite de 10 mg/min. Tempo mínimo calculado: ${formatPtTrim(calc.infusionMinutes, 0)} minutos; velocidade e prescrição em mL/h já ajustadas.</span>
+          </div>
+        ` : ''}
+        ${isCustomDose ? `
+          <div class="item warn-bg" style="grid-column:1/-1">
+            <span class="k">Dose personalizada</span>
+            <span class="v">A dose está fora das opções predefinidas. Confirmar indicação e esquema; a alteração é manual e não representa ajuste renal automático.</span>
+          </div>
+        ` : ''}
+        ${calc.doseMg * calc.dosesPerDay > 3600 ? `
+          <div class="item warn-bg" style="grid-column:1/-1">
+            <span class="k">Revisar dose diária</span>
+            <span class="v">O esquema ultrapassa o máximo empírico usual de 3.600 mg/dia em crianças. Revisar indicação, dose diária, função renal e monitorização antes da prescrição.</span>
+          </div>
+        ` : ''}
       ` : `
         <div class="item continuous-preparation-box preparation-infeasible" style="grid-column:1/-1">
-          <span class="k">Preparo</span>
-          <span class="v">Informe um peso válido para calcular a dose e o preparo.</span>
+          <span class="k">Prescrição</span>
+          <span class="v">Informe peso, dose e concentração final válida (2,5 a 5 mg/mL) para calcular os volumes do preparo e da BIC.</span>
         </div>
       `;
-
       card.innerHTML = `
-        <h3>${item.name}</h3>
-        <div class="info-sub">${item.presentation}</div>
-        <div class="info-meta">
-          <div class="item"><span class="k">Apresentação</span><span class="v">Frasco-ampola 500 mg</span></div>
-          <div class="item"><span class="k">Dose</span><span class="v">${item.usual}</span></div>
+        <h3>${item.name} (${item.vialMg === 500 ? '500 mg' : '1 g'})</h3>
+          <div class="info-meta">
           <div class="continuous-controls">
             <div class="continuous-dose-prep-stack">
-              <div class="continuous-field">
-                <label for="fixed_dose_${key}">Dose</label>
-                <select id="fixed_dose_${key}" class="fixed-continuous-dose-select" data-fixed-continuous-key="${key}">
-                  ${doseOptions}
-                </select>
-              </div>
-              <div class="continuous-field">
-                <label for="fixed_concentration_${key}">Concentração final após rediluição</label>
-                <select id="fixed_concentration_${key}" class="fixed-continuous-concentration-select" data-fixed-continuous-key="${key}">
-                  ${concentrationOptions}
-                </select>
-              </div>
-              <div class="continuous-prep-below-dose">
-                ${preparationMarkup}
-              </div>
+              ${doseControl}
+              ${concentrationControl}
+              ${diluentControl}
+              <div class="continuous-prep-below-dose">${preparationMarkup}</div>
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
       grid.appendChild(card);
     });
 
+    renderAdditionalPrescribedCards(grid, ctx);
     bindFixedContinuousControlEvents();
     if (!UI_STATE.batchRender) {
       refreshFeedback(grid, feedback);
@@ -2691,37 +3099,185 @@ function renderDrugCards(ctx) {
     }
   }
 
-  function bindFixedContinuousControlEvents() {
-    const grid = byId('fixedContinuousCards');
-    if (!grid) return;
+  function renderAdditionalPrescribedCards(grid, ctx) {
+    const ageKnown = Number.isFinite(ctx.ageDays);
+    const weightValid = Number.isFinite(ctx.weight) && ctx.weight > 0;
 
-    grid.querySelectorAll('.fixed-continuous-dose-select').forEach((select) => {
-      select.addEventListener('change', () => {
-        const key = select.dataset.fixedContinuousKey;
-        const item = FIXED_CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
-        if (!item) return;
-        const config = getFixedContinuousConfig(item);
-        const value = Number(select.value);
-        if (item.doseOptions.includes(value)) config.dose = value;
-        renderFixedContinuousCards(UI_STATE.lastContext || emptyContext(), { manualId: select.id, announceKey: key });
-      });
+    ADDITIONAL_PRESCRIBED_MEDS.forEach((med) => {
+      const stateKey = `additional:${med.key}`;
+      if (!UI_STATE.fixedContinuousConfigs[stateKey] ||
+          typeof UI_STATE.fixedContinuousConfigs[stateKey] !== 'object') {
+        UI_STATE.fixedContinuousConfigs[stateKey] = {route:'EV', dose:med.defaultDose};
+      }
+      const config = UI_STATE.fixedContinuousConfigs[stateKey];
+      if (!['EV','IM'].includes(config.route)) config.route='EV';
+      if (!med.doseOptions.includes(Number(config.dose))) config.dose=med.defaultDose;
+      const dosePerKg = Number(config.dose);
+      const route = config.route;
+      let prescription='Informe idade e peso para calcular.';
+      let observation='';
+      let allowed = ageKnown && weightValid;
+
+      if (allowed && med.key === 'dipirona' &&
+          (ctx.ageDays < 90 || ctx.weight < 5)) {
+        allowed=false;
+        prescription='Não calcular: idade inferior a 3 meses ou peso inferior a 5 kg.';
+      }
+      if (allowed && med.key === 'dipirona' && route === 'EV' &&
+          (ctx.ageDays < 365 || ctx.weight < 9)) {
+        allowed=false;
+        prescription='Via EV não indicada nesta idade/peso. Selecionar IM somente quando apropriado.';
+      }
+      if (allowed && med.key === 'ondansetrona' && ctx.ageDays < 30) {
+        allowed=false;
+        prescription='Não calcular: idade inferior a 1 mês para uso pós-operatório.';
+      }
+      if (allowed && med.key === 'ondansetrona' && route === 'IM' && ctx.ageYears <= 12) {
+        allowed=false;
+        prescription='Via IM pediátrica: esquema automático não estabelecido na bula consultada.';
+      }
+      if (allowed && med.key === 'ceftriaxona' && ctx.ageDays <= 28) {
+        allowed=false;
+        prescription='Esquema neonatal: verificar contraindicações antes de prescrever.';
+      }
+      if (allowed) {
+        const adultOndansetron = med.key === 'ondansetrona' && ctx.ageYears > 12;
+        const doseMg = adultOndansetron ? 4 : Math.min(ctx.weight*dosePerKg,med.maxDoseMg);
+        const mL = (num,places=2)=>formatPtTrim(num,places);
+        if (med.key === 'dipirona') {
+          prescription=`Aplicar ${mL(doseMg/500,3)} mL ${route}${route==='EV'?' lentamente':''}, ${med.interval}.`;
+          observation=route==='EV'?'Velocidade máxima EV: 1 mL/min; monitorar hipotensão.':'Aplicação IM profunda.';
+        } else if (med.key === 'ondansetrona') {
+          prescription=`Aplicar ${mL(doseMg/2,3)} mL ${route}${route==='EV'?' lentamente (2 a 5 minutos)':''}, ${med.interval}.`;
+          observation='Referência de dose pediátrica: prevenção/tratamento de náuseas e vômitos pós-operatórios.';
+        } else if (med.key === 'ceftriaxona') {
+          // O pó aumenta o volume final: usar a concentração real de reconstituição
+          // conforme apresentação de 1 g com AD 10 mL EV → ~10,8 mL; IM com
+          // lidocaína a 1% 3,5 mL → ~4,2 mL, sem intercâmbio entre vias.
+          const vials = Math.max(1,Math.ceil(doseMg/1000));
+          const vialLabel=`${vials} ${vials===1?'frasco':'frascos'} de 1 g`;
+          if (route === 'IM') {
+            const withdrawalMl = doseMg*4.2/1000;
+            prescription=`Diluir ${vialLabel} com 3,5 mL de lidocaína a 1%${vials>1?' cada':''} e Aplicar ${mL(withdrawalMl,3)} mL IM, ${med.interval}.`;
+            observation='Somente IM; a solução preparada com lidocaína nunca deve ser administrada EV. Máximo de 1 g por local IM.';
+          } else {
+            const withdrawalMl = doseMg*10.8/1000;
+            const finalVolume = doseMg/20;
+            const diluentMl = finalVolume-withdrawalMl;
+            prescription=`Diluir ${vialLabel} com 10 mL de AD${vials>1?' cada':''} e Fazer ${mL(withdrawalMl,3)} mL rediluidos em ${mL(diluentMl,3)} mL de S.F.0,9% e Infundir ${mL(finalVolume,3)} mL EV em 30 minutos, ${med.interval}.`;
+            observation='Não utilizar diluentes com cálcio. A concentração de reconstituição depende da formulação.';
+          }
+        }
+      }
+
+      const card=document.createElement('article');
+      card.className='info-card';
+      card.dataset.additionalPrescribedKey=med.key;
+      card.innerHTML=`
+        <h3>${headingWithPresentation(med.name, med.presentation)}</h3>
+        <div class="info-meta">
+          <div class="item"><span class="k">Dose</span><span class="v">${med.key==='ondansetrona'&&ctx.ageYears>12?'4 mg (adolescentes >12 anos)':`${mLDisplay(dosePerKg)} mg/kg/dose`}</span></div>
+          <div class="continuous-controls">
+            <div class="continuous-field">
+              <label for="additional_route_${med.key}">Via</label>
+              <select id="additional_route_${med.key}" class="additional-prescribed-route" data-additional-key="${med.key}">
+                <option value="EV" ${route==='EV'?'selected':''}>EV</option>
+                <option value="IM" ${route==='IM'?'selected':''}>IM</option>
+              </select>
+            </div>
+            ${med.doseOptions.length>1?`<div class="continuous-field">
+              <label for="additional_dose_${med.key}">Dose (mg/kg/dose)</label>
+              <select id="additional_dose_${med.key}" class="additional-prescribed-dose" data-additional-key="${med.key}">
+                ${med.doseOptions.map(v=>`<option value="${v}" ${v===dosePerKg?'selected':''}>${mLDisplay(v)} mg/kg/dose</option>`).join('')}
+              </select>
+            </div>`:''}
+          </div>
+          <div class="item continuous-preparation-box${!allowed?' preparation-infeasible':''}" style="grid-column:1/-1">
+            <span class="k">Prescrição</span><span class="v">${prescription}</span>
+          </div>
+          ${observation?`<div class="item" style="grid-column:1/-1"><span class="k">Observações</span><span class="v">${formatObservationText(observation)}</span></div>`:''}
+        </div>`;
+      grid.appendChild(card);
     });
-
-    grid.querySelectorAll('.fixed-continuous-concentration-select').forEach((select) => {
-      select.addEventListener('change', () => {
-        const key = select.dataset.fixedContinuousKey;
-        const item = FIXED_CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
-        if (!item) return;
-        const config = getFixedContinuousConfig(item);
-        const value = Number(select.value);
-        if (item.finalConcentrationOptions.includes(value)) config.finalConcentration = value;
-        renderFixedContinuousCards(UI_STATE.lastContext || emptyContext(), { manualId: select.id, announceKey: key });
+    function mLDisplay(value) {return formatPtTrim(value,2);}
+    grid.querySelectorAll('.additional-prescribed-route, .additional-prescribed-dose').forEach((select)=>{
+      select.addEventListener('change',()=>{
+        const med=ADDITIONAL_PRESCRIBED_MEDS.find(m=>m.key===select.dataset.additionalKey);
+        if (!med) return;
+        const key=`additional:${med.key}`;
+        const cfg=UI_STATE.fixedContinuousConfigs[key];
+        if (select.classList.contains('additional-prescribed-route')) cfg.route=select.value;
+        else if (med.doseOptions.includes(Number(select.value))) cfg.dose=Number(select.value);
+        renderFixedContinuousCards(UI_STATE.lastContext || emptyContext());
       });
     });
   }
 
-
-
+  function bindFixedContinuousControlEvents() {
+    const grid = byId('fixedContinuousCards');
+    if (!grid) return;
+    const findConfig = (key) => {
+      const item = FIXED_CONTINUOUS_MEDS.find((med) => continuousKey(med) === key);
+      return item ? { item, config: getFixedContinuousConfig(item) } : null;
+    };
+    const rerender = (key, manualId) => renderFixedContinuousCards(
+      UI_STATE.lastContext || emptyContext(), { manualId, announceKey: key }
+    );
+    grid.querySelectorAll('.fixed-continuous-dose-select').forEach((select) => {
+      select.addEventListener('change', () => {
+        const key = select.dataset.fixedContinuousKey;
+        const found = findConfig(key);
+        if (!found) return;
+        if (select.value === 'custom') {
+          found.config.dose = '';
+          rerender(key, `fixed_custom_dose_${key}`);
+        } else {
+          const value = Number(select.value);
+          if (found.item.doseOptions.includes(value)) found.config.dose = value;
+          rerender(key, select.id);
+        }
+      });
+    });
+    grid.querySelectorAll('.fixed-continuous-custom-dose-input').forEach((input) => {
+      input.addEventListener('change', () => {
+        const key = input.dataset.fixedContinuousKey;
+        const found = findConfig(key);
+        if (!found) return;
+        const value = input.value.trim() ? Number(input.value) : NaN;
+        found.config.dose = Number.isFinite(value) && value >= 0.1 && value <= 80 ? value : '';
+        rerender(key, input.id);
+      });
+    });
+    grid.querySelectorAll('.fixed-continuous-concentration-select').forEach((select) => {
+      select.addEventListener('change', () => {
+        const key = select.dataset.fixedContinuousKey;
+        const found = findConfig(key);
+        if (!found) return;
+        const value = Number(select.value);
+        if (found.item.finalConcentrationOptions.includes(value)) found.config.finalConcentration = value;
+        rerender(key, select.id);
+      });
+    });
+    grid.querySelectorAll('.fixed-continuous-concentration-input').forEach((input) => {
+      input.addEventListener('change', () => {
+        const key = input.dataset.fixedContinuousKey;
+        const found = findConfig(key);
+        if (!found || found.item.kind !== 'vancomycin') return;
+        const value = input.value.trim() ? Number(input.value) : NaN;
+        found.config.finalConcentration = Number.isFinite(value) ? value : '';
+        rerender(key, input.id);
+      });
+    });
+    grid.querySelectorAll('.fixed-continuous-diluent-select').forEach((select) => {
+      select.addEventListener('change', () => {
+        const key = select.dataset.fixedContinuousKey;
+        const found = findConfig(key);
+        if (!found || !found.item.finalDiluentOptions) return;
+        if (found.item.finalDiluentOptions.includes(select.value)) found.config.finalDiluent = select.value;
+        rerender(key, select.id);
+      });
+    });
+  }
 
   const NEONATAL_HOLLIDAY_SEGAR_ALERT = 'A fórmula de Holliday-Segar (100-50-20) é <strong>absolutamente contraindicada</strong> para a fase de transição neonatal (primeiros 28 dias).';
 
@@ -2771,7 +3327,7 @@ function renderDrugCards(ctx) {
     box.style.display = 'block';
     const input = fieldId ? byId(fieldId) : null;
     if (input) {
-      input.closest('.field').appendChild(box);
+      byId('patientCard').insertBefore(box, byId('patientCard').querySelector('.paraped-bottom-actions'));
       input.setAttribute('aria-invalid', 'true');
       input.setAttribute('aria-describedby', 'alertBox');
       if (restoreFocus) requestFieldFocus(fieldId);
@@ -3060,7 +3616,7 @@ function renderDrugCards(ctx) {
       byId(id).setAttribute('enterkeyhint', index === PATIENT_FIELDS.length - 1 ? 'done' : 'next');
     });
     document.addEventListener('focus', (event) => {
-      if (isEditable(event.target)) prepareEntry(event.target);
+      if (isEditable(event.target)) { prepareEntry(event.target); patientScroll.align(event.target); }
     }, true);
     document.addEventListener('beforeinput', (event) => {
       if (isEditable(event.target) && event.inputType?.startsWith('insert')) selectForFirstEdit(event.target);
@@ -3129,7 +3685,7 @@ function renderDrugCards(ctx) {
       cancelPendingFocus();
       section.open = false;
       summary.focus({ preventScroll: true });
-      summary.scrollIntoView(scrollOptions());
+      patientScroll.align(summary);
     });
   }
 
@@ -3201,10 +3757,10 @@ function renderDrugCards(ctx) {
     assert(resolveDrugField(glicose.presentation, neonate28, glicose) === 'SG10%', 'Glicose em 28 dias completos usa SG10%');
     assert(resolveDrugField(glicose.presentation, child, glicose) === 'SG25%', 'Glicose pediátrica usa SG25%');
 
-    const adrenaline = RESUSCITATION_DRUGS.find((item) => item.name === 'Adrenalina IV/IO');
+    const adrenaline = RESUSCITATION_DRUGS.find((item) => item.name === 'Adrenalina (1mg/mL) IV');
     assert(Math.abs(adrenaline.total(10) - 1) < 1e-9, 'Dose de adrenalina IV correta para 10 kg');
-    assert(RESUSCITATION_DRUGS[0].name === 'Adrenalina IV/IO', 'Adrenalina IV/IO aparece antes da alternativa endotraqueal');
-    assert(RESUSCITATION_DRUGS[1].name.includes('alternativa temporária'), 'Adrenalina endotraqueal é rotulada como alternativa temporária');
+    assert(RESUSCITATION_DRUGS[0].name === 'Adrenalina (1mg/mL) IV', 'Adrenalina IV aparece antes da endotraqueal');
+    assert(RESUSCITATION_DRUGS[1].name === 'Adrenalina (1mg/mL) Endotraqueal', 'Título da Adrenalina endotraqueal correto');
     const calcium = RESUSCITATION_DRUGS.find((item) => item.name === 'Gluconato de cálcio 10%');
     assert(calcium.specialSituation === true && calcium.specialAlert.includes('Não administrar rotineiramente'), 'Cálcio separado como situação especial com alerta');
 
@@ -3233,7 +3789,7 @@ function renderDrugCards(ctx) {
     const ctxAbove40 = { weight: 45, height: 150, ageDays: 12 * 365, ageYears: 12, ageMonths: 144, ageText: '12a' };
     const midazolamRapid = RESUSCITATION_DRUGS.find((item) => item.name === 'Midazolam / Dormonid');
     const fentanylRapid = RESUSCITATION_DRUGS.find((item) => item.name === 'Fentanil');
-    const precedexRapid = RESUSCITATION_DRUGS.find((item) => item.name === 'Dexmedetomidina / Precedex (ataque)');
+    const precedexRapid = RESUSCITATION_DRUGS.find((item) => item.name === 'Dexmedetomidina / Precedex');
     const morphineRapid = RESUSCITATION_DRUGS.find((item) => item.name === 'Morfina / Dimorf');
     assert(usePureRapidDose(ctxUnderPureThreshold) === false, 'Até 40 kg mantém diluição nas doses rápidas selecionadas');
     assert(Math.abs(midazolamRapid.total(25, ctxUnderPureThreshold) - 2.5) < 1e-9, 'Midazolam 25 kg permanece diluído');
@@ -3267,7 +3823,8 @@ function renderDrugCards(ctx) {
     assert(RESUSCITATION_DRUGS.every((item) => item.unit !== 'J'), 'Doses rápidas sem itens de energia elétrica');
     assert(RESUSCITATION_DRUGS.length === 21, 'Quantidade esperada de doses rápidas após consolidação');
     assert(CONTINUOUS_MEDS.length === 14, 'Quantidade esperada de infusões contínuas após consolidação');
-    assert(FIXED_CONTINUOUS_MEDS.length === 2, 'Quantidade esperada de medicamentos comumente prescritos');
+    assert(FIXED_CONTINUOUS_MEDS.length === 2, 'Quantidade esperada dos antibióticos de preparo fixo');
+    assert(ADDITIONAL_PRESCRIBED_MEDS.length === 3, 'Dipirona, Ondansetrona e Ceftriaxona incluídas');
     assert(!!FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Vancomicina'), 'Vancomicina incluída nos medicamentos com preparo fixo');
     const fixedVancomycin = FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Vancomicina');
     const fixedVancomycinCalc15 = computeFixedContinuousPreparation(fixedVancomycin, 10, 15, 5);
@@ -3275,16 +3832,37 @@ function renderDrugCards(ctx) {
     assert(Math.abs(fixedVancomycinCalc15.withdrawalMl - 3) < 1e-9, 'Vancomicina 150 mg: aspirar 3 mL da solução 50 mg/mL');
     assert(Math.abs(fixedVancomycinCalc15.finalVolumeMl - 30) < 1e-9, 'Vancomicina 150 mg a 5 mg/mL: 30 mL finais');
     assert(Math.abs(fixedVancomycinCalc15.finalDiluentMl - 27) < 1e-9, 'Vancomicina 150 mg a 5 mg/mL: adicionar 27 mL de diluente');
+    assert(computeFixedContinuousPreparation(fixedVancomycin, 10, 15, 2.49) === null, 'Vancomicina: abaixo de 2,5 mg/mL é inválido');
+    assert(computeFixedContinuousPreparation(fixedVancomycin, 10, 15, 5.01) === null, 'Vancomicina: acima de 5 mg/mL é inválido');
+    const fixedVancomycinCalc3 = computeFixedContinuousPreparation(fixedVancomycin, 10, 15, 3.2);
+    assert(Math.abs(fixedVancomycinCalc3.finalVolumeMl - (150 / 3.2)) < 1e-9, 'Vancomicina: concentração personalizada na faixa é permitida');
     const fixedVancomycinCalc10 = computeFixedContinuousPreparation(fixedVancomycin, 10, 10, 2.5);
     assert(Math.abs(fixedVancomycinCalc10.doseMg - 100) < 1e-9, 'Vancomicina 10 mg/kg: 10 kg = 100 mg');
     assert(Math.abs(fixedVancomycinCalc10.finalVolumeMl - 40) < 1e-9, 'Vancomicina 100 mg a 2,5 mg/mL: 40 mL finais');
     const fixedMeropenem = FIXED_CONTINUOUS_MEDS.find((item) => item.name === 'Meropenem');
     assert(!!fixedMeropenem, 'Meropenem incluído nos medicamentos comumente prescritos');
-    const fixedMeropenemCalc = computeMeropenemRegimen(fixedMeropenem, 10);
+    const fixedMeropenemCalc = computeMeropenemRegimen(fixedMeropenem, 10, 20);
     assert(Math.abs(fixedMeropenemCalc.doseMg - 200) < 1e-9, 'Meropenem 20 mg/kg: 10 kg = 200 mg/dose');
     assert(fixedMeropenemCalc.intervalHours === 8, 'Meropenem prescrito de 8/8 horas');
     assert(fixedMeropenemCalc.infusionMinutes === 180, 'Meropenem com infusão em 3 horas');
     assert(Math.abs(fixedMeropenemCalc.dailyDoseMg - 600) < 1e-9, 'Meropenem 10 kg: total diário de 600 mg');
+    assert(Math.abs(fixedMeropenemCalc.withdrawalMl - 4) < 1e-9, 'Meropenem 10 kg 20 mg/kg: aspirar 4 mL da solução de 50 mg/mL');
+    assert(Math.abs(fixedMeropenemCalc.finalDiluentMl - 16) < 1e-9, 'Meropenem 10 kg 20 mg/kg: adicionar 16 mL de SF 0,9% a 10 mg/mL');
+    assert(Math.abs(fixedMeropenemCalc.finalVolumeMl - 20) < 1e-9, 'Meropenem 10 kg 20 mg/kg: infundir 20 mL por dose');
+    assert(Math.abs(fixedMeropenemCalc.rateMlPerHour - (20 / 3)) < 1e-9, 'Meropenem 10 kg 20 mg/kg: BIC 20/3 mL/h em 3 horas');
+    const fixedMeropenemDefault = computeMeropenemRegimen(fixedMeropenem, 10);
+    assert(fixedMeropenem.defaultDose === 40 && Math.abs(fixedMeropenemDefault.doseMg - 400) < 1e-9, 'Meropenem padrão: 40 mg/kg/dose para 10 kg');
+    assert(Math.abs(fixedMeropenemDefault.withdrawalMl - 8) < 1e-9, 'Meropenem padrão 10 kg: aspirar 8 mL');
+    assert(Math.abs(fixedMeropenemDefault.finalDiluentMl - 32) < 1e-9, 'Meropenem padrão 10 kg: rediluir em 32 mL');
+    assert(Math.abs(fixedMeropenemDefault.finalVolumeMl - 40) < 1e-9, 'Meropenem padrão 10 kg: volume final 40 mL');
+    assert(Math.abs(fixedMeropenemDefault.rateMlPerHour - (40/3)) < 1e-9, 'Meropenem padrão 10 kg: BIC de 40/3 mL/h');
+
+    const fixedMeropenemCalc40 = computeMeropenemRegimen(fixedMeropenem, 10, 40, 20);
+    assert(Math.abs(fixedMeropenemCalc40.withdrawalMl - 8) < 1e-9, 'Meropenem 40 mg/kg 10 kg: aspirar 8 mL da solução');
+    assert(Math.abs(fixedMeropenemCalc40.finalVolumeMl - 20) < 1e-9, 'Meropenem 40 mg/kg 10 kg a 20 mg/mL: volume final de 20 mL');
+    const fixedMeropenemCapped = computeMeropenemRegimen(fixedMeropenem, 60, 20, 10);
+    assert(fixedMeropenemCapped.capped && fixedMeropenemCapped.doseMg === 1000, 'Meropenem 20 mg/kg limitado a 1 g para 60 kg');
+    assert(Math.abs(fixedMeropenemCapped.finalVolumeMl - fixedMeropenemCapped.withdrawalMl - fixedMeropenemCapped.finalDiluentMl) < 1e-9, 'Rediluição soma exatamente o volume final');
 
     const dopamine = CONTINUOUS_MEDS.find((item) => item.name === 'Dopamina');
     assert(formatContinuousConcentrationLimit(dopamine, 'peripheral') !== formatContinuousConcentrationLimit(dopamine, 'central'), 'Dopamina tem limites diferentes por acesso');
@@ -3345,7 +3923,7 @@ function renderDrugCards(ctx) {
     assert(isPropofolUnderThreeYears(propofolRapid, ctxUnderThree) === true, 'Propofol em dose rápida alerta quando idade é menor que 3 anos');
     assert(isPropofolUnderThreeYears(propofol, ctxUnderThree) === true, 'Propofol em infusão contínua alerta quando idade é menor que 3 anos');
     assert(buildPropofolSafetyAlertMarkup(propofolRapid, ctxUnderThree).includes('Alerta de segurança'), 'Markup vermelho do alerta de Propofol <3 anos é gerado');
-    assert(buildPropofolSafetyAlertMarkup(propofolRapid, ctxThreeYears).includes('não deve ser usado como prescrição de sedação contínua'), 'Propofol rápido mantém alerta de que não é prescrição de sedação contínua');
+    assert(buildPropofolSafetyAlertMarkup(propofolRapid, ctxThreeYears) === '', 'Propofol rápido não exibe alerta redundante quando idade ≥ 3 anos');
     assert(buildPropofolSafetyAlertMarkup(propofol, ctxThreeYears).includes('não é indicado para sedação em UTI pediátrica'), 'Propofol contínuo alerta em qualquer idade pediátrica');
 
     assert(getContinuousDoseRangeStatus(dobutamine, 0.5).level === 'low', 'Alerta de dose baixa identifica dose abaixo do intervalo usual');
@@ -3364,7 +3942,7 @@ function renderDrugCards(ctx) {
 
     const dobutamineFree12Calc = computeContinuousPreparation(dobutamine, 10, dobutamine.defaultDose, 'free');
     const dobutamineFree12 = getContinuousSchemeByVolume(dobutamineFree12Calc, 12);
-    assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free').includes('Concentração Livre selecionada'), 'Concentração Livre alerta quando ultrapassa limites de acesso cadastrados');
+    assert(buildContinuousConcentrationAlertMarkup(dobutamine, dobutamineFree12Calc, dobutamineFree12, 'free') === '', 'Concentração Livre não gera alerta de concentração / preparo');
     assert(byId('alertBox').getAttribute('role') === 'alert', 'Contêiner de alertas possui semântica acessível');
     assert(document.querySelector('.signature-block .version-name')?.textContent === '1.15.11.06', 'versionName visível abaixo do desenvolvedor');
 
@@ -3477,7 +4055,7 @@ function renderDrugCards(ctx) {
         if(data.continuousConfigs&&typeof data.continuousConfigs==='object'&&!Array.isArray(data.continuousConfigs))UI_STATE.continuousConfigs=data.continuousConfigs;
         if(data.fixedContinuousConfigs&&typeof data.fixedContinuousConfigs==='object'&&!Array.isArray(data.fixedContinuousConfigs))UI_STATE.fixedContinuousConfigs=data.fixedContinuousConfigs;
         renderAll();
-        if(Array.isArray(data.sections))document.querySelectorAll('details').forEach((d,i)=>{if(typeof data.sections[i]==='boolean')d.open=data.sections[i];});
+        if(Array.isArray(data.sections)){const saved=data.sections.length===7?[data.sections[0],Boolean(data.sections[1]||data.sections[2]),...data.sections.slice(3)]:data.sections;document.querySelectorAll('details').forEach((d,i)=>{if(typeof saved[i]==='boolean')d.open=saved[i];});}
         byId('recoveredDataNotice').hidden = !fields.some(id => String(byId(id).value).trim() !== '');
       }
     } catch (_) { /* não abortar calculadora quando dados estiverem corrompidos */ }
@@ -3537,7 +4115,7 @@ function renderDrugCards(ctx) {
     if (!data) data={pt:content,last:content};
     else if (content!==data.last && content!==data.pt){data.pt=content;data.last=content;}
     else if (content!==data.last && content===data.pt){data.last=content;}
-    const next=current==='en-US'?translate(data.pt):data.pt;
+    const next=current==='en-US'?translate(data.pt):data.pt.replace(/\bIV\b/g,'EV');
     textSources.set(node,{pt:data.pt,last:next});
     if(content!==next) node.nodeValue=next;
   }
@@ -3582,7 +4160,10 @@ function renderDrugCards(ctx) {
 </script>
 <script>
 document.querySelectorAll('.paraped-up-arrow').forEach(function(button){
-  button.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+  button.addEventListener('click',function(){
+    if(window.ParaPedScroll) window.ParaPedScroll.toTop();
+    else window.scrollTo({top:0,behavior:'auto'});
+  });
 });
 </script>
 
